@@ -1,0 +1,39 @@
+a {
+  padding: 12px 5px 12px 15px;
+  display: block;
+  position: relative;
+  color: #b8c7ce;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+}
+
+i {
+  width: 20px;
+}
+
+.active {
+  color: #fff;
+  background: #1e282c;
+  border-left: 3px solid #3c8dbc;
+}
+
+.active .pull-right {
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.pull-right-container {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -7px;
+}
+.pull-right-container .fa-angle-left{
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin-right: 10px;
+}
+

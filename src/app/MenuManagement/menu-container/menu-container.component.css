@@ -1,0 +1,11 @@
+span, i {
+  color: #b8c7ce !important;
+}
+
+.active {
+  display: block;
+}
+
+.treeview-menu {
+  display: block;
+}

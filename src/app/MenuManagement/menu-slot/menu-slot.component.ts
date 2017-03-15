@@ -1,10 +1,7 @@
 import {Component, OnInit, Input, EventEmitter} from '@angular/core';
 import {Slot} from "../models/slot";
-/**
- * TODO:
- * + Add Options
- * + Add Styling
- */
+
+
 @Component({
   selector: 'menu-slot',
   templateUrl: './menu-slot.component.html',
@@ -22,7 +19,7 @@ export class MenuSlotComponent implements OnInit {
   }
 
   private selected(event): void{
-    this.slot.event.emit(event);
+    this.slot.selected.next(this.slot.name);
   }
 
 }

@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { FroalaEditorModule, FroalaViewModule } from 'angular2-froala-wysiwyg';
 
 import { AppComponent } from './app.component';
 
@@ -15,20 +14,20 @@ import { LogService } from './services/log.service';
 import { MainEditorComponent } from './main-editor/main-editor.component';
 import { MenuSlotComponent } from './MenuManagement/menu-slot/menu-slot.component';
 import { MenuContainerComponent } from './MenuManagement/menu-container/menu-container.component';
+import { MainMenuComponent } from './MenuManagement/main-menu/main-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainEditorComponent,
     MenuSlotComponent,
-    MenuContainerComponent
+    MenuContainerComponent,
+    MainMenuComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    HttpModule
   ],
   providers: [TagService, EditorService, LogService],
   bootstrap: [AppComponent]

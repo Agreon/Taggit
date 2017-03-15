@@ -1,3 +1,7 @@
-<p (click)="selected($event)">
-  {{slot.name}}
-</p>
+<a (click)="selected($event)" [class]="slot.active ? 'active' : ''">
+  <i class="fa fa-book"></i>
+  <span>{{slot.name}}</span>
+  <span *ngIf="slot.options" class="pull-right-container">
+    <i class="fa fa-angle-left pull-right" ></i>
+  </span>
+</a>
