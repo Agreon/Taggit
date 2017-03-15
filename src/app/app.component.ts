@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {LogService} from "./services/log.service";
+import {EditorService} from "./services/editor.service";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app works!';
+  title = 'Taggit!';
+
+  constructor(private editorService: EditorService) {
+    editorService.insertContent("Inserted");
+  }
+
+  public handleEditorKeyUp(event: any): void {
+    console.log(event);
+    LogService.log(event);
+  }
+
 }
