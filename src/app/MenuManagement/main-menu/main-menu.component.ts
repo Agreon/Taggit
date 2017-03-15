@@ -2,6 +2,9 @@ import {Component, OnInit, EventEmitter} from '@angular/core';
 import {Slot} from "../models/slot";
 import {Subject} from "rxjs";
 
+/**
+ * TODO: Options-traversing
+ */
 @Component({
   selector: 'main-menu',
   templateUrl: './main-menu.component.html',
@@ -9,18 +12,18 @@ import {Subject} from "rxjs";
 })
 export class MainMenuComponent implements OnInit {
 
-  private projectsSelected = new Subject<string>();
   private projectSelected = new Subject<string>();
-  private tagsSelected = new Subject<string>();
   private tagSelected = new Subject<string>();
 
+  private headerSelected = new Subject<string>();
+
   private slots: Slot[] = [
-    new Slot("Projects", this.projectsSelected, [
+    new Slot("Projects", this.headerSelected, [
       new Slot("EWA", this.projectSelected),
       new Slot("GDV", this.projectSelected),
       new Slot("Philo", this.projectSelected)
     ]),
-    new Slot("Tags", this.tagsSelected, [
+    new Slot("Tags", this.headerSelected, [
       new Slot("TODO", this.tagSelected),
       new Slot("Question", this.tagSelected)
     ])
@@ -29,10 +32,10 @@ export class MainMenuComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.projectsSelected.subscribe(() => {
-      console.log("Projects was clicked!");
-      this.setActive("Projects");
-      this.getByName("Projects").collapsed = !this.getByName("Projects").collapsed;
+    this.headerSelected.subscribe((name) => {
+      console.log(name, "was clicked!");
+      this.setActive(name);
+      this.getByName(name).collapsed = !this.getByName(name).collapsed;
     });
 
     this.projectSelected.subscribe((projectName) => {
@@ -40,11 +43,6 @@ export class MainMenuComponent implements OnInit {
       this.setActive(projectName);
     });
 
-    this.tagsSelected.subscribe(()=> {
-      console.log("Tagsselected");
-      this.setActive("Tags");
-      this.getByName("Tags").collapsed = !this.getByName("Tags").collapsed;
-    });
 
     this.tagSelected.subscribe((tagName) => {
       console.log("Selected tag", tagName);

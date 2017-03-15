@@ -8,7 +8,7 @@ import {EditorService} from "./services/editor.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Taggit!';
+  private sidebarVisible: boolean = true;
 
   constructor(private editorService: EditorService) {
     editorService.insertContent("Inserted");

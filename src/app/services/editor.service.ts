@@ -4,6 +4,7 @@ import {Subject, Observable} from "rxjs";
 @Injectable()
 export class EditorService {
 
+  // TODO: Wird nicht benötigt
   private contentInsertSource = new Subject<string>();
 
   constructor() { }
