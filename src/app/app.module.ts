@@ -18,6 +18,7 @@ import { MainMenuComponent } from './MenuManagement/menus/main-menu/main-menu.co
 import { MenuManagerComponent } from './MenuManagement/menu-manager/menu-manager.component';
 import { ProjectViewMenuComponent } from './MenuManagement/menus/project-view-menu/project-view-menu.component';
 import { MenuTemplateComponent } from './MenuManagement/menus/menu-template/menu-template.component';
+import {ProjectService} from "./services/project.service";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { MenuTemplateComponent } from './MenuManagement/menus/menu-template/menu
     FormsModule,
     HttpModule
   ],
-  providers: [TagService, EditorService, LogService],
+  providers: [TagService, EditorService, LogService, ProjectService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })

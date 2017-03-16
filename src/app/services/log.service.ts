@@ -6,9 +6,9 @@ export class LogService {
 
   constructor() { }
 
-  public static log(message: any): void {
+  public static log(message: any, message2: any = ""): void {
     if(!environment.production) {
-      console.log(message);
+      console.log(message, message2);
     }
   }
 

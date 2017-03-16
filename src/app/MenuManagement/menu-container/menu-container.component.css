@@ -9,3 +9,7 @@ span, i {
 .treeview-menu {
   display: block;
 }
+
+.header{
+  text-align: center;
+}

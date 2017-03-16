@@ -14,7 +14,7 @@ export enum MENU_TYPE {
 export class MenuEvent{
   constructor(
     public type: MENU_TYPE,
-    public param: any
+    public param: any = {}
   ){}
 }
 
@@ -46,11 +46,18 @@ export class MenuManagerComponent implements OnInit {
   private loadMenu(menuType: MENU_TYPE, param: any = {}){
     console.log("Loading",this.menus[menuType]);
 
+    let factory = null;
+    if(menuType == MENU_TYPE.MAIN_MENU){
+      factory = this.resolver.resolveComponentFactory(MainMenuComponent);
+    }else {
+      factory = this.resolver.resolveComponentFactory(ProjectViewMenuComponent);
+    }
     //let factory = null;
    /* if(this.factories[menuType]){
       factory = this.factories[menuType];
     } else {*/
-      let factory = this.resolver.resolveComponentFactory(this.menus[menuType]);
+      //let factory = this.resolver.resolveComponentFactory(MainMenuComponent);
+    //this.resolver.resolveComponentFactory(this.menus[menuType]);
      // this.factories[menuType] = factory;
     //}
 
