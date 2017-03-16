@@ -51,6 +51,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
       skin_url: 'assets/skins/lightgray',
       toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | TagBar',
       menubar: true,
+      height: "100%",
       setup: function(editor){
         editor.on('keyup', () => {
           const content = editor.getContent();

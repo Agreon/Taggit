@@ -14,7 +14,10 @@ import { LogService } from './services/log.service';
 import { MainEditorComponent } from './main-editor/main-editor.component';
 import { MenuSlotComponent } from './MenuManagement/menu-slot/menu-slot.component';
 import { MenuContainerComponent } from './MenuManagement/menu-container/menu-container.component';
-import { MainMenuComponent } from './MenuManagement/main-menu/main-menu.component';
+import { MainMenuComponent } from './MenuManagement/menus/main-menu/main-menu.component';
+import { MenuManagerComponent } from './MenuManagement/menu-manager/menu-manager.component';
+import { ProjectViewMenuComponent } from './MenuManagement/menus/project-view-menu/project-view-menu.component';
+import { MenuTemplateComponent } from './MenuManagement/menus/menu-template/menu-template.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { MainMenuComponent } from './MenuManagement/main-menu/main-menu.componen
     MainEditorComponent,
     MenuSlotComponent,
     MenuContainerComponent,
-    MainMenuComponent
+    MainMenuComponent,
+    MenuManagerComponent,
+    ProjectViewMenuComponent,
+    MenuTemplateComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +36,7 @@ import { MainMenuComponent } from './MenuManagement/main-menu/main-menu.componen
     HttpModule
   ],
   providers: [TagService, EditorService, LogService],
+  entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
