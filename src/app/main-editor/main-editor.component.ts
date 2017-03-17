@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, AfterViewInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, AfterViewInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
 import {EditorService} from "../services/editor.service";
 import {Subscription} from "rxjs";
 import {LogService} from "../services/log.service";
@@ -7,6 +7,7 @@ import {TagService} from "../services/tag.service";
 import {Document} from "../models/document";
 import {forEach} from "@angular/router/src/utils/collection";
 import {ProjectService} from "../services/project.service";
+import {ActivatedRouteSnapshot, ActivatedRoute} from "@angular/router";
 
 /**
  * TODO:
@@ -15,6 +16,7 @@ import {ProjectService} from "../services/project.service";
  * + Plugins
  *    + Save usw
  * + Styling
+ * + remove Selfs
  */
 @Component({
   selector: 'main-editor',
@@ -31,26 +33,44 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
 
   private tags: Tag[] = [];
 
-  constructor(private projectService: ProjectService, private tagService: TagService){
+  constructor(private projectService: ProjectService,
+              private tagService: TagService){
 
-    // TODO: Delete old tags
+    let self = this;
     this.subscription = tagService.getTags().subscribe(tags => {
       this.tags = tags;
 
-      LogService.log(tags);
+      LogService.log("Tags",tags);
+
+      this.initEditor();
 
       for(let t of this.tags){
         this.addTagButton(t);
       }
+      if(this.document.content){
+        self.editor.setContent(this.document.content);
+      }
     });
 
-    let self = this;
+    self.document = new Document("","");
 
-    self.document = new Document("Test");
+     this.projectService.getCurrentDocument().subscribe(d => {
+        if(!d){
+          return;
+        }
 
-    this.projectService.getCurrentProject().subscribe(p => {
-      self.document = p.documents[0];
+        this.document = d;
+
+        // TODO: Load project
+        let content = this.projectService.loadDocumentContent(this.document.name);
+
+        self.editor.setContent(content);
     });
+  }
+
+  private tagClicked(tag: Tag){
+    console.log("Tag clicked",tag);
+    this.editor.insertContent(tag.asHtml());
   }
 
   /**
@@ -59,7 +79,14 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
    */
   private addTagButton(tag: Tag): void {
 
+    // temp
+    // temp
+    if(tag)
+      return;
+
     let editor = this.editor;
+
+    console.log("AddTagButton",tag);
 
     editor.addButton(tag.name, {
       text: tag.name,
@@ -69,15 +96,39 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
       }
     });
 
+    console.log("AddButton");
+
     let btn = editor.buttons[tag.name];
     let group = editor.theme.panel.find("toolbar buttongroup").length;
     let bg = editor.theme.panel.find("toolbar buttongroup")[group-1];
-    console.log(bg);
+    console.log("bg",bg);
     bg._lastRepaintRect = bg._layoutRect;
     bg.append(btn);
+
+    console.log("ahaha");
+
+
+   /* this.hotkeysService.add(new Hotkey('meta+shift+g', (event: KeyboardEvent): boolean => {
+      console.log('Typed hotkey');
+      return false; // Prevent bubbling
+    }));
+*/
   }
+/*
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    console.log("Event",event);
+
+    if(event.ctrlKey && event.keyCode == 1){
+          this.editor.insertContent(this.tags[0].asHtml());
+      }
+  }*/
 
   ngAfterViewInit(): void {
+
+  }
+
+  private initEditor(){
     let self = this;
     tinymce.init({
       selector: '#mainEditor',
@@ -98,30 +149,26 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
 
   private editorSetup(editor) {
 
-    this.editor = editor;
-    let self = this;
 
     editor.on('keyup', () => {
       const content = editor.getContent();
-      self.onEditorKeyUp.emit(content);
+      this.onEditorKeyUp.emit(content);
     });
 
-    let testTag = new Tag("Question",
-      "Add a Question with Answer",
-      "strg+1",
-      [new TagInput("Question", "Input", "What does BMI mean?"),
-        new TagInput("Answer", "Input", "Body Mass Index")]);
+    editor.on('focus', () => {
+      // TODO: disable menu-ctrl thorugh service
+      console.log("focus");
+    });
 
-
-    self.editor.on('init', function(args) {
-      // Custom logic
+    editor.on('init', function(args) {
       console.log("Editor inited");
-      self.tagService.addTag(testTag);
     });
 
-    // editor.shortcuts.add('ctrl+1', function() {
-    //    editor.insertContent(testTag.asHtml());
-    // });
+    for(let tag of this.tags){
+      editor.addShortcut(tag.hotkey, tag.name, () => {
+        editor.insertContent(tag.asHtml());
+      });
+    }
 
     this.editor = editor;
   }

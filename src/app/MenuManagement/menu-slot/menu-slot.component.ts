@@ -18,7 +18,8 @@ export class MenuSlotComponent implements OnInit {
 
   }
 
-  private selected(event): void{
+  // TODO: Maybe give whole slot
+  private selected(event): void {
     this.slot.selected.next(this.slot.name);
   }
 

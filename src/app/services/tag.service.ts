@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
-import {Observable, Subject} from "rxjs";
-import { Tag } from '../models/tag';
+import {Observable, Subject, BehaviorSubject} from "rxjs";
+import {Tag, TagInput} from '../models/tag';
 
 @Injectable()
 export class TagService {
 
-  private allTags = new Subject<Tag[]>();
+  private tags: Tag[] = [
+    new Tag("Question",
+      "Add a Question with Answer",
+      "ctrl+1",
+      [new TagInput("Question", "Input", "What does BMI mean?"),
+        new TagInput("Answer", "Input", "Body Mass Index")]),
+    new Tag("TODO",
+      "Add a Todo-Item",
+      "ctrl+2",
+      [new TagInput("TODO", "Input", "Folie 34")])
+  ];
 
-  private tags: Tag[] = [];
+
+  private allTags = new BehaviorSubject<Tag[]>(this.tags);
 
   constructor() { }
 

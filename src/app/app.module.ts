@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
 import { AppComponent } from './app.component';
+import { TooltipModule } from 'ng2-bootstrap';
 
 // Services
 import { TagService } from './services/tag.service';
@@ -19,6 +19,13 @@ import { MenuManagerComponent } from './MenuManagement/menu-manager/menu-manager
 import { ProjectViewMenuComponent } from './MenuManagement/menus/project-view-menu/project-view-menu.component';
 import { MenuTemplateComponent } from './MenuManagement/menus/menu-template/menu-template.component';
 import {ProjectService} from "./services/project.service";
+import {Routes, RouterModule} from "@angular/router";
+import { TagButtonComponent } from './main-editor/tag-button/tag-button.component';
+
+const appRoutes: Routes = [
+  { path: 'MainEditor', component: MainEditorComponent},
+  { path: '', redirectTo: 'MainEditor', pathMatch: 'full' }
+];
 
 @NgModule({
   declarations: [
@@ -29,12 +36,15 @@ import {ProjectService} from "./services/project.service";
     MainMenuComponent,
     MenuManagerComponent,
     ProjectViewMenuComponent,
-    MenuTemplateComponent
+    MenuTemplateComponent,
+    TagButtonComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    RouterModule.forRoot(appRoutes),
+    TooltipModule.forRoot()
   ],
   providers: [TagService, EditorService, LogService, ProjectService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],

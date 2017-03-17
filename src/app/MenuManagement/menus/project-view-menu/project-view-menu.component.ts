@@ -5,6 +5,7 @@ import {Subject} from "rxjs";
 import {Slot} from "../../models/slot";
 import {ProjectService} from "../../../services/project.service";
 import {Project} from "../../../models/project";
+import {Router, ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'project-view-menu',
@@ -23,7 +24,10 @@ export class ProjectViewMenuComponent /*extends MenuTemplateComponent */implemen
   private slots: Slot[] = [];
   private project: Project;
 
-  constructor(private projectService: ProjectService) {
+  private documents: Document[] = [];
+
+  constructor(private projectService: ProjectService,
+              private router: Router) {
     //super();
 
     // On Project-Load
@@ -39,8 +43,13 @@ export class ProjectViewMenuComponent /*extends MenuTemplateComponent */implemen
 
     // On Project-Select
     this.selectedDocument.subscribe(d => {
-      console.log("Selected Doc!",d);
-      // TODO: Route to Editor
+
+      this.slots.forEach(slot => {
+        slot.active = slot.name == d;
+      });
+
+      this.projectService.setCurrentDocument(this.project.getDocument(d));
+      this.router.navigate(['/MainEditor']);
     });
 
   }
@@ -58,6 +67,11 @@ export class ProjectViewMenuComponent /*extends MenuTemplateComponent */implemen
     this.project.documents.forEach(d => {
       this.slots.push(new Slot(d.name,this.selectedDocument,"book"));
     });
+
+    if(this.slots.length < 1){
+      return;
+    }
+
     this.slots[0].active = true;
   }
 

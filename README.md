@@ -12,12 +12,16 @@ Wie bekomme ich später Tags von Dokumenten oder Projekten?
 	+ Vererbung
 	+ Mouse-Animationen
 		+ MouseHover
+	+ angular 2->prevent default
+	+ setActive in Menu-Container
+	
 + Routing 
 + ShortCuts + InputManager
 + Editor
 	+ TagLeiste
 	+ Modals
 	+ Styling 
+	+ Markdown
 
 
 

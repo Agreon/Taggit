@@ -19,9 +19,7 @@ export class Tag {
     let retHtml = "";
 
     retHtml += "<p class='tagged "+ this.name + "'>";
-    retHtml += "<em>"+this.name+"</em>";
     this.inputs.forEach((input) => {
-
       retHtml += "<p id='"+input.name+"'>";
       retHtml += "<strong>"+input.name+": </strong>";
       retHtml += input.value;
