@@ -21,6 +21,7 @@ import { MenuTemplateComponent } from './MenuManagement/menus/menu-template/menu
 import {ProjectService} from "./services/project.service";
 import {Routes, RouterModule} from "@angular/router";
 import { TagButtonComponent } from './main-editor/tag-button/tag-button.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
@@ -37,7 +38,8 @@ const appRoutes: Routes = [
     MenuManagerComponent,
     ProjectViewMenuComponent,
     MenuTemplateComponent,
-    TagButtonComponent
+    TagButtonComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

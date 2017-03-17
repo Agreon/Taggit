@@ -34,6 +34,8 @@ export class MenuContainerComponent implements OnInit {
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
 
+    event.stopPropagation();
+
     // Down
     if(event.keyCode == 40){
         if(this.slots[this.currentSlot].collapsed == false){

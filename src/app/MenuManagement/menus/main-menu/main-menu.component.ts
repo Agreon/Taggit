@@ -14,14 +14,7 @@ import {Project} from "../../../models/project";
   templateUrl: 'main-menu.component.html',
   styleUrls: ['main-menu.component.css']
 })
-export class MainMenuComponent /*extends MenuTemplateComponent */implements OnInit{
-
-  @Input("Param")
-  param: any;
-  @Output("ChangeMenu")
-  changeMenu: Subject<any> = new Subject<any>();
-
-  private slots: Slot[] = [];
+export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
   private projectSelected = new Subject<string>();
   private tagSelected = new Subject<string>();
@@ -30,7 +23,7 @@ export class MainMenuComponent /*extends MenuTemplateComponent */implements OnIn
   private projects: Project[] = [];
 
   constructor(private projectService: ProjectService) {
-    //super();
+    super();
 
     this.slots = [
       new Slot("Projects", this.headerSelected, "book", [
@@ -41,6 +34,7 @@ export class MainMenuComponent /*extends MenuTemplateComponent */implements OnIn
       ])
     ];
 
+    // Load Project-Document
     this.projectService.getProjects().subscribe(projects => {
       /**
        * Foreach oder mapping??
@@ -58,28 +52,21 @@ export class MainMenuComponent /*extends MenuTemplateComponent */implements OnIn
 
   ngOnInit() {
     this.headerSelected.subscribe((name) => {
-      console.log(name, "was clicked!");
       this.setActive(name);
       this.getByName(name).collapsed = !this.getByName(name).collapsed;
     });
 
-    this.projectSelected.subscribe((projectName) => {
-      console.log("Selected projectName", projectName);
-
-      //this.projectService.setCurrentProject(); NAME ODER Proj?
-      let project = this.projects.filter(p => {
-        return p.name == projectName;
+    this.projectSelected
+      .map(name => {  // Get Project for name
+      return  this.projects.filter(p => {
+        return p.name == name;
       })[0];
-
+    }).subscribe(project => {
       this.projectService.setCurrentProject(project);
-
-      console.log("CurrentProj", project);
-
       this.changeMenu.next(new MenuEvent(MENU_TYPE.PROJECT_VIEW));
     });
 
     this.tagSelected.subscribe((tagName) => {
-      console.log("Selected tag", tagName);
       this.setActive(tagName);
     });
   }

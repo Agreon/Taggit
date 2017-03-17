@@ -52,8 +52,6 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    self.document = new Document("","");
-
      this.projectService.getCurrentDocument().subscribe(d => {
         if(!d){
           return;
@@ -69,7 +67,6 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   private tagClicked(tag: Tag){
-    console.log("Tag clicked",tag);
     this.editor.insertContent(tag.asHtml());
   }
 

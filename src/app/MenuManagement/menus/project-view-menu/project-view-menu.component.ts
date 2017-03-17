@@ -12,23 +12,15 @@ import {Router, ActivatedRoute} from "@angular/router";
   templateUrl: './project-view-menu.component.html',
   styleUrls: ['./project-view-menu.component.css']
 })
-export class ProjectViewMenuComponent /*extends MenuTemplateComponent */implements OnInit{
+export class ProjectViewMenuComponent extends MenuTemplateComponent implements OnInit{
 
-  @Input("Param")
-  param: any;
-  @Output("ChangeMenu")
-  changeMenu: Subject<any> = new Subject<any>();
+  private selectedDocument = new Subject<string>();
 
-  private selectedDocument = new Subject<any>();
-
-  private slots: Slot[] = [];
   private project: Project;
-
-  private documents: Document[] = [];
 
   constructor(private projectService: ProjectService,
               private router: Router) {
-    //super();
+    super();
 
     // On Project-Load
     this.projectService.getCurrentProject().subscribe(project => {
