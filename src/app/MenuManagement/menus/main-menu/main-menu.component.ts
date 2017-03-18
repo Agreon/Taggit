@@ -52,7 +52,6 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
   ngOnInit() {
     this.headerSelected.subscribe((name) => {
-      this.setActive(name);
       this.getByName(name).collapsed = !this.getByName(name).collapsed;
     });
 
@@ -67,7 +66,6 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     });
 
     this.tagSelected.subscribe((tagName) => {
-      this.setActive(tagName);
     });
   }
 
@@ -75,12 +73,6 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     return this.slots.filter(slot => {
       return slot.name == name;
     })[0];
-  }
-
-  private setActive(slotName: string) {
-    this.slots.forEach(slot => {
-      slot.active = slot.name == slotName;
-    });
   }
 
 }

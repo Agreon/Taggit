@@ -2,7 +2,6 @@
 export class TagInput {
   constructor(
     public name: string,
-    public type: string,
     public value: string
   ) {}
 }
@@ -29,6 +28,21 @@ export class Tag {
     retHtml += "</p>";
 
     return retHtml;
+  }
+
+  public getInput(name: string): TagInput {
+    return this.inputs.filter( input => {
+      return input.name == name;
+    })[0];
+  }
+
+  public setInputValue(inputName: string, value: string) {
+    for(let input of this.inputs) {
+      if (input.name == inputName) {
+        input.value = value;
+        return;
+      }
+    }
   }
 
 }

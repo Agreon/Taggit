@@ -1,4 +1,4 @@
-<a (click)="selected($event)" [class]="slot.active ? 'active' : ''">
+<a (click)="selected($event)" [class]="slot.active || !slot.collapsed ? 'active' : ''">
   <i class="fa fa-book"></i>
   <span>{{slot.name}}</span>
   <span *ngIf="slot.options" class="pull-right-container">

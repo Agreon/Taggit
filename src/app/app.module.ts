@@ -3,12 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
-import { TooltipModule } from 'ng2-bootstrap';
+//import { TooltipModule } from 'ng2-bootstrap';
 
 // Services
 import { TagService } from './services/tag.service';
 import { EditorService } from './services/editor.service';
 import { LogService } from './services/log.service';
+import { InputService } from './services/input.service';
 
 // Components
 import { MainEditorComponent } from './main-editor/main-editor.component';
@@ -45,10 +46,10 @@ const appRoutes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(appRoutes),
-    TooltipModule.forRoot()
+    RouterModule.forRoot(appRoutes)
+    //,TooltipModule.forRoot()
   ],
-  providers: [TagService, EditorService, LogService, ProjectService],
+  providers: [TagService, EditorService, LogService, InputService, ProjectService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })

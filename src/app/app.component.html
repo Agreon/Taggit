@@ -7,9 +7,9 @@
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Taggit</b></span>
     </a>
-    <navbar></navbar>
+    <navbar (OnToggle)="toggleSidebar()"></navbar>
   </header>
-  <aside class="main-sidebar">
+  <aside *ngIf="sidebarVisible" (click)="onClickSidebar()" class="main-sidebar">
     <menu-manager></menu-manager>
   </aside>
 
@@ -17,5 +17,5 @@
       <router-outlet></router-outlet>
   </div>
 
-  <div class="control-sidebar-bg"></div>
+  <!--<div class="control-sidebar-bg"></div>-->
 </div>

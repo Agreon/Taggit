@@ -4,7 +4,7 @@ import {LogService} from "../services/log.service";
 export class Project {
   constructor(
     public name: string,
-    public documents: Array<Document>
+    public documents: Array<Document> = []
   ){}
 
   public saveDocument(document: Document) {

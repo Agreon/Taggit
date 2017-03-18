@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {LogService} from "./services/log.service";
 import {EditorService} from "./services/editor.service";
+import {InputService} from "./services/input.service";
 
 @Component({
   selector: 'app-root',
@@ -10,13 +11,21 @@ import {EditorService} from "./services/editor.service";
 export class AppComponent {
   private sidebarVisible: boolean = true;
 
-  constructor(private editorService: EditorService) {
-    editorService.insertContent("Inserted");
+  constructor(private inputService: InputService) {
   }
 
-  public handleEditorKeyUp(event: any): void {
-    console.log(event);
-    LogService.log(event);
+  private toggleSidebar(){
+    console.log("Toggle");
+    this.sidebarVisible = !this.sidebarVisible;
+  }
+
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    this.inputService.keyPress(event);
+  }
+
+  private onClickSidebar(){
+    this.inputService.setActive("MenuContainer");
   }
 
 }

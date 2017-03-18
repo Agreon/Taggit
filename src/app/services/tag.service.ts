@@ -9,12 +9,12 @@ export class TagService {
     new Tag("Question",
       "Add a Question with Answer",
       "ctrl+1",
-      [new TagInput("Question", "Input", "What does BMI mean?"),
-        new TagInput("Answer", "Input", "Body Mass Index")]),
+      [new TagInput("Question", "What does BMI mean?"),
+        new TagInput("Answer", "Body Mass Index")]),
     new Tag("TODO",
       "Add a Todo-Item",
       "ctrl+2",
-      [new TagInput("TODO", "Input", "Folie 34")])
+      [new TagInput("TODO", "Folie 34")])
   ];
 
 

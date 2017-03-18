@@ -37,3 +37,7 @@ i {
   margin-right: 10px;
 }
 
+.active .pull-right {
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}

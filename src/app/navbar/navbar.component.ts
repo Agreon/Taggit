@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {ProjectService} from "../services/project.service";
 
 @Component({
@@ -7,6 +7,9 @@ import {ProjectService} from "../services/project.service";
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+
+  @Output("OnToggle")
+  onToggle: EventEmitter<any> = new EventEmitter<any>();
 
   private documentName;
 
@@ -17,6 +20,11 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+
+  toggleSidebar(){
+    this.onToggle.emit();
   }
 
 }

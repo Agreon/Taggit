@@ -1,17 +1,20 @@
 import {Component, OnInit, Input, HostListener, Output, EventEmitter} from '@angular/core';
 import {Slot} from "../models/slot";
+import {InputReceiver} from "../../models/input-receiver";
+import {InputService} from "../../services/input.service";
+import {MENU_TYPE} from "../menu-manager/menu-manager.component";
 
 /**
  * TODO:
  * + Keyevents from service
- * + setActive hadling
+ * + stoppropagination
  */
 @Component({
   selector: 'menu-container',
   templateUrl: './menu-container.component.html',
   styleUrls: ['./menu-container.component.css']
 })
-export class MenuContainerComponent implements OnInit {
+export class MenuContainerComponent implements OnInit, InputReceiver {
 
   @Input("Name")
   name: string;
@@ -19,41 +22,57 @@ export class MenuContainerComponent implements OnInit {
   @Input("Slots")
   slots: Slot[];
 
+  @Input("ShowBackBtn")
+  showBackBtn: boolean;
+
   @Output("OnCancel")
   onCancel: EventEmitter<any> = new  EventEmitter<any>();
 
   private currentSlot: number = 0;
   private optionIndex: number = -1;
 
-  constructor() { }
+  constructor(private inputService: InputService) {
+    inputService.addReciever("MenuContainer", this);
+    inputService.setActive("MenuContainer");
+  }
 
   ngOnInit() {
 
   }
 
-  @HostListener('document:keypress', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
+  ngOnChanges() {
 
+  }
+
+  private hover(slot: Slot){
+    this.setActive(slot.name);
+  }
+
+  private backPressed(){
+    this.onCancel.emit();
+  }
+
+  keyEvent(event: KeyboardEvent) {
     event.stopPropagation();
 
     // Down
     if(event.keyCode == 40){
-        if(this.slots[this.currentSlot].collapsed == false){
-          if( this.optionIndex < this.slots[this.currentSlot].options.length - 1){
-            if(this.optionIndex != -1) {
-              this.slots[this.currentSlot]
-                .options[this.optionIndex].active = false;
-            }
-            this.optionIndex++;
+      if(this.slots[this.currentSlot].collapsed == false){
+        if( this.optionIndex < this.slots[this.currentSlot].options.length - 1){
+          if(this.optionIndex != -1) {
             this.slots[this.currentSlot]
-              .options[this.optionIndex].active = true;
+              .options[this.optionIndex].active = false;
           }
+          this.optionIndex++;
+          this.slots[this.currentSlot]
+            .options[this.optionIndex].active = true;
         }
-        else if(this.currentSlot < this.slots.length - 1){
-          this.slots[this.currentSlot].active = false;
-          this.currentSlot++;
-          this.slots[this.currentSlot].active = true;
-        }
+      }
+      else if(this.currentSlot < this.slots.length - 1){
+        this.slots[this.currentSlot].active = false;
+        this.currentSlot++;
+        this.slots[this.currentSlot].active = true;
+      }
     }
 
     // Up
@@ -83,7 +102,7 @@ export class MenuContainerComponent implements OnInit {
         this.slots[this.currentSlot]
           .options[this.optionIndex]
           .selected.next(this.slots[this.currentSlot]
-                            .options[this.optionIndex].name);
+          .options[this.optionIndex].name);
       }else {
         this.slots[this.currentSlot]
           .selected.next(this.slots[this.currentSlot].name);
@@ -104,4 +123,9 @@ export class MenuContainerComponent implements OnInit {
     }
   }
 
+  private setActive(slotName: string) {
+    this.slots.forEach(slot => {
+      slot.active =  slot.name == slotName;
+    });
+  }
 }

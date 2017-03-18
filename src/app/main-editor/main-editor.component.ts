@@ -8,6 +8,8 @@ import {Document} from "../models/document";
 import {forEach} from "@angular/router/src/utils/collection";
 import {ProjectService} from "../services/project.service";
 import {ActivatedRouteSnapshot, ActivatedRoute} from "@angular/router";
+import {InputService} from "../services/input.service";
+import {InputReceiver} from "../models/input-receiver";
 
 /**
  * TODO:
@@ -23,7 +25,7 @@ import {ActivatedRouteSnapshot, ActivatedRoute} from "@angular/router";
   templateUrl: './main-editor.component.html',
   styleUrls: ['./main-editor.component.css']
 })
-export class MainEditorComponent implements AfterViewInit, OnDestroy {
+export class MainEditorComponent implements AfterViewInit, OnDestroy, InputReceiver {
   @Output() onEditorKeyUp = new EventEmitter();
 
   private document: Document;
@@ -34,7 +36,10 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
   private tags: Tag[] = [];
 
   constructor(private projectService: ProjectService,
-              private tagService: TagService){
+              private tagService: TagService,
+              private inputService: InputService){
+
+    inputService.addReciever("MainEditor",this);
 
     let self = this;
     this.subscription = tagService.getTags().subscribe(tags => {
@@ -44,9 +49,6 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
 
       this.initEditor();
 
-      for(let t of this.tags){
-        this.addTagButton(t);
-      }
       if(this.document.content){
         self.editor.setContent(this.document.content);
       }
@@ -59,19 +61,26 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
 
         this.document = d;
 
-        // TODO: Load project
+        // TODO: Load project in service => Promise
         let content = this.projectService.loadDocumentContent(this.document.name);
 
         self.editor.setContent(content);
+        self.editor.focus();
     });
   }
 
   private tagClicked(tag: Tag){
-    this.editor.insertContent(tag.asHtml());
+    this.openDialog(tag);
+  }
+
+  private contentClicked(){
+    console.log("Content");
+    this.editor.focus();
   }
 
   /**
-   * Adds a tag-button to the editor
+   * Adds a tag-button to the editor7
+   * CURRENTLY NOT USED
    * @param tag
    */
   private addTagButton(tag: Tag): void {
@@ -104,36 +113,67 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
 
     console.log("ahaha");
 
-
-   /* this.hotkeysService.add(new Hotkey('meta+shift+g', (event: KeyboardEvent): boolean => {
-      console.log('Typed hotkey');
-      return false; // Prevent bubbling
-    }));
-*/
   }
-/*
-  @HostListener('document:keypress', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    console.log("Event",event);
 
-    if(event.ctrlKey && event.keyCode == 1){
-          this.editor.insertContent(this.tags[0].asHtml());
+  /**
+   * TODO:
+   * + Maybe add Description and Tooltips
+   * @param tag
+   */
+  private openDialog(tag: Tag){
+
+    let inputs = [];
+
+    for(let i = 0; i < tag.inputs.length; i++){
+      let newInput = {
+        name: tag.inputs[i].name,
+        label: tag.inputs[i].name,
+        type: 'textbox'
+        //,tooltip: input.description
+      };
+
+      if(i == 0){
+        newInput['value'] = this.editor.selection.getContent();
       }
-  }*/
+
+      inputs.push(newInput);
+    }
+
+    let self = this;
+
+    this.editor.windowManager.open({
+      title: 'Add Tag',
+      body: inputs,
+      onsubmit: function(e){
+        for(let data in e.data){
+          tag.setInputValue(data,e.data[data]);
+        }
+        self.editor.insertContent(tag.asHtml());
+        self.editor.selection.setContent("");
+      }
+    });
+  }
 
   ngAfterViewInit(): void {
 
+  }
+
+  keyEvent(event: KeyboardEvent) {
   }
 
   private initEditor(){
     let self = this;
     tinymce.init({
       selector: '#mainEditor',
-      plugins: ['link', 'paste', 'table', 'save'],
+      inline: true,
+      fixed_toolbar_container: '#editorToolbar',
+      plugins: ['lists', 'advlist','link', 'paste', 'table', 'save', 'textpattern'],
+      insert_button_items: 'image link | inserttable',
       skin_url: 'assets/skins/lightgray',
-      toolbar: 'save | insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | TagBar',
+      toolbar: 'save | insertfile undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image ',
       menubar: true,
       height: "100%",
+      resize: false,
       setup: function(editor){
         self.editorSetup(editor);
       },
@@ -146,24 +186,33 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy {
 
   private editorSetup(editor) {
 
-
     editor.on('keyup', () => {
       const content = editor.getContent();
       this.onEditorKeyUp.emit(content);
     });
 
     editor.on('focus', () => {
-      // TODO: disable menu-ctrl thorugh service
-      console.log("focus");
+      this.inputService.setActive("MainEditor");
     });
 
     editor.on('init', function(args) {
       console.log("Editor inited");
     });
 
+    // Curstom shortcuts
+
+    // Switch to Menu
+    editor.addShortcut("ctrl+alt+w", "MenuSwitch", () => {
+      this.inputService.setActive("MenuContainer");
+      console.log("switch");
+      // TODO: Remove focus
+
+    });
+
+    // Add Tag Shortcuts
     for(let tag of this.tags){
       editor.addShortcut(tag.hotkey, tag.name, () => {
-        editor.insertContent(tag.asHtml());
+        this.openDialog(tag);
       });
     }
 

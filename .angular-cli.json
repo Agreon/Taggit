@@ -28,7 +28,10 @@
         "../node_modules/tinymce/plugins/paste/plugin.js",
         "../node_modules/tinymce/plugins/table/plugin.js",
         "../node_modules/tinymce/plugins/save/plugin.js",
-        "../node_modules/tinymce/plugins/autosave/plugin.js"
+        "../node_modules/tinymce/plugins/autosave/plugin.js",
+        "../node_modules/tinymce/plugins/lists/plugin.js",
+        "../node_modules/tinymce/plugins/advlist/plugin.js",
+        "../node_modules/tinymce/plugins/textpattern/plugin.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

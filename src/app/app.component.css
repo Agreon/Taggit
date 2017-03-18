@@ -1,0 +1,12 @@
+.wrapper{
+ xoverflow: hidden;
+}
+
+.content-wrapper {
+  max-height: 100vh;
+  min-height: 93.7vh;
+}
+
+.main-header .main-sidebar {
+  position: fixed;
+}
