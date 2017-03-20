@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Project} from "../models/project";
 import {Document} from "../models/document";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
+import {HttpService} from "./http.service";
 
 @Injectable()
 export class ProjectService {
@@ -15,7 +16,7 @@ export class ProjectService {
   private currentProject: Project;
   private currentDocument: Document;
 
-  constructor() { }
+  constructor(private httpService: HttpService) { }
 
   /**
    * Load all projects of a user
@@ -31,6 +32,12 @@ export class ProjectService {
       new Project("GDV",[]),
       new Project("Philo",[])
     ];
+
+    this.httpService.getProjects().subscribe(projects => {
+      console.log("Got projects",projects);
+    }, err => {
+      console.log("Err", err);
+    });
 
     this.allProjectsSubject.next(this.projects);
   }

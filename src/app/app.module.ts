@@ -23,6 +23,7 @@ import {ProjectService} from "./services/project.service";
 import {Routes, RouterModule} from "@angular/router";
 import { TagButtonComponent } from './main-editor/tag-button/tag-button.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import {HttpService} from "./services/http.service";
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
@@ -49,7 +50,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
     //,TooltipModule.forRoot()
   ],
-  providers: [TagService, EditorService, LogService, InputService, ProjectService],
+  providers: [TagService, EditorService, LogService, InputService, ProjectService, HttpService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })
