@@ -59,7 +59,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
           return;
         }
 
-        this.document = d;
+       this.document = d;
 
         // TODO: Load project in service => Promise
         let content = this.projectService.loadDocumentContent(this.document.name);
@@ -133,7 +133,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       };
 
       if(i == 0){
-        newInput['value'] = this.editor.selection.getContent();
+        newInput['value'] = this.editor.selection.getStoreableContent();
       }
 
       inputs.push(newInput);

@@ -3,6 +3,7 @@ import {Project} from "../models/project";
 import {Document} from "../models/document";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpService} from "./http.service";
+import {LogService} from "./log.service";
 
 @Injectable()
 export class ProjectService {
@@ -22,33 +23,26 @@ export class ProjectService {
    * Load all projects of a user
    */
   public loadProjects(): void {
-    // TODO: Load projects
-
-    this.projects = [
-      new Project("EWA",[
-        new Document("Vorlesung 1","<p>BliBlaBlub</p>",true),
-        new Document("Vorlesung 2", "<p>BluBlaBli</p>", true)
-      ]),
-      new Project("GDV",[]),
-      new Project("Philo",[])
-    ];
-
-    this.httpService.getProjects().subscribe(projects => {
+    this.httpService.get("project").subscribe( projects => {
       console.log("Got projects",projects);
+      this.projects = projects;
+      this.allProjectsSubject.next(this.projects);
     }, err => {
       console.log("Err", err);
     });
+  }
 
-    this.allProjectsSubject.next(this.projects);
+  public createProject(name: string) {
+    this.httpService.create(new Project(name)).subscribe(proj => {
+      this.projects.push(proj);
+      this.allProjectsSubject.next(this.projects);
+    }, err => {
+      console.log("Err", err);
+    });
   }
 
   public getProjects(): Observable<Project[]> {
     return this.allProjectsSubject.asObservable();
-  }
-
-  public addProject(project: Project): void {
-    this.projects.push(project);
-    this.allProjectsSubject.next(this.projects);
   }
 
   public setCurrentProject(project: Project) {
@@ -69,17 +63,50 @@ export class ProjectService {
     return this.currentDocumentSubject.asObservable();
   }
 
+  /**
+   * TODO: Make Observable return?
+   * @param document
+   */
   public saveDocument(document: Document) {
 
     // TODO: Maybe get tags out of doc
 
+    console.log("Save doc", document);
+
     this.currentProject.saveDocument(document);
 
     // TODO: Save currentProject in DB?
-    // Additionally the doc somewhere
-    // so we need an id
+    this.httpService.save(this.currentProject).subscribe(() => {
+        console.log("Saved project to db", this.currentProject);
+      },
+      err => {
+        console.log("Error saving project to db", err);
+      }
+    );
 
-    // Set cached
+    this.httpService.save(document).subscribe((doc) => {
+        console.log("Saved document to db", doc);
+      },
+      err => {
+        console.log("Error saving document to db", err);
+      }
+    );
+
+    // Set cached if initial? => nein passiert bei create
+  }
+
+  /**
+   * Observable return
+   * @param document
+   */
+  public createDocument(document: Document) {
+      console.log("Creating doc", document);
+      this.httpService.create(document).subscribe(doc => {
+          console.log("Created document", doc);
+          //this.currentProject.saveDocument(doc);
+      }, err => {
+        console.log("Error creating document", err);
+      });
   }
 
   /**
@@ -94,10 +121,14 @@ export class ProjectService {
     if(doc.cached){
         return doc.content;
     } else {
-      // TODO: Load from db
+      // Load from db
+      this.httpService.get("document", doc._id).subscribe(document => {
+        // Set cache-status
+        doc.cached = true;
+        console.log("Got doc", document);
+        this.currentProject.saveDocument(document);
+      }, err => { LogService.log("Error getting doc content", err)});
 
-      // Set cache-status
-      doc.cached = true;
     }
   }
 

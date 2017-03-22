@@ -44,7 +44,6 @@ export class MenuManagerComponent implements OnInit {
 
 
   private loadMenu(menuType: MENU_TYPE, param: any = {}){
-    console.log("Loading",this.menus[menuType]);
 
     let factory = null;
     if(menuType == MENU_TYPE.MAIN_MENU){

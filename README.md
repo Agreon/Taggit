@@ -16,11 +16,28 @@
 	+ Markdown
   + TagButtons
     + Vlt. in MenuButton -> Tags mit collaps
+    + Collapse-Button
   
-              
++ Design: Verbindung zu Backend 
+  + Wie mache ich das mit den IDs?
+  => Anwendungsfälle 
+    + Create-Doc
+      => Den wert den man zurück kriegt, als doc setzen
+        => so wird id gespeichert
+        => ret in currProj speichern
+    + Create-Proj
+      + id speichern
+      
+    + getDoc(id)
+       
+  
+       
               
 + NiceToHave
 	+ Search
+	+ Link freigeben (public)
+		+ einfach get /id des docs
+		+ wenn bool: public, show 
 
 + User
   + DB-Design

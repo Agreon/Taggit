@@ -19,6 +19,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
   private projectSelected = new Subject<string>();
   private tagSelected = new Subject<string>();
   private headerSelected = new Subject<string>();
+  private createProject = new Subject<string>();
 
   private projects: Project[] = [];
 
@@ -42,9 +43,13 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
        */
       this.projects = projects;
 
+      this.slots[0].options = [];
+
       projects.forEach(p => {
         this.slots[0].options.push(new Slot(p.name,this.projectSelected,"book"));
       });
+
+      this.slots[0].options.push(new Slot("Add", this.createProject, "book"));
     });
 
     this.projectService.loadProjects();
@@ -55,6 +60,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.getByName(name).collapsed = !this.getByName(name).collapsed;
     });
 
+    // Project selected
     this.projectSelected
       .map(name => {  // Get Project for name
       return  this.projects.filter(p => {
@@ -63,6 +69,11 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     }).subscribe(project => {
       this.projectService.setCurrentProject(project);
       this.changeMenu.next(new MenuEvent(MENU_TYPE.PROJECT_VIEW));
+    });
+
+    // Create Project
+    this.createProject.subscribe(() => {
+      this.projectService.createProject("TestProject");
     });
 
     this.tagSelected.subscribe((tagName) => {
