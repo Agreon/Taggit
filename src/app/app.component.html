@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper hold-transition skin-blue sidebar-mini">
   <header class="main-header">
     <!-- Logo -->
     <a class="logo">
@@ -9,13 +9,15 @@
     </a>
     <navbar (OnToggle)="toggleSidebar()"></navbar>
   </header>
-  <aside *ngIf="sidebarVisible" (click)="onClickSidebar()" class="main-sidebar">
+  <aside (click)="onClickSidebar()" class="main-sidebar">
     <menu-manager></menu-manager>
   </aside>
 
   <div class="content-wrapper">
       <router-outlet></router-outlet>
   </div>
+
+  <app-modal></app-modal>
 
   <!--<div class="control-sidebar-bg"></div>-->
 </div>

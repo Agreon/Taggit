@@ -1,43 +1,46 @@
 # TODO
+
+	+ Backend.save überbschreibt alte werte nicht, sondern fügt sie trotz gleicher id dazu ein.
+
 + Menü
-	+ Mouse-Animationen
-		+ OnClick
-		  +=> in menu-slot 200ms timeout bis das event emittet wird
-	+ angular 2->prevent default
+
   + focus
     + Nach keypress um zu menü zu wechseln
         => focus weg von editor
-		 
+  + toolbar
+     + always show 
+  + Modals
+     + Kann diese auch für Tags verwenden!   
+     + Instant-Focus für ersten Input  
+         
+   + LoadingSpinner
+         
 + InputManager
+  + Chrome 
+      + Arrow-Keys are not recognized
 + Editor
 	+ Styling 
-		https://www.tinymce.com/docs/configure/editor-appearance/#fixed_toolbar_container
-    https://www.tinymce.com/docs/configure/editor-appearance/#inline
+    + Einblende Leiste dauerhaft anzeigen
 	+ Markdown
   + TagButtons
     + Vlt. in MenuButton -> Tags mit collaps
     + Collapse-Button
+    + Tooltips wieder rein?
   
-+ Design: Verbindung zu Backend 
-  + Wie mache ich das mit den IDs?
-  => Anwendungsfälle 
-    + Create-Doc
-      => Den wert den man zurück kriegt, als doc setzen
-        => so wird id gespeichert
-        => ret in currProj speichern
-    + Create-Proj
-      + id speichern
-      
-    + getDoc(id)
-       
   
        
-              
 + NiceToHave
 	+ Search
 	+ Link freigeben (public)
 		+ einfach get /id des docs
 		+ wenn bool: public, show 
+	+ Menu
+    + MenuToggle
+       + Nachschauen welche klassen in admineLte
+       + Vorerst Weglassen?
+    + Mouse-Animationen
+          + OnClick
+            +=> in menu-slot 200ms timeout bis das event emittet wird
 
 + User
   + DB-Design

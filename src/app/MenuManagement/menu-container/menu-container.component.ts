@@ -32,12 +32,11 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
   private optionIndex: number = -1;
 
   constructor(private inputService: InputService) {
-    inputService.addReciever("MenuContainer", this);
-    inputService.setActive("MenuContainer");
   }
 
   ngOnInit() {
-
+    this.inputService.addReciever("MenuContainer", this);
+    this.inputService.setActive("MenuContainer");
   }
 
   ngOnChanges() {

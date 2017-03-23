@@ -1,0 +1,28 @@
+<div class="modal fade"
+     tabindex="-1"
+     [ngClass]="{'in': visibleAnimate}"
+     [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" *ngIf="parameter">
+        {{parameter.header}}
+      </div>
+      <div class="modal-body" *ngIf="parameter && parameter.inputs">
+        <div
+            *ngFor="let input of parameter.inputs"
+             class="row">
+          <div class="col-lg-3">
+            {{input.label}}
+          </div>
+          <div class="col-lg-9">
+            <input type="text" [(ngModel)]="input.value">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

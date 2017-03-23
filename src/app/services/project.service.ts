@@ -5,6 +5,9 @@ import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpService} from "./http.service";
 import {LogService} from "./log.service";
 
+/**
+ * TODO: Order Methods
+ */
 @Injectable()
 export class ProjectService {
 
@@ -37,7 +40,7 @@ export class ProjectService {
       this.projects.push(proj);
       this.allProjectsSubject.next(this.projects);
     }, err => {
-      console.log("Err", err);
+      console.log("Err Creating project", err);
     });
   }
 
@@ -91,26 +94,31 @@ export class ProjectService {
         console.log("Error saving document to db", err);
       }
     );
-
-    // Set cached if initial? => nein passiert bei create
   }
 
   /**
-   * Observable return
-   * @param document
+   * TODO: Observable/Promise return
+   * @param name
    */
-  public createDocument(document: Document) {
-      console.log("Creating doc", document);
-      this.httpService.create(document).subscribe(doc => {
-          console.log("Created document", doc);
-          //this.currentProject.saveDocument(doc);
-      }, err => {
-        console.log("Error creating document", err);
-      });
+  public createDocument(name: string) {
+    console.log("Create",name);
+    this.httpService.create(new Document(name)).subscribe((document: Document) => {
+      document.cached = true;
+
+      console.log("currproj",this.currentProject);
+
+      this.currentProject.saveDocument(document);
+      this.currentDocument = document;
+
+      this.currentProjectSubject.next(this.currentProject);
+      this.currentDocumentSubject.next(this.currentDocument);
+    }, err => {
+      console.log("Err Creating document", err);
+    });
   }
 
   /**
-   * TODO: Get Doc from DB and save it in currentProject-docs
+   * TODO: return to somewhere..maybe to caller or subject
    * Gets the content of a document
    * @param name
    */
@@ -127,6 +135,7 @@ export class ProjectService {
         doc.cached = true;
         console.log("Got doc", document);
         this.currentProject.saveDocument(document);
+        return this.currentDocument.content;
       }, err => { LogService.log("Error getting doc content", err)});
 
     }

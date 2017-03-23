@@ -1,7 +1,8 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, HostListener, ViewChild} from '@angular/core';
 import {LogService} from "./services/log.service";
 import {EditorService} from "./services/editor.service";
 import {InputService} from "./services/input.service";
+import {ModalComponent} from "./MenuManagement/modal/modal.component";
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,7 @@ export class AppComponent {
   handleKeyboardEvent(event: KeyboardEvent) {
     this.inputService.keyPress(event);
   }
-
+  
   private onClickSidebar(){
     this.inputService.setActive("MenuContainer");
   }

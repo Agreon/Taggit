@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {MenuTemplateComponent} from "../menu-template/menu-template.component";
 import {MENU_TYPE, MenuEvent} from "../../menu-manager/menu-manager.component";
 import {Subject} from "rxjs";
@@ -6,6 +6,8 @@ import {Slot} from "../../models/slot";
 import {ProjectService} from "../../../services/project.service";
 import {Project} from "../../../models/project";
 import {Router, ActivatedRoute} from "@angular/router";
+import {ModalInput, ModalParameter} from "../../modal/modal.component";
+import {ModalService} from "../../../services/modal.service";
 
 @Component({
   selector: 'project-view-menu',
@@ -15,10 +17,12 @@ import {Router, ActivatedRoute} from "@angular/router";
 export class ProjectViewMenuComponent extends MenuTemplateComponent implements OnInit{
 
   private selectedDocument = new Subject<string>();
+  private createDocument = new Subject<string>();
 
   private project: Project;
 
   constructor(private projectService: ProjectService,
+              private modalService: ModalService,
               private router: Router) {
     super();
 
@@ -44,6 +48,22 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       this.router.navigate(['/MainEditor']);
     });
 
+
+    let onCreate = new EventEmitter<Array<ModalInput>>();
+
+    // Create Document Callback
+    onCreate.subscribe(inputs => {
+      this.projectService.createDocument(inputs[0].value);
+    });
+
+    // On Create Document-Button
+    this.createDocument.subscribe(() => {
+      console.log("CreateProject");
+      let param = new ModalParameter("New Document",[
+        new ModalInput("Name","")
+      ], onCreate);
+      this.modalService.openModal(param);
+    });
   }
 
   ngOnInit() {
@@ -52,12 +72,15 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
   public updateView(): void {
     this.slots = [];
 
+    // Create Menu
+    this.slots.push(new Slot("Create Document", this.createDocument, "plus"));
+
     if(this.project.documents.length < 1){
       return;
     }
 
     this.project.documents.forEach(d => {
-      this.slots.push(new Slot(d.name,this.selectedDocument,"book"));
+      this.slots.push(new Slot(d.name,this.selectedDocument,"file-text"));
     });
 
     if(this.slots.length < 1){

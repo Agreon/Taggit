@@ -5,6 +5,8 @@ import {MenuEvent, MENU_TYPE} from "../../menu-manager/menu-manager.component";
 import {MenuTemplateComponent} from "../menu-template/menu-template.component";
 import {ProjectService} from "../../../services/project.service";
 import {Project} from "../../../models/project";
+import {ModalService} from "../../../services/modal.service";
+import {ModalInput, ModalParameter} from "../../modal/modal.component";
 
 /**
  * TODO: Back-Button + create button
@@ -23,33 +25,34 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
   private projects: Project[] = [];
 
-  constructor(private projectService: ProjectService) {
+  constructor(private projectService: ProjectService,
+              private modalService: ModalService) {
     super();
 
     this.slots = [
       new Slot("Projects", this.headerSelected, "book", [
+        new Slot("Create Menu", this.createProject, "plus")
       ], true, false),
-      new Slot("Tags", this.headerSelected, "book",[
-        new Slot("TODO", this.tagSelected, "book"),
-        new Slot("Question", this.tagSelected, "book")
+      new Slot("Tags", this.headerSelected, "tags",[
+        new Slot("TODO", this.tagSelected, "tag"),
+        new Slot("Question", this.tagSelected, "tag")
       ])
     ];
 
+
     // Load Project-Document
     this.projectService.getProjects().subscribe(projects => {
-      /**
-       * Foreach oder mapping??
-       * @type {Project[]}
-       */
+
       this.projects = projects;
 
       this.slots[0].options = [];
 
+      // Create Menu
+      this.slots[0].options.push(new Slot("Create Menu", this.createProject, "plus"));
+
       projects.forEach(p => {
         this.slots[0].options.push(new Slot(p.name,this.projectSelected,"book"));
       });
-
-      this.slots[0].options.push(new Slot("Add", this.createProject, "book"));
     });
 
     this.projectService.loadProjects();
@@ -66,15 +69,26 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       return  this.projects.filter(p => {
         return p.name == name;
       })[0];
-    }).subscribe(project => {
+    }).subscribe((project: Project) => {
       this.projectService.setCurrentProject(project);
       this.changeMenu.next(new MenuEvent(MENU_TYPE.PROJECT_VIEW));
     });
 
+    let onCreate = new EventEmitter<Array<ModalInput>>();
+
     // Create Project
     this.createProject.subscribe(() => {
-      this.projectService.createProject("TestProject");
+      console.log("CreateProject");
+      let param = new ModalParameter("New Project",[
+        new ModalInput("Name","")
+      ], onCreate);
+      this.modalService.openModal(param);
     });
+
+    onCreate.subscribe(inputs => {
+        this.projectService.createProject(inputs[0].value);
+    });
+
 
     this.tagSelected.subscribe((tagName) => {
     });

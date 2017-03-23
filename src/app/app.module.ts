@@ -10,6 +10,7 @@ import { TagService } from './services/tag.service';
 import { EditorService } from './services/editor.service';
 import { LogService } from './services/log.service';
 import { InputService } from './services/input.service';
+import {ModalService} from "./services/modal.service";
 
 // Components
 import { MainEditorComponent } from './main-editor/main-editor.component';
@@ -24,6 +25,7 @@ import {Routes, RouterModule} from "@angular/router";
 import { TagButtonComponent } from './main-editor/tag-button/tag-button.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import {HttpService} from "./services/http.service";
+import { ModalComponent } from './MenuManagement/modal/modal.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
@@ -41,7 +43,8 @@ const appRoutes: Routes = [
     ProjectViewMenuComponent,
     MenuTemplateComponent,
     TagButtonComponent,
-    NavbarComponent
+    NavbarComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
     //,TooltipModule.forRoot()
   ],
-  providers: [TagService, EditorService, LogService, InputService, ProjectService, HttpService],
+  providers: [TagService, EditorService, ModalService, LogService, InputService, ProjectService, HttpService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })

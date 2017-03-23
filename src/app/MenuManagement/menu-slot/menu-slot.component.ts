@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, SimpleChanges} from '@angular/core';
 import {Slot} from "../models/slot";
 
 
@@ -12,14 +12,22 @@ export class MenuSlotComponent implements OnInit {
   @Input("Slot")
   slot: Slot;
 
+  private iconStyle = "fa fa-book";
+
   constructor() { }
 
-  ngOnInit() {
-
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes["slot"]){
+      this.iconStyle = "fa fa-" + this.slot.icon;
+    }
   }
 
-  // TODO: Maybe give whole slot
+  ngOnInit(): void {
+  }
+
+  // TODO: Maybe give back whole slot
   private selected(event): void {
+    event.stopPropagation();
     this.slot.selected.next(this.slot.name);
   }
 

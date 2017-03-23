@@ -132,8 +132,9 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
         //,tooltip: input.description
       };
 
+      // Set selection as value for first input
       if(i == 0){
-        newInput['value'] = this.editor.selection.getStoreableContent();
+        newInput['value'] = this.editor.selection.getContent();
       }
 
       inputs.push(newInput);
@@ -154,6 +155,9 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     });
   }
 
+
+
+
   ngAfterViewInit(): void {
 
   }
@@ -165,7 +169,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     let self = this;
     tinymce.init({
       selector: '#mainEditor',
-      inline: true,
+      //inline: true,
       fixed_toolbar_container: '#editorToolbar',
       plugins: ['lists', 'advlist','link', 'paste', 'table', 'save', 'textpattern'],
       insert_button_items: 'image link | inserttable',
@@ -196,7 +200,6 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     });
 
     editor.on('init', function(args) {
-      console.log("Editor inited");
     });
 
     // Curstom shortcuts
