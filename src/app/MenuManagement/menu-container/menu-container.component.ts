@@ -68,9 +68,8 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
         }
       }
       else if(this.currentSlot < this.slots.length - 1){
-        this.slots[this.currentSlot].active = false;
         this.currentSlot++;
-        this.slots[this.currentSlot].active = true;
+        this.setActive(this.slots[this.currentSlot].name);
       }
     }
 
@@ -89,9 +88,8 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
         }
       }
       else if(this.currentSlot > 0){
-        this.slots[this.currentSlot].active = false;
         this.currentSlot--;
-        this.slots[this.currentSlot].active = true;
+        this.setActive(this.slots[this.currentSlot].name);
       }
     }
 

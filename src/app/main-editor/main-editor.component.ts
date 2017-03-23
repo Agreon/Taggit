@@ -1,5 +1,4 @@
 import {Component, OnInit, OnDestroy, AfterViewInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
-import {EditorService} from "../services/editor.service";
 import {Subscription} from "rxjs";
 import {LogService} from "../services/log.service";
 import {Tag, TagInput} from "../models/tag";
@@ -10,6 +9,8 @@ import {ProjectService} from "../services/project.service";
 import {ActivatedRouteSnapshot, ActivatedRoute} from "@angular/router";
 import {InputService} from "../services/input.service";
 import {InputReceiver} from "../models/input-receiver";
+import {ModalService} from "../services/modal.service";
+import {ModalInput, ModalParameter} from "../MenuManagement/modal/modal.component";
 
 /**
  * TODO:
@@ -37,7 +38,8 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
   constructor(private projectService: ProjectService,
               private tagService: TagService,
-              private inputService: InputService){
+              private inputService: InputService,
+              private modalService: ModalService){
 
     inputService.addReciever("MainEditor",this);
 
@@ -59,13 +61,14 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
           return;
         }
 
+       console.log("Current Doc", d);
        this.document = d;
 
-        // TODO: Load project in service => Promise
-        let content = this.projectService.loadDocumentContent(this.document.name);
-
-        self.editor.setContent(content);
-        self.editor.focus();
+       this.projectService.loadDocumentContent(this.document.name).subscribe(content => {
+         console.log("Got Content", content);
+         self.editor.setContent(content);
+         self.editor.focus();
+       });
     });
   }
 
@@ -115,12 +118,41 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
   }
 
+  private openDialog(tag: Tag) {
+    let insertTag = new EventEmitter<Array<ModalInput>>();
+
+
+    let inputs = [];
+
+    for(let i = 0; i < tag.inputs.length; i++){
+      let newInput = new ModalInput(tag.inputs[i].name, "");
+
+      // Set selection as value for first input
+      if(i == 0){
+        newInput['value'] = this.editor.selection.getContent();
+      }
+
+      inputs.push(newInput);
+    }
+
+    let param = new ModalParameter("Insert Tag", inputs, insertTag);
+
+    this.modalService.openModal(param);
+
+    insertTag.subscribe(inputs => {
+      for(let data in inputs){
+        tag.setInputValue(data,inputs[data]);
+      }
+      this.editor.insertContent(tag.asHtml());
+      this.editor.selection.setContent("");
+    });
+  }
   /**
    * TODO:
    * + Maybe add Description and Tooltips
    * @param tag
    */
-  private openDialog(tag: Tag){
+  private openDialog2(tag: Tag){
 
     let inputs = [];
 
@@ -169,7 +201,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     let self = this;
     tinymce.init({
       selector: '#mainEditor',
-      //inline: true,
+      inline: true,
       fixed_toolbar_container: '#editorToolbar',
       plugins: ['lists', 'advlist','link', 'paste', 'table', 'save', 'textpattern'],
       insert_button_items: 'image link | inserttable',

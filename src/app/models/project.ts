@@ -11,6 +11,7 @@ export class Project extends Storeable {
     public documents: Array<Document> = []
   ){
     super();
+    this.excludedFromDB.push("documents");
   }
 
   public saveDocument(document: Document) {
@@ -31,8 +32,48 @@ export class Project extends Storeable {
     })[0];
   }
 
+  /**
+   * TOOD: Documents are just ids
+   * @param object
+   * @returns {Project}
+   */
+  public fromJSON(object: any): void {
+
+    for(let attr in object){
+      if(object.hasOwnProperty(attr) &&
+        attr != "documents"){
+        this[attr] = object[attr];
+      }
+    }
+
+    // TODO: Test
+
+    // Add new documents
+    object.documents.forEach(doc => {
+      if(this.documents.filter(ownDoc => {
+          return ownDoc._id == doc._id;
+        }).length == 0){
+          this.documents.push(Document.fromJSON(doc));
+      }
+    });
+
+    // Check if documents still in project
+    /*this.documents = this.documents.filter(doc => {
+      return object.documents.indexOf(docMeta => {
+          // If in array
+          if(doc._id == docMeta._id){
+            // update doc-name
+            doc.name = docMeta.name;
+            return true;
+          }
+          return false;
+      }) != -1;
+    });*/
+  }
+
   public getStoreableContent(): any {
-    let content = {_id: this._id, name: this.name, documents: []};
+    let content = super.getStoreableContent();
+    content.documents = [];
 
     for (let doc of this.documents){
       content.documents.push({_id: doc._id, name: doc.name});

@@ -10,21 +10,24 @@ export class Document extends Storeable {
     public cached: boolean = false
   ) {
     super();
+    // Exclude cached
+    this.excludedFromDB.push("cached");
   }
 
-  public fromJSON(object: any){
+
+  public static fromJSON(object: any): Document {
+    let document = new Document("");
+
     for(let attr in object){
       if(object.hasOwnProperty(attr)){
-        this[attr] = object[attr];
+        document[attr] = object[attr];
       }
     }
+
+    return document;
   }
 
-  // TODO: Find out how to filter out values from stringify
   public getStoreableContent(): any {
-    return {
-      _id: this._id,
-      name: this.name,
-      content: this.content};
+    return super.getStoreableContent();
   }
 }

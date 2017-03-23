@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Project} from "../models/project";
 import {Document} from "../models/document";
-import {Subject, Observable, BehaviorSubject} from "rxjs";
+import {Subject, Observable, BehaviorSubject, Observer} from "rxjs";
 import {HttpService} from "./http.service";
 import {LogService} from "./log.service";
 
@@ -28,7 +28,14 @@ export class ProjectService {
   public loadProjects(): void {
     this.httpService.get("project").subscribe( projects => {
       console.log("Got projects",projects);
-      this.projects = projects;
+      this.projects = projects.map(project => {
+        let proj = new Project("");
+        proj.fromJSON(project);
+        return proj;
+      });
+      console.log("Save them as",this.projects);
+
+      //this.projects = projects;
       this.allProjectsSubject.next(this.projects);
     }, err => {
       console.log("Err", err);
@@ -36,7 +43,12 @@ export class ProjectService {
   }
 
   public createProject(name: string) {
-    this.httpService.create(new Project(name)).subscribe(proj => {
+    this.httpService.create(new Project(name)).subscribe(project => {
+
+      // Fill with ids and so on
+      let proj = new Project("");
+      proj.fromJSON(project);
+
       this.projects.push(proj);
       this.allProjectsSubject.next(this.projects);
     }, err => {
@@ -102,47 +114,45 @@ export class ProjectService {
    */
   public createDocument(name: string) {
     console.log("Create",name);
-    this.httpService.create(new Document(name)).subscribe((document: Document) => {
+    this.httpService.create(new Document(name)).subscribe(document => {
       document.cached = true;
-
-      let doc = new Document("");
-      doc.fromJSON(document);
-
-      this.currentDocument = doc;
-
-      console.log("currproj",this.currentDocument);
-
+      this.currentDocument = Document.fromJSON(document);
       this.currentProject.saveDocument(this.currentDocument);
-
       this.currentProjectSubject.next(this.currentProject);
       this.currentDocumentSubject.next(this.currentDocument);
+
+      this.httpService.save(this.currentProject).subscribe(() => {
+        console.log("Project updated");
+      }, err => {
+        console.log("Err project update", err);
+      });
+
     }, err => {
       console.log("Err Creating document", err);
     });
   }
 
   /**
-   * TODO: return to somewhere..maybe to caller or subject
    * Gets the content of a document
    * @param name
    */
-  public loadDocumentContent(name: string): string {
-    //if(this.currentProject.documents)
+  public loadDocumentContent(name: string): Observable<string> {
+
     let doc = this.currentProject.getDocument(name);
-    // If cached just return it
-    if(doc.cached){
-        return doc.content;
-    } else {
-      // Load from db
-      this.httpService.get("document", doc._id).subscribe(document => {
-        // Set cache-status
-        doc.cached = true;
-        console.log("Got doc", document);
-        this.currentProject.saveDocument(document);
-        return this.currentDocument.content;
-      }, err => { LogService.log("Error getting doc content", err)});
 
-    }
+    return Observable.create((observer: Observer<string>) => {
+      if(doc.cached){
+        observer.next(doc.content);
+      } else {
+        // Load from db
+        this.httpService.get("document", doc._id).subscribe(document => {
+          this.currentDocument = Document.fromJSON(document);
+          // Set cache-status
+          this.currentDocument.cached = true;
+          this.currentProject.saveDocument(this.currentDocument);
+          observer.next(this.currentDocument.content);
+        }, err => { LogService.log("Error getting doc content", err); observer.error(err);});
+      }
+    });
   }
-
 }

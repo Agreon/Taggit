@@ -7,10 +7,9 @@ import { AppComponent } from './app.component';
 
 // Services
 import { TagService } from './services/tag.service';
-import { EditorService } from './services/editor.service';
 import { LogService } from './services/log.service';
 import { InputService } from './services/input.service';
-import {ModalService} from "./services/modal.service";
+import { ModalService } from "./services/modal.service";
 
 // Components
 import { MainEditorComponent } from './main-editor/main-editor.component';
@@ -53,7 +52,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
     //,TooltipModule.forRoot()
   ],
-  providers: [TagService, EditorService, ModalService, LogService, InputService, ProjectService, HttpService],
+  providers: [TagService, ModalService, LogService, InputService, ProjectService, HttpService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })

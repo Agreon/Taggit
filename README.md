@@ -1,7 +1,5 @@
 # TODO
 
-	+ Backend.save überbschreibt alte werte nicht, sondern fügt sie trotz gleicher id dazu ein.
-
 + Menü
 
   + focus
@@ -10,27 +8,39 @@
   + toolbar
      + always show 
   + Modals
-     + Kann diese auch für Tags verwenden!   
+     + Beautify 
      + Instant-Focus für ersten Input  
          
    + LoadingSpinner
          
+   + Options-Menu-Slot
+      + Rename
+      + Delete
+      
+   + Order Docs/Projects by creationDate  
+      
+    
 + InputManager
   + Chrome 
       + Arrow-Keys are not recognized
 + Editor
-	+ Styling 
-    + Einblende Leiste dauerhaft anzeigen
 	+ Markdown
   + TagButtons
     + Vlt. in MenuButton -> Tags mit collaps
     + Collapse-Button
     + Tooltips wieder rein?
   
-  
++ Backend
+    + User
+      + DB-Design
+        + ID
+        + LoginName (email)
+        + Password
+      + Register/ Login
        
 + NiceToHave
 	+ Search
+	+ DragnDrop to order projects/document
 	+ Link freigeben (public)
 		+ einfach get /id des docs
 		+ wenn bool: public, show 
@@ -42,17 +52,6 @@
           + OnClick
             +=> in menu-slot 200ms timeout bis das event emittet wird
 
-+ User
-  + DB-Design
-    + ID
-    + LoginName (email)
-    + Password
-  + Register/ Login
-  + 
-  
-  
-+ Backend
-  + Save Document
-  + Get Projects
-  + Get DocumentContent
+
+
 

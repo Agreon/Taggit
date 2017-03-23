@@ -28,9 +28,9 @@ export class ModalParameter {
   ) {}
 
   public getInput(name: string): ModalInput {
-    return this.inputs.find(input => {
+    return this.inputs.filter(input => {
       return input.name == name;
-    });
+    })[0];
   }
 }
 
@@ -63,12 +63,12 @@ export class ModalComponent implements OnInit, InputReceiver {
 
 
   keyEvent(event: KeyboardEvent) {
-    if (event.keyCode == 27 || event.keyCode == 8) {
-      this.onSubmit();
+    if (event.keyCode == 27) {
+      this.hide();
     }
 
     if (event.keyCode == 13) {
-      this.hide();
+      this.onSubmit();
     }
   }
 

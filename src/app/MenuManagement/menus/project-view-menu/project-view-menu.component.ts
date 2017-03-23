@@ -54,6 +54,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     // Create Document Callback
     onCreate.subscribe(inputs => {
       this.projectService.createDocument(inputs[0].value);
+      // TODO: Set Active
     });
 
     // On Create Document-Button
@@ -73,7 +74,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.slots = [];
 
     // Create Menu
-    this.slots.push(new Slot("Create Document", this.createDocument, "plus"));
+    this.slots.push(new Slot("Create Document", this.createDocument, "plus", null, true));
 
     if(this.project.documents.length < 1){
       return;
