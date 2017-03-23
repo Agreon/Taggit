@@ -105,10 +105,14 @@ export class ProjectService {
     this.httpService.create(new Document(name)).subscribe((document: Document) => {
       document.cached = true;
 
-      console.log("currproj",this.currentProject);
+      let doc = new Document("");
+      doc.fromJSON(document);
 
-      this.currentProject.saveDocument(document);
-      this.currentDocument = document;
+      this.currentDocument = doc;
+
+      console.log("currproj",this.currentDocument);
+
+      this.currentProject.saveDocument(this.currentDocument);
 
       this.currentProjectSubject.next(this.currentProject);
       this.currentDocumentSubject.next(this.currentDocument);

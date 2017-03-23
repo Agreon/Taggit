@@ -31,7 +31,7 @@ export class Project extends Storeable {
     })[0];
   }
 
-  getStoreableContent(): any {
+  public getStoreableContent(): any {
     let content = {_id: this._id, name: this.name, documents: []};
 
     for (let doc of this.documents){
