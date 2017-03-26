@@ -26,6 +26,11 @@ export class Project extends Storeable {
     LogService.log("Saved document in", this.documents);
   }
 
+  public removeDocument(document: Document){
+
+      LogService.log("Removed document", document);
+  }
+
   public getDocument(name: string): Document {
     return this.documents.filter(d => {
       return d.name == name;

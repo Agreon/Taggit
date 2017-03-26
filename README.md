@@ -6,7 +6,7 @@
     + Nach keypress um zu menü zu wechseln
         => focus weg von editor
 
-    + nameleiste schrift zentrieren
+  + menu-name-bar center font
 
   + Modals
      + Beautify 
@@ -15,13 +15,13 @@
    + LoadingSpinner
          
    + Options-Menu-Slot 
-      => Zum anzeigen kriegen
       => Vlt. später in context-menü (bootstrap?)
-      => Keynav in SubSlots fangen, bis escape gedrückt
+    + Main-menu options?
+        
       
    + Order Docs/Projects by creationDate  
       
-    + toolbar
+   + toolbar
          + always show 
 + InputManager
   + Chrome 
@@ -40,6 +40,9 @@
         + LoginName (email)
         + Password
       + Register/ Login
+      
++ General
+  + Dont load libs from CDN
       
 # NiceToHave
 + Search

@@ -16,7 +16,8 @@ export class HttpService {
   }
 
   public save(storeable: Storeable): Observable<any> {
-    return this.http.put(this.serverUrl + "/" + storeable.type + "/" + storeable._id, storeable.getStoreableContent());
+    return this.http.put(this.serverUrl + "/" + storeable.type + "/" + storeable._id, storeable.getStoreableContent())
+      .catch((error:any) => Observable.throw(error || 'Server error'));;
   }
 
   public get(type: string, id?: string): Observable<any> {
@@ -30,13 +31,8 @@ export class HttpService {
       .catch((error:any) => Observable.throw(error || 'Server error'));
   }
 
-  public delete(type: string, id?: string): Observable<any> {
-    let request = this.serverUrl + "/" + type;
-    if(id){
-      request += "/"+id;
-    }
-
-    return this.http.delete(request)
+  public remove(storeable: Storeable): Observable<any> {
+    return this.http.delete(this.serverUrl + "/" + storeable.type + "/" + storeable._id)
       .map((res: Response) => res.json())
       .catch((error:any) => Observable.throw(error || 'Server error'));
   }

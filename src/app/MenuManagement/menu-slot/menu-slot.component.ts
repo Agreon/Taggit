@@ -26,14 +26,16 @@ export class MenuSlotComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // TODO: Maybe give back whole slot
   private selected(event): void {
-    this.slot.onSelected.next(this.slot.name);
+   // this.slot.onSelected.next(this.slot);
     event.stopPropagation();
 
+    this.slot.selectSlot();
+/*
+    // TODO: in slot.ts?
     if(this.slot.subSlots && !this.slot.showAsOptions){
       this.slot.collapsed = !this.slot.collapsed;
-    }
+    }*/
   }
 
   private optionsSelected(event): void {
@@ -42,6 +44,9 @@ export class MenuSlotComponent implements OnInit {
   }
 
   private hover(slot: Slot){
-    this.slot.onHover.next(this.slot.name);
+    if(this.slot.onHover){
+      this.slot.onHover.next(this.slot);
+    }
   }
+
 }

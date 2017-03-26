@@ -56,6 +56,17 @@ export class ProjectService {
     });
   }
 
+  public renameProject(project: Project, name: string): Observable<Project> {
+    LogService.log("Rename project", name)
+    project.name = name;
+
+    return this.httpService.save(project);
+  }
+
+  public deleteProject(project: Project): Observable<any> {
+    return this.httpService.remove(project);
+  }
+
   public getProjects(): Observable<Project[]> {
     return this.allProjectsSubject.asObservable();
   }
@@ -132,6 +143,26 @@ export class ProjectService {
     });
   }
 
+  public renameDocument(document: Document, name: string): Observable<Document> {
+    document.name = name;
+    LogService.log("Rename document", document);
+
+    this.currentProject.saveDocument(document);
+
+    this.httpService.save(this.currentProject).subscribe(() => {
+      console.log("Project updated");
+    }, err => {
+      console.log("Err project update", err);
+    });
+
+    return this.httpService.save(document);
+  }
+
+  public deleteDocument(document: Document): Observable<any> {
+    return this.httpService.remove(document);
+  }
+
+
   /**
    * Gets the content of a document
    * @param name
@@ -146,12 +177,13 @@ export class ProjectService {
       } else {
         // Load from db
         this.httpService.get("document", doc._id).subscribe(document => {
+          console.log("got doc", document);
           this.currentDocument = Document.fromJSON(document);
           // Set cache-status
           this.currentDocument.cached = true;
           this.currentProject.saveDocument(this.currentDocument);
           observer.next(this.currentDocument.content);
-        }, err => { LogService.log("Error getting doc content", err); observer.error(err);});
+        }, err => { LogService.log("Error getting doc content", err); });
       }
     });
   }
