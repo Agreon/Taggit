@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, HostListener, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, HostListener, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import {Slot} from "../models/slot";
 import {InputReceiver} from "../../models/input-receiver";
 import {InputService} from "../../services/input.service";
@@ -29,7 +29,7 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
   onCancel: EventEmitter<any> = new  EventEmitter<any>();
 
   private currentSlot: number = 0;
-  private optionIndex: number = -1;
+  private subSlotIndex: number = -1;
 
   constructor(private inputService: InputService) {
   }
@@ -39,32 +39,39 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
     this.inputService.setActive("MenuContainer");
   }
 
-  ngOnChanges() {
-
-  }
-
-  private hover(slot: Slot){
-    this.setActive(slot.name);
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes["slots"]){
+      for(let slot of this.slots){
+        slot.onHover.subscribe((name) => {
+          //this.setActive(name);
+        });
+      }
+    }
   }
 
   private backPressed(){
     this.onCancel.emit();
   }
 
+  /**
+   * TODO: Remove if elses and just create one var for current slot
+   * TODO: Move alot to the slots
+   * @param event
+   */
   keyEvent(event: KeyboardEvent) {
     event.stopPropagation();
 
     // Down
     if(event.keyCode == 40){
       if(this.slots[this.currentSlot].collapsed == false){
-        if( this.optionIndex < this.slots[this.currentSlot].options.length - 1){
-          if(this.optionIndex != -1) {
+        if( this.subSlotIndex < this.slots[this.currentSlot].subSlots.length - 1){
+          if(this.subSlotIndex != -1) {
             this.slots[this.currentSlot]
-              .options[this.optionIndex].active = false;
+              .subSlots[this.subSlotIndex].active = false;
           }
-          this.optionIndex++;
+          this.subSlotIndex++;
           this.slots[this.currentSlot]
-            .options[this.optionIndex].active = true;
+            .subSlots[this.subSlotIndex].active = true;
         }
       }
       else if(this.currentSlot < this.slots.length - 1){
@@ -76,14 +83,14 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
     // Up
     if(event.keyCode == 38){
       if(this.slots[this.currentSlot].collapsed == false){
-        if(this.optionIndex > -1){
+        if(this.subSlotIndex > -1){
           this.slots[this.currentSlot]
-            .options[this.optionIndex].active = false;
+            .subSlots[this.subSlotIndex].active = false;
 
-          this.optionIndex--;
-          if(this.optionIndex != -1){
+          this.subSlotIndex--;
+          if(this.subSlotIndex != -1){
             this.slots[this.currentSlot]
-              .options[this.optionIndex].active = true;
+              .subSlots[this.subSlotIndex].active = true;
           }
         }
       }
@@ -95,29 +102,65 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
 
     // Return
     if(event.keyCode == 13){
-      if(this.optionIndex != -1) {
+      if(this.subSlotIndex != -1) {
         this.slots[this.currentSlot]
-          .options[this.optionIndex]
-          .selected.next(this.slots[this.currentSlot]
-          .options[this.optionIndex].name);
-      }else {
+          .subSlots[this.subSlotIndex]
+          .onSelected.next(this.slots[this.currentSlot]
+          .subSlots[this.subSlotIndex].name);
+
+        // If collapsable
+        if(this.slots[this.currentSlot].subSlots[this.subSlotIndex].subSlots && !this.slots[this.currentSlot].subSlots[this.subSlotIndex].showAsOptions){
+          this.slots[this.currentSlot].subSlots[this.subSlotIndex].collapsed = !this.slots[this.currentSlot].subSlots[this.subSlotIndex].collapsed;
+        }
+
+      }
+      else {
         this.slots[this.currentSlot]
-          .selected.next(this.slots[this.currentSlot].name);
-        // todo reset optionindex .active
+          .onSelected.next(this.slots[this.currentSlot].name);
+        // todo: reset subSlotIndex .active
+        // If collapsable
+        if(this.slots[this.currentSlot].subSlots && !this.slots[this.currentSlot].showAsOptions){
+          this.slots[this.currentSlot].collapsed = !this.slots[this.currentSlot].collapsed;
+          this.subSlotIndex = 0;
+          this.setActive(this.slots[this.currentSlot].subSlots[0].name);
+          if(this.slots[this.currentSlot].collapsed == true){
+            this.subSlotIndex = -1;
+          }
+        }
       }
     }
 
     // Escape
     if(event.keyCode == 27 || event.keyCode == 8){
-      if(this.optionIndex != -1){
+      if(this.subSlotIndex != -1){
         this.slots[this.currentSlot]
-          .options[this.optionIndex]
+          .subSlots[this.subSlotIndex]
           .active = false;
         this.slots[this.currentSlot].collapsed = true;
-        this.optionIndex = -1;
+        this.subSlotIndex = -1;
+      }else {
+        this.onCancel.emit();
       }
-      this.onCancel.emit();
     }
+
+    console.log("Options", event);
+
+    // Options
+    if(event.ctrlKey) {
+      if(this.subSlotIndex != -1 && this.slots[this.currentSlot].subSlots[this.subSlotIndex].showAsOptions) {
+        this.slots[this.currentSlot]
+          .subSlots[this.subSlotIndex]
+          .collapsed = !this.slots[this.currentSlot].subSlots[this.subSlotIndex].collapsed;
+      }else if(this.slots[this.currentSlot].showAsOptions) {
+        this.slots[this.currentSlot].collapsed = !this.slots[this.currentSlot].collapsed;
+        this.subSlotIndex = 0;
+        this.setActive(this.slots[this.currentSlot].subSlots[0].name);
+        if(this.slots[this.currentSlot].collapsed == true){
+          this.subSlotIndex = -1;
+        }
+      }
+    }
+
   }
 
   private setActive(slotName: string) {

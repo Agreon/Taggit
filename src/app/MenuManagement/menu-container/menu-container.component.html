@@ -17,13 +17,7 @@
     </span>
     <span>{{name}}</span>
   </li>
-  <li *ngFor="let slot of slots" (mouseover)="hover(slot)">
+  <li *ngFor="let slot of slots">
     <menu-slot [Slot]="slot"></menu-slot>
-      <!-- Show options -->
-      <ul *ngIf="!slot.collapsed && slot.options" class="treeview-menu">
-        <li *ngFor="let option of slot.options" (mouseover)="hover(slot)">
-          <menu-slot [Slot]="option "></menu-slot>
-        </li>
-      </ul>
   </li>
 </ul>

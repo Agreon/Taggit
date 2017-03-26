@@ -19,6 +19,7 @@ export class MenuSlotComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if(changes["slot"]){
       this.iconStyle = "fa fa-" + this.slot.icon;
+      console.log(this.slot);
     }
   }
 
@@ -27,8 +28,20 @@ export class MenuSlotComponent implements OnInit {
 
   // TODO: Maybe give back whole slot
   private selected(event): void {
+    this.slot.onSelected.next(this.slot.name);
     event.stopPropagation();
-    this.slot.selected.next(this.slot.name);
+
+    if(this.slot.subSlots && !this.slot.showAsOptions){
+      this.slot.collapsed = !this.slot.collapsed;
+    }
   }
 
+  private optionsSelected(event): void {
+    this.slot.collapsed = !this.slot.collapsed;
+    event.stopPropagation();
+  }
+
+  private hover(slot: Slot){
+    this.slot.onHover.next(this.slot.name);
+  }
 }

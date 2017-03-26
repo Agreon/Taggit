@@ -18,6 +18,8 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
   private selectedDocument = new Subject<string>();
   private createDocument = new Subject<string>();
+  private renameDocument = new Subject<string>();
+  private deleteDocument = new Subject<string>();
 
   private project: Project;
 
@@ -74,14 +76,17 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.slots = [];
 
     // Create Menu
-    this.slots.push(new Slot("Create Document", this.createDocument, "plus", null, true));
+    this.slots.push(new Slot("Create Document", "plus", null, false, this.createDocument));
 
     if(this.project.documents.length < 1){
       return;
     }
 
     this.project.documents.forEach(d => {
-      this.slots.push(new Slot(d.name,this.selectedDocument,"file-text"));
+      this.slots.push(new Slot(d.name,"file-text", [
+        new Slot("Rename", "pencil", null,false, this.renameDocument),
+        new Slot("Delete", "trash", null, false, this.deleteDocument)
+      ], true, this.selectedDocument));
     });
 
     if(this.slots.length < 1){

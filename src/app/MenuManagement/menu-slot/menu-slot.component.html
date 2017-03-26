@@ -1,7 +1,26 @@
-<a (click)="selected($event)" [class]="slot.active || !slot.collapsed ? 'active' : ''">
+<a (click)="selected($event)"
+   [class]="slot.active || !slot.collapsed ? 'active' : ''"
+   (mouseover)="hover(slot)">
+
   <i [class]="iconStyle"></i>
+
   <span>{{slot.name}}</span>
-  <span *ngIf="slot.options" class="pull-right-container">
+
+  <span *ngIf="slot.subSlots && !slot.showAsOptions" class="pull-right-container">
     <i class="fa fa-angle-left pull-right" ></i>
   </span>
+  <!-- Options -->
+  <span *ngIf="slot.showAsOptions"
+        class="pull-right-container"
+        (click)="optionsSelected($event)">
+    <i class="fa fa-cog" ></i>
+   <!-- <i class="fa fa-ellipsis-v" ></i>-->
+</span>
 </a>
+
+<!-- SubSlots -->
+<ul *ngIf="!slot.collapsed && slot.subSlots" class="treeview-menu">
+  <li *ngFor="let subSlot of slot.subSlots" (mouseover)="hover(subSlot)">
+    <menu-slot [Slot]="subSlot"></menu-slot>
+  </li>
+</ul>

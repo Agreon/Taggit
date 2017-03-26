@@ -7,6 +7,7 @@ import {ProjectService} from "../../../services/project.service";
 import {Project} from "../../../models/project";
 import {ModalService} from "../../../services/modal.service";
 import {ModalInput, ModalParameter} from "../../modal/modal.component";
+import {LogService} from "../../../services/log.service";
 
 /**
  * TODO: Back-Button + create button
@@ -23,6 +24,9 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
   private headerSelected = new Subject<string>();
   private createProject = new Subject<string>();
 
+  private renameProject = new Subject<string>();
+  private deleteProject = new Subject<string>();
+
   private projects: Project[] = [];
 
   constructor(private projectService: ProjectService,
@@ -30,12 +34,12 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     super();
 
     this.slots = [
-      new Slot("Projects", this.headerSelected, "book", [
-        new Slot("Create Menu", this.createProject, "plus")
-      ], true, false),
-      new Slot("Tags", this.headerSelected, "tags",[
-        new Slot("TODO", this.tagSelected, "tag"),
-        new Slot("Question", this.tagSelected, "tag")
+      new Slot("Projects", "book", [
+        new Slot("Create Project", "plus", null, null, this.createProject)
+      ], false, new Subject<string>(), new Subject<string>(), true, false),
+      new Slot("Tags", "tags", [
+        new Slot("TODO", "tag", null, false, this.tagSelected),
+        new Slot("Question", "tag", null, false, this.tagSelected)
       ])
     ];
 
@@ -45,13 +49,16 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
       this.projects = projects;
 
-      this.slots[0].options = [];
+      this.slots[0].subSlots = [];
 
       // Create Menu
-      this.slots[0].options.push(new Slot("Create Menu", this.createProject, "plus"));
+      this.slots[0].subSlots.push(new Slot("Create Menu", "plus", null, false, this.createProject));
 
       projects.forEach(p => {
-        this.slots[0].options.push(new Slot(p.name,this.projectSelected,"book"));
+        this.slots[0].subSlots.push(new Slot(p.name, "book", [
+          new Slot("Rename", "pencil", null,false, this.renameProject),
+          new Slot("Delete", "trash", null, false, this.deleteProject)
+        ], true, this.projectSelected));
       });
     });
 
@@ -59,11 +66,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.headerSelected.subscribe((name) => {
-      this.getByName(name).collapsed = !this.getByName(name).collapsed;
-    });
-
-    // Project selected
+    // Project onSelected
     this.projectSelected
       .map(name => {  // Get Project for name
       return  this.projects.filter(p => {
@@ -74,9 +77,9 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.changeMenu.next(new MenuEvent(MENU_TYPE.PROJECT_VIEW));
     });
 
+    // Create Project
     let onCreate = new EventEmitter<Array<ModalInput>>();
 
-    // Create Project
     this.createProject.subscribe(() => {
       console.log("CreateProject");
       let param = new ModalParameter("New Project",[
@@ -89,9 +92,44 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
         this.projectService.createProject(inputs[0].value);
     });
 
+    // Rename Project
+    let onRename = new EventEmitter<string>();
+
+    this.renameProject.subscribe(() => {
+      LogService.log("Rename project");
+      let param = new ModalParameter("New Name",[
+        new ModalInput("Name","")
+      ], onRename);
+      this.modalService.openModal(param);
+    });
+
+    onRename.subscribe(inputs => {
+      // TODO: Send at least id of project
+      //this.projectService.renameProject(inputs[0].value);
+    });
+
+
+    // Delete Project
+    let onDelete = new EventEmitter<string>();
+
+    this.deleteProject.subscribe(() => {
+      LogService.log("Rename project");
+      let param = new ModalParameter("New Name",[
+        new ModalInput("Name","")
+      ], onDelete);
+      this.modalService.openModal(param);
+    });
+
+    onDelete.subscribe(inputs => {
+      // TODO: Send at least id of project
+      //this.projectService.deleteProject(inputs[0].value);
+    });
 
     this.tagSelected.subscribe((tagName) => {
     });
+
+
+
   }
 
   private getByName(name: string): Slot {
