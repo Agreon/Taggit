@@ -58,7 +58,12 @@ export class Slot {
     }
 
     if(!this.collapsed){
-      this.subSlots[this.subSlotIndex].showOptions();
+      if(!this.subSlots[this.subSlotIndex].showAsOptions){
+        this.collapsed = true;
+        this.subSlotIndex = 0;
+      }else {
+        this.subSlots[this.subSlotIndex].showOptions();
+      }
     }
     else {
       this.collapsed = false;

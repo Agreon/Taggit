@@ -103,7 +103,8 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
       console.log("Active 2", this.activeSlot);
     }
 
-    if(event.ctrlKey) {
+    // Options
+    if(event.keyCode == 17) {
       this.activeSlot.showOptions();
     }
   }

@@ -11,10 +11,10 @@
         <div
             *ngFor="let input of parameter.inputs"
              class="row">
-          <div class="col-lg-3">
+          <div class="col-lg-3 col-md-3 col-sm-3">
             {{input.label}}
           </div>
-          <div class="col-lg-9">
+          <div class="col-lg-9 col-md-9 col-sm-9">
             <input type="text" [(ngModel)]="input.value">
           </div>
         </div>

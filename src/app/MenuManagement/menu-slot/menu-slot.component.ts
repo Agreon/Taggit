@@ -19,7 +19,6 @@ export class MenuSlotComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if(changes["slot"]){
       this.iconStyle = "fa fa-" + this.slot.icon;
-      console.log(this.slot);
     }
   }
 

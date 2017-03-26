@@ -17,8 +17,10 @@
    + Options-Menu-Slot 
       => Vlt. später in context-menü (bootstrap?)
     + Main-menu options?
-        
-      
+    + den parent selectbar machen?   
+      + nicht so gut?  
+   
+   
    + Order Docs/Projects by creationDate  
       
    + toolbar

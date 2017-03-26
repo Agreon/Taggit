@@ -78,16 +78,17 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       this.currentDocument = document;
       LogService.log("Rename Document", document);
       let param = new ModalParameter("Rename Document",[
-        new ModalInput("Name","")
+        new ModalInput("Name", document.name)
       ], onRename);
       this.modalService.openModal(param);
     });
 
     onRename.subscribe(inputs => {
       // Set Name of project without reloading menu
+	  // TODO: Active is not reliable; Maybe just the collapsed one, and then collapse it
+
       this.slots.filter(s => {return s.active})[0].name = inputs[0].value;
       // Rename Project in DB TODO: maybe notification with snackbar ('saved')
-      console.log("CurrentDoc", this.currentDocument);
       this.projectService.renameDocument(this.currentDocument, inputs[0].value).subscribe(() =>{
         LogService.log("Document renamed");
       }, err => {

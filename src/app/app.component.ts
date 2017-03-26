@@ -14,11 +14,10 @@ export class AppComponent {
   }
 
   private toggleSidebar(){
-    console.log("Toggle");
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  @HostListener('document:keypress', ['$event'])
+  //@HostListener('document:keyup', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     this.inputService.keyPress(event);
   }
