@@ -25,9 +25,9 @@
       
    + toolbar
          + always show 
-+ InputManager
-  + Chrome 
-      + Arrow-Keys are not recognized
+
++ Landing-Page with Login/Register
+
 + Editor
 	+ Markdown
   + TagButtons

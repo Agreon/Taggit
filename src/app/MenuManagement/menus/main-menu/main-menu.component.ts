@@ -76,6 +76,10 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
     // Create Project
     let onCreate = new EventEmitter<Array<ModalInput>>();
+    onCreate.subscribe(inputs => {
+      this.projectService.createProject(inputs[0].value)
+      this.inputService.setActive("MenuContainer");
+    });
 
     this.createProject.subscribe(() => {
       console.log("CreateProject");
@@ -85,13 +89,15 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.modalService.openModal(param);
     });
 
-    onCreate.subscribe(inputs => {
-        this.projectService.createProject(inputs[0].value)
-        this.inputService.setActive("MenuContainer");
-    });
 
     // Rename Project
     let onRename = new EventEmitter<Array<ModalInput>>();
+    onRename.subscribe(inputs => {
+      // Set Name of project without reloading menu
+      this.slots[0].subSlots.filter(s => {return s.active})[0].name = inputs[0].value;
+      // Rename Project in DB TODO: maybe notification with snackbar ('saved')
+      this.projectService.renameProject(this.currentProject, inputs[0].value);
+    });
 
     this.renameProject.subscribe((project) => {
       this.currentProject = project;
@@ -102,16 +108,12 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.modalService.openModal(param);
     });
 
-    onRename.subscribe(inputs => {
-      // Set Name of project without reloading menu
-      this.slots[0].subSlots.filter(s => {return s.active})[0].name = inputs[0].value;
-      // Rename Project in DB TODO: maybe notification with snackbar ('saved')
-      this.projectService.renameProject(this.currentProject, inputs[0].value);
-    });
-
 
     // Delete Project
     let onDelete = new EventEmitter<Array<ModalInput>>();
+    onDelete.subscribe(inputs => {
+      this.projectService.deleteProject(this.currentProject);
+    });
 
     this.deleteProject.subscribe((project) => {
       this.currentProject = project;
@@ -122,9 +124,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.modalService.openModal(param);
     });
 
-    onDelete.subscribe(inputs => {
-      this.projectService.deleteProject(this.currentProject);
-    });
+
 
     this.tagSelected.subscribe((tagName) => {
     });

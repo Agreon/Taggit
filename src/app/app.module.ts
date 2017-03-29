@@ -25,6 +25,7 @@ import { TagButtonComponent } from './main-editor/tag-button/tag-button.componen
 import { NavbarComponent } from './navbar/navbar.component';
 import {HttpService} from "./services/http.service";
 import { ModalComponent } from './MenuManagement/modal/modal.component';
+import { AuthenticationComponent } from './navbar/authentication/authentication.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
@@ -43,7 +44,8 @@ const appRoutes: Routes = [
     MenuTemplateComponent,
     TagButtonComponent,
     NavbarComponent,
-    ModalComponent
+    ModalComponent,
+    AuthenticationComponent
   ],
   imports: [
     BrowserModule,
