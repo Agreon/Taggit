@@ -1,11 +1,10 @@
-<!--<div *ngIf="isAuthenticated | async">
-  Show current user,
-</div>
-<div *ngIf="!isAuthenticated | async">
-
-</div>
--->
 <div class="auth-container">
-  <a (click)="onSignIn">Sign-In</a> |
-  <a (click)="onSignUp">Sign-Up</a>
+  <div *ngIf="!currentUser">
+    <a (click)="onSignIn()">Sign-In</a> |
+    <a (click)="onSignUp()">Sign-Up</a>
+  </div>
+  <div *ngIf="currentUser">
+    <a class="userName"><b>{{currentUser.username}}</b></a>
+    <a class="signOut" (click)="onSignOut()"><i class="fa fa-sign-out"></i></a>
+  </div>
 </div>

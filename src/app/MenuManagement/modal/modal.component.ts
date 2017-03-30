@@ -8,7 +8,8 @@ export class ModalInput {
   constructor(
     public name: string,
     public value: string,
-    public label?: string
+    public label?: string,
+    public hidden: boolean = false
   ) {
     if(!label){
       this.label = name;
@@ -24,7 +25,8 @@ export class ModalParameter {
   constructor(
     public header: string,
     public inputs: Array<ModalInput>,
-    public onSubmit: EventEmitter<any>
+    public onSubmit: EventEmitter<any>,
+    public description?: string
   ) {}
 
   public getInput(name: string): ModalInput {

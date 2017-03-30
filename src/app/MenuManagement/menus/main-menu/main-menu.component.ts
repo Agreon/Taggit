@@ -9,6 +9,7 @@ import {ModalService} from "../../../services/modal.service";
 import {ModalInput, ModalParameter} from "../../modal/modal.component";
 import {LogService} from "../../../services/log.service";
 import {InputService} from "../../../services/input.service";
+import {UserService} from "../../../services/user.service";
 
 /**
  * TODO: Back-Button + create button
@@ -31,7 +32,8 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
   constructor(private projectService: ProjectService,
               private modalService: ModalService,
-              private inputService: InputService) {
+              private inputService: InputService,
+              private userService: UserService) {
     super();
 
     this.slots = [
@@ -63,7 +65,13 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       });
     });
 
-    this.projectService.loadProjects();
+    // Load projects when authenticated
+    this.userService.getCurrentUser()
+      .filter(x => {if(x) return true;
+                    else return false;})
+      .subscribe(() => {
+      this.projectService.loadProjects();
+    });
   }
 
   ngOnInit() {
@@ -118,9 +126,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     this.deleteProject.subscribe((project) => {
       this.currentProject = project;
       LogService.log("Delete project");
-      let param = new ModalParameter("Delete Project",[
-        new ModalInput("Are you sure?","")
-      ], onDelete);
+      let param = new ModalParameter("Delete Project",[], onDelete, "Are you sure?");
       this.modalService.openModal(param);
     });
 

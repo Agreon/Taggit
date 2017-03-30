@@ -35,17 +35,15 @@
     + Collapse-Button
     + Tooltips wieder rein?
   
-+ Backend
-    + User
-      + DB-Design
-        + ID
-        + LoginName (email)
-        + Password
-      + Register/ Login
-      
++ UserService?
+  + UserToken
+  + username
+  +
+
 + General
   + Dont load libs from CDN
-      
+  + observable.complete()
+  + " or '      
 # NiceToHave
 + Search
 	+ DragnDrop to order projects/document
