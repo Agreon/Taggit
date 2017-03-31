@@ -1,10 +1,34 @@
 # TODO
 
+## Release 0.1
+  + Login/register
+    + login works
+    + loadbyToken works
+    + register works
+    + logOut 
+      + project-menu still accessible
+        => Later from landing page not a problem
+           
+  + Modals
+    + onCreateProj does not close.
+      + only with key, bc focus still on MainMenu  
+   
+   + Menü    
+    + set focus on start
+    + nested options are not selectable by keys
+     
+    
+  + Editor
+    + set deactive on shortcut
+     => Handy seiten
+     
+  + Tags
+    + load/store from db,
+  
+  + DB
+    + check for same name project/doc
+## General
 + Menü
-
-  + focus
-    + Nach keypress um zu menü zu wechseln
-        => focus weg von editor
 
   + menu-name-bar center font
 

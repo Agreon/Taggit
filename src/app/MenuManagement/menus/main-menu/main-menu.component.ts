@@ -10,9 +10,11 @@ import {ModalInput, ModalParameter} from "../../modal/modal.component";
 import {LogService} from "../../../services/log.service";
 import {InputService} from "../../../services/input.service";
 import {UserService} from "../../../services/user.service";
+import {TagService} from "../../../services/tag.service";
+import {Tag} from "../../../models/tag";
 
 /**
- * TODO: Back-Button + create button
+ * TODO: Back-Button
  */
 @Component({
   selector: 'main-menu',
@@ -22,18 +24,22 @@ import {UserService} from "../../../services/user.service";
 export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
   private projectSelected = new Subject<any>();
-  private tagSelected = new Subject<any>();
   private createProject = new Subject<any>();
   private renameProject = new Subject<Project>();
   private deleteProject = new Subject<Project>();
 
-  private projects: Project[] = [];
+  private tagSelected = new Subject<any>();
+  private createTag = new Subject<any>();
+  private deleteTag = new Subject<Tag>();
+
+
   private currentProject: Project;
 
   constructor(private projectService: ProjectService,
               private modalService: ModalService,
               private inputService: InputService,
-              private userService: UserService) {
+              private userService: UserService,
+              private tagService: TagService) {
     super();
 
     this.slots = [
@@ -50,8 +56,6 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     // Load Project-Document
     this.projectService.getProjects().subscribe(projects => {
 
-      this.projects = projects;
-
       this.slots[0].subSlots = [];
 
       // Create Project
@@ -65,12 +69,27 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       });
     });
 
+    this.tagService.getTags().subscribe(tags => {
+      this.slots[1].subSlots = [];
+
+      // Create Tag
+      this.slots[0].subSlots.push(new Slot("Create Tag", "plus", null, false, this.createTag));
+
+      tags.forEach(p => {
+        this.slots[0].subSlots.push(new Slot(p.name, "tag", [
+          new Slot("Delete", "trash", null, false, this.deleteTag, null, false, true, p)
+        ], true, this.tagSelected, null, false, true, p));
+      });
+    });
+
+
     // Load projects when authenticated
     this.userService.getCurrentUser()
       .filter(x => {if(x) return true;
                     else return false;})
       .subscribe(() => {
       this.projectService.loadProjects();
+      this.tagService.loadTags();
     });
   }
 
@@ -89,6 +108,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.inputService.setActive("MenuContainer");
     });
 
+    // Open Modal on Selection
     this.createProject.subscribe(() => {
       console.log("CreateProject");
       let param = new ModalParameter("New Project",[
@@ -132,7 +152,11 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
 
 
-    this.tagSelected.subscribe((tagName) => {
+    this.tagSelected.subscribe((tag) => {
+    });
+
+    this.deleteTag.subscribe((tag) => {
+
     });
 
 

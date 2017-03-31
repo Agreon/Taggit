@@ -18,8 +18,8 @@
             {{input.label}}
           </div>
           <div class="col-lg-9 col-md-9 col-sm-9">
-            <input *ngIf="!input.hidden" type="text" [(ngModel)]="input.value" >
-            <input *ngIf="input.hidden" type="password" [(ngModel)]="input.value" >
+            <input *ngIf="!input.hidden" type="text" [(ngModel)]="input.value" #inputField>
+            <input *ngIf="input.hidden" type="password" [(ngModel)]="input.value" #inputField>
           </div>
         </div>
       </div>

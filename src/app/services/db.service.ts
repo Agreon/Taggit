@@ -7,16 +7,11 @@ import {Storeable} from "../models/storeable";
 export class DBService {
 
   private serverUrl: string = "http://127.0.0.1:3000";
-  private userToken: string;
+  private userToken: string; // TOOD: Maybe not needed
+  private headers: Headers = new Headers();
 
-  constructor(private http: Http) {
-    /*if(localStorage["taggitToken"]){
-      this.userToken = localStorage["taggitToken"];
-      console.log("Isthere",this.userToken);
-      // TODO: Directly login
-      this.authenticated.next(true);
-    }*/
-  }
+
+  constructor(private http: Http) {  }
 
   /**
    * Creates a new Storeable
@@ -26,21 +21,21 @@ export class DBService {
   public create(storeable: Storeable): Observable<any> {
     let request = this.createRequestUrl(storeable.type);
 
-    return this.http.post(request, storeable.getStoreableContent(), this.createAuthHeaders())
+    return this.http.post(request, storeable.getStoreableContent(), this.headers)
       .map((res: Response) => res.json());
   }
 
   public save(storeable: Storeable): Observable<any> {
     let request = this.createRequestUrl(storeable.type,storeable._id);
 
-    return this.http.put(request, storeable.getStoreableContent(), this.createAuthHeaders())
+    return this.http.put(request, storeable.getStoreableContent(), this.headers)
       .catch((error:any) => Observable.throw(error || 'Server error'));;
   }
 
   public get(type: string, id?: string): Observable<any> {
     let request = this.createRequestUrl(type,id);
 
-    return this.http.get(request, this.createAuthHeaders())
+    return this.http.get(request, this.headers)
       .map((res: Response) => res.json())
       .catch((error:any) => Observable.throw(error || 'Server error'));
   }
@@ -48,7 +43,7 @@ export class DBService {
   public remove(storeable: Storeable): Observable<any> {
     let request = this.createRequestUrl(storeable.type,storeable._id);
 
-    return this.http.delete(request, this.createAuthHeaders())
+    return this.http.delete(request, this.headers)
       .map((res: Response) => res.json())
       .catch((error:any) => Observable.throw(error || 'Server error'));
   }
@@ -66,17 +61,17 @@ export class DBService {
         }
         return res;
       });
-     /* .map(res => {
-        console.log("Got res", res);
-      if(res.success){
-        console.log("authenticate",res);
-        this.userToken = res.token;
-        localStorage["taggitToken"] = res.token;
-        this.authenticated.next(true);
-      }else {
-        Observable.throw(res.message);
-      }
-    });*/
+  }
+
+  public getUserByToken(token: string): Observable<any> {
+    let request = this.createRequestUrl("userByToken");
+
+    return this.http.post(request, { "token": token })
+      .map((res: Response) => res.json());
+  }
+
+  public setHeaders(headers: Headers): void {
+    this.headers = headers;
   }
 
   private createRequestUrl(request: string, id?: string){
@@ -85,12 +80,6 @@ export class DBService {
       url += "/"+id;
     }
     return url;
-  }
-
-  private createAuthHeaders(): any {
-    let headers = new Headers();
-    headers.append("authorization", this.userToken);
-    return {"headers": headers};
   }
 
 }

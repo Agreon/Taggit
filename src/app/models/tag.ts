@@ -1,4 +1,5 @@
 
+import {Storeable} from "./storeable";
 export class TagInput {
   constructor(
     public name: string,
@@ -6,7 +7,10 @@ export class TagInput {
   ) {}
 }
 
-export class Tag {
+export class Tag extends Storeable{
+
+    public type: string = "Tag";
+
     constructor(
       public name: string,
       public description: string,
@@ -28,6 +32,22 @@ export class Tag {
     retHtml += "</p>";
 
     return retHtml;
+  }
+
+  public static fromJSON(object: any): Tag {
+    let tag = new Tag(null, null, null, null);
+
+    for(let param in tag) {
+      if(object.hasOwnProperty(param)){
+        tag[param] = object[param];
+      }
+    }
+
+  /*  user._id = object._id;
+    user.created_at = object.created_at;
+    user.updated_at = object.updated_at;
+*/
+    return tag;
   }
 
   public getInput(name: string): TagInput {

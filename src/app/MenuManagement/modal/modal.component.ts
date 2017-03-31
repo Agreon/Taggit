@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {ModalService} from "../../services/modal.service";
 import {Subject} from "rxjs";
 import {InputReceiver} from "../../models/input-receiver";
@@ -18,7 +18,6 @@ export class ModalInput {
 }
 
 /**
- * TODO: Maybe some description text
  * OnKeyBoard-Input! is 'input-reciever'!
  */
 export class ModalParameter {
@@ -41,28 +40,27 @@ export class ModalParameter {
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit, InputReceiver {
+export class ModalComponent implements InputReceiver {
 
   private parameter: ModalParameter;
 
   private visible = false;
   private visibleAnimate = false;
 
-  @ViewChild('inputs') private inputs;
+  @ViewChildren('inputField') private inputs;
 
   constructor(private modalService: ModalService,
               private inputService: InputService) {
+
+    inputService.addReciever("Modal", this);
+
     // Recieve Parameters
     modalService.getModalParameter().subscribe(param => {
       this.parameter = param;
       this.show();
     });
-  }
 
-  ngOnInit() {
-    this.inputService.addReciever("Modal", this);
   }
-
 
   keyEvent(event: KeyboardEvent) {
     if (event.keyCode == 27) {
@@ -78,8 +76,13 @@ export class ModalComponent implements OnInit, InputReceiver {
     this.visible = true;
     setTimeout(() => this.visibleAnimate = true);
     this.inputService.setActive("Modal");
-    console.log("Inputs",this.inputs);
- //   this.inputs.children[1].children[0].nativeElement.focus();
+
+    // Focus first Element
+    setTimeout(() => {
+      if(this.inputs.length > 0){
+        this.inputs.first.nativeElement.focus()
+      }
+    },1);
   }
 
   public hide(): void {

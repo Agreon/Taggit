@@ -5,15 +5,13 @@ export class User extends Storeable {
 
   constructor(
     public username: string,
-    public password: string,
-    public token: string
+    public password: string
   ) {
     super();
-    this.excludedFromDB.push("token");
   }
 
   public static fromJSON(object: any): User {
-    let user = new User(object.local.username, null, null);
+    let user = new User(object.local.username, null);
 
     user._id = object._id;
     user.created_at = object.created_at;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Project} from "../models/project";
 import {Document} from "../models/document";
-import {Subject, Observable, BehaviorSubject, Observer} from "rxjs";
+import {Subject, Observable, BehaviorSubject, Observer, ReplaySubject} from "rxjs";
 import {DBService} from "./db.service";
 import {LogService} from "./log.service";
 
@@ -12,8 +12,8 @@ import {LogService} from "./log.service";
 export class ProjectService {
 
   private allProjectsSubject = new Subject<Project[]>();
-  private currentProjectSubject = new BehaviorSubject<Project>(null);
-  private currentDocumentSubject = new BehaviorSubject<Document>(null);
+  private currentProjectSubject = new ReplaySubject<Project>(1);
+  private currentDocumentSubject = new ReplaySubject<Document>(1);
 
   private projects: Project[] = [];
 
