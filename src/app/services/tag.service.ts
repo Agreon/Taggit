@@ -8,7 +8,7 @@ import {LogService} from "./log.service";
 export class TagService {
 
   private allTagsSubject = new ReplaySubject<Tag[]>(1);
-  private tags: Tag[] = [];
+  //private tags: Tag[] = [];
 
   private tags: Tag[] = [
     new Tag("Question",
@@ -23,6 +23,7 @@ export class TagService {
   ];
 
   constructor(private dbService: DBService) {
+    this.allTagsSubject.next(this.tags);
 
   }
 

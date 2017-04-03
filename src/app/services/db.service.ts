@@ -6,8 +6,8 @@ import {Storeable} from "../models/storeable";
 @Injectable()
 export class DBService {
 
-  private serverUrl: string = "http://127.0.0.1:3000";
-  private userToken: string; // TOOD: Maybe not needed
+  private serverUrl: string = "http://agreon.de:3000";
+  //private serverUrl: string = "http://127.0.0.1:3000";
   private headers: Headers = new Headers();
 
 
@@ -54,13 +54,7 @@ export class DBService {
     let body = {"username": username, "password": password};
 
     return this.http.post(request, body)
-      .map((res: Response) => res.json())
-      .map(res => {
-        if(res.success){
-          this.userToken = res.token;
-        }
-        return res;
-      });
+      .map((res: Response) => res.json());
   }
 
   public getUserByToken(token: string): Observable<any> {

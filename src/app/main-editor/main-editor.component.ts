@@ -245,9 +245,10 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     });
 
     // Add Tag Shortcuts
-    for(let tag of this.tags){
-      editor.addShortcut(tag.hotkey, tag.name, () => {
-        this.openDialog(tag);
+    for(let i = 0; i < this.tags.length; i++){
+    //for(let tag of this.tags){
+      editor.addShortcut(this.tags[i].hotkey, this.tags[i].name, () => {
+        this.openDialog(this.tags[i]);
       });
     }
 

@@ -73,10 +73,10 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.slots[1].subSlots = [];
 
       // Create Tag
-      this.slots[0].subSlots.push(new Slot("Create Tag", "plus", null, false, this.createTag));
+      this.slots[1].subSlots.push(new Slot("Create Tag", "plus", null, false, this.createTag));
 
       tags.forEach(p => {
-        this.slots[0].subSlots.push(new Slot(p.name, "tag", [
+        this.slots[1].subSlots.push(new Slot(p.name, "tag", [
           new Slot("Delete", "trash", null, false, this.deleteTag, null, false, true, p)
         ], true, this.tagSelected, null, false, true, p));
       });
@@ -89,7 +89,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
                     else return false;})
       .subscribe(() => {
       this.projectService.loadProjects();
-      this.tagService.loadTags();
+      //this.tagService.loadTags();
     });
   }
 

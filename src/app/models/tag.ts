@@ -16,7 +16,9 @@ export class Tag extends Storeable{
       public description: string,
       public hotkey: string,
       public inputs: TagInput[]
-    ) {}
+    ) {
+      super();
+    }
 
   public asHtml(): string {
     let retHtml = "";
