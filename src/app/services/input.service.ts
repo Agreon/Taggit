@@ -16,6 +16,13 @@ export class InputService {
     for(let r in this.receivers){
       this.receivers[r].active = false;
     }
+
+    // Activate Focus
+    if(this.receivers[name].receiver.focusHandle){
+      console.log("Setting focus",name);
+      this.receivers[name].receiver.focusHandle.nativeElement.focus();
+    }
+
     this.receivers[name].active = true;
   }
 

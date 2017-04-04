@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, HostListener, Output, EventEmitter, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Input, HostListener, Output, EventEmitter, SimpleChanges, ViewChild} from '@angular/core';
 import {Slot} from "../models/slot";
 import {InputReceiver} from "../../models/input-receiver";
 import {InputService} from "../../services/input.service";
@@ -28,6 +28,8 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
   @Output("OnCancel")
   onCancel: EventEmitter<any> = new  EventEmitter<any>();
 
+  @ViewChild('focusHandle') public focusHandle;
+
   private activeSlot: Slot;
   private currentSlot: number = 0;
   private subSlotIndex: number = -1;
@@ -42,12 +44,14 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
 
   ngOnChanges(changes: SimpleChanges) {
     if(changes["slots"]){
-      for(let slot of this.slots){
+     /* for(let slot of this.slots){
         slot.onHover.subscribe((slot) => {
-          //this.setActive(name);
+          //this.setActive(slot);
         });
-      }
-      this.setActive(this.slots[0].name);
+      }*/
+
+      this.setActive(this.slots[0]);
+      //this.activeSlot = this.slots[0];
     }
   }
 
@@ -67,7 +71,7 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
       if(this.activeSlot.collapsed) {
         if(this.currentSlot < this.slots.length - 1){
           this.currentSlot++;
-          this.setActive(this.slots[this.currentSlot].name);
+          this.setActive(this.slots[this.currentSlot]);
         }
       } else {
         this.activeSlot.nextSubSlot();
@@ -79,7 +83,7 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
       if(this.activeSlot.collapsed) {
         if(this.currentSlot > 0){
           this.currentSlot--;
-          this.setActive(this.slots[this.currentSlot].name);
+          this.setActive(this.slots[this.currentSlot]);
         }
       } else {
         this.activeSlot.previousSubSlot();
@@ -109,9 +113,9 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
     }
   }
 
-  private setActive(slotName: string) {
+  private setActive(inSlot: Slot) {
     this.slots.forEach(slot => {
-      if(slot.name == slotName){
+      if(slot.name == inSlot.name){
         slot.active = true;
         this.activeSlot = slot;
       }else {

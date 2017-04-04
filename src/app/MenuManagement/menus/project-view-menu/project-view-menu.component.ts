@@ -67,7 +67,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       console.log("CreateProject");
       let param = new ModalParameter("New Document",[
         new ModalInput("Name","")
-      ], onCreate);
+      ], onCreate, "MenuContainer");
       this.modalService.openModal(param);
     });
 
@@ -79,7 +79,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       LogService.log("Rename Document", document);
       let param = new ModalParameter("Rename Document",[
         new ModalInput("Name", document.name)
-      ], onRename);
+      ], onRename, "MenuContainer");
       this.modalService.openModal(param);
     });
 
@@ -87,8 +87,13 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       // Set Name of project without reloading menu
 	  // TODO: Active is not reliable; Maybe just the collapsed one, and then collapse it
 
-      this.slots.filter(s => {return s.active})[0].name = inputs[0].value;
-      // Rename Project in DB TODO: maybe notification with snackbar ('saved')
+      let currentSlot = this.slots.filter(s => {return s.active})[0];
+
+      currentSlot.name = inputs[0].value;
+      currentSlot.closeSlot();
+
+      // TODO: maybe notification with snackbar ('saved')
+      // Rename Project in DB
       this.projectService.renameDocument(this.currentDocument, inputs[0].value).subscribe(() =>{
         LogService.log("Document renamed");
       }, err => {
@@ -103,15 +108,14 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.deleteDocument.subscribe((document) => {
       this.currentDocument = document;
       LogService.log("Delete Document", document);
-      let param = new ModalParameter("Delete Project",[
-        new ModalInput("Are you sure?","")
-      ], onDelete);
+      let param = new ModalParameter("Delete Document",[], onDelete, "MenuContainer", "Are you sure?");
       this.modalService.openModal(param);
     });
 
     onDelete.subscribe(inputs => {
       this.projectService.deleteDocument(this.currentDocument).subscribe(res => {
         console.log("deleted", res);
+
 
         let toDelete = -1;
         for(let i = 0; i < this.slots.length; i++){
@@ -147,8 +151,8 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
     this.project.documents.forEach(d => {
       this.slots.push(new Slot(d.name,"file-text", [
-        new Slot("Rename", "pencil", null, false, this.renameDocument, null, false, true, d),
-        new Slot("Delete", "trash", null, false, this.deleteDocument, null, false, true, d)
+        new Slot("Rename", "pencil", null, false, this.renameDocument, false, true, d),
+        new Slot("Delete", "trash", null, false, this.deleteDocument, false, true, d)
       ], true, this.selectedDocument));
     });
 

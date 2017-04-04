@@ -38,14 +38,13 @@ export class MenuSlotComponent implements OnInit {
   }
 
   private optionsSelected(event): void {
-    this.slot.collapsed = !this.slot.collapsed;
+    //this.slot.collapsed = !this.slot.collapsed;
+    this.slot.showOptions();
     event.stopPropagation();
   }
 
-  private hover(slot: Slot){
-    if(this.slot.onHover){
-      this.slot.onHover.next(this.slot);
-    }
+  private hover(slot: Slot, hover: boolean){
+    slot.hovered = hover;
   }
 
 }

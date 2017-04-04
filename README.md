@@ -7,26 +7,42 @@
     + register works
     + logOut 
       + project-menu still accessible
-        => Later from landing page not a problem
-           
-  + Modals
-    + onCreateProj does not close.
-      + only with key, bc focus still on MainMenu  
+        => Later from landing page and redirect not a problem
+        => SetCurrentProject(null);
+        
+   REST
+    + Delete throws http error but works 
+    + remove project from list
+      
+  + Focus
+   + modal
+      + focus kann in modal-compo gesetzt werden, allerdings weiß man nicht wohin der foucs gehen soll?
+        => Method-param?
+      
+   + Editor
+       + set deactive on shortcut
    
-   + Menü    
-    + set focus on start
-    + nested options are not selectable by keys
+   + onMouseHover-focus
+    + maybe hover-variable for setting focus
      
-    
-  + Editor
-    + set deactive on shortcut
-     => Handy seiten
      
   + Tags
-    + load/store from db,
-  
+    + load
+    
+    + store
+    
+    + create
+      + how to dynamically add inputs?
+    
   + DB
-    + check for same name project/doc
+    + check if project/doc-name already exists
+      + create
+      + rename 
+      
+   + Responsiveness
+      + Documentname breaks
+      + scrollbar appears
+      + 
 ## General
 + Menü
 
@@ -34,7 +50,6 @@
 
   + Modals
      + Beautify 
-     + Instant-Focus für ersten Input  
          
    + LoadingSpinner
          
@@ -53,21 +68,19 @@
 + Landing-Page with Login/Register
 
 + Editor
-	+ Markdown
+  + Markdown view?
+  + set cursor at the end of the document?
   + TagButtons
     + Vlt. in MenuButton -> Tags mit collaps
     + Collapse-Button
     + Tooltips wieder rein?
   
-+ UserService?
-  + UserToken
-  + username
-  +
 
-+ General
-  + Dont load libs from CDN
++ Code-Quali
   + observable.complete()
   + " or '      
+  + projects/documents get by _id not name
+  
 # NiceToHave
 + Search
 	+ DragnDrop to order projects/document
@@ -81,8 +94,6 @@
    + Mouse-Animationen
       + OnClick
       +=> in menu-slot 200ms timeout bis das event emittet wird
-
-
 
 # Future
 + Fragen für die eigne Uni veröffentlichen, um so gemienschaftlich einen Fragenkatalog zu erstellen, der beim lernen hilft

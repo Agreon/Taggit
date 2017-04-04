@@ -2,7 +2,7 @@
      tabindex="-1"
      [ngClass]="{'in': visibleAnimate}"
      [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
-  <div class="modal-dialog">
+  <div class="modal-dialog" #focusHandle>
     <div class="modal-content">
       <div class="modal-header" *ngIf="parameter">
         {{parameter.header}}

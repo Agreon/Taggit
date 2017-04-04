@@ -25,6 +25,7 @@ export class ModalParameter {
     public header: string,
     public inputs: Array<ModalInput>,
     public onSubmit: EventEmitter<any>,
+    public focusSource?: string,
     public description?: string
   ) {}
 
@@ -47,6 +48,7 @@ export class ModalComponent implements InputReceiver {
   private visible = false;
   private visibleAnimate = false;
 
+  @ViewChild('focusHandle') public focusHandle;
   @ViewChildren('inputField') private inputs;
 
   constructor(private modalService: ModalService,
@@ -82,12 +84,18 @@ export class ModalComponent implements InputReceiver {
       if(this.inputs.length > 0){
         this.inputs.first.nativeElement.focus()
       }
-    },1);
+    },3);
   }
 
   public hide(): void {
     this.visible = false;
-    setTimeout(() => this.visibleAnimate = false);
+    setTimeout(() => {
+      this.visibleAnimate = false;
+
+      // Set Focus to previous component
+      if(this.parameter.focusSource)
+      this.inputService.setActive(this.parameter.focusSource);
+    });
   }
 
   public onSubmit(): void {

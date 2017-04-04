@@ -1,4 +1,7 @@
-import {Component, OnInit, OnDestroy, AfterViewInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, AfterViewInit, Input, Output, EventEmitter, HostListener,
+  ViewChild
+} from '@angular/core';
 import {Subscription} from "rxjs";
 import {LogService} from "../services/log.service";
 import {Tag, TagInput} from "../models/tag";
@@ -28,6 +31,8 @@ import {ModalInput, ModalParameter} from "../MenuManagement/modal/modal.componen
 })
 export class MainEditorComponent implements AfterViewInit, OnDestroy, InputReceiver {
   @Output() onEditorKeyUp = new EventEmitter();
+
+  @ViewChild('focusHandle') public focusHandle;
 
   private document: Document;
 
@@ -135,60 +140,16 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       inputs.push(newInput);
     }
 
-    let param = new ModalParameter("Insert Tag", inputs, insertTag);
-
-    this.modalService.openModal(param);
+    this.modalService.openModal(new ModalParameter("Insert Tag", inputs, insertTag, "MainEditor"));
 
     insertTag.subscribe(inputs => {
-      for(let data in inputs){
-        tag.setInputValue(data,inputs[data]);
+      for(let data of inputs){
+        tag.setInputValue(data.name,data.value);
       }
       this.editor.insertContent(tag.asHtml());
       this.editor.selection.setContent("");
     });
   }
-  /**
-   * TODO:
-   * + Maybe add Description and Tooltips
-   * @param tag
-   */
-  private openDialog2(tag: Tag){
-
-    let inputs = [];
-
-    for(let i = 0; i < tag.inputs.length; i++){
-      let newInput = {
-        name: tag.inputs[i].name,
-        label: tag.inputs[i].name,
-        type: 'textbox'
-        //,tooltip: input.description
-      };
-
-      // Set selection as value for first input
-      if(i == 0){
-        newInput['value'] = this.editor.selection.getContent();
-      }
-
-      inputs.push(newInput);
-    }
-
-    let self = this;
-
-    this.editor.windowManager.open({
-      title: 'Add Tag',
-      body: inputs,
-      onsubmit: function(e){
-        for(let data in e.data){
-          tag.setInputValue(data,e.data[data]);
-        }
-        self.editor.insertContent(tag.asHtml());
-        self.editor.selection.setContent("");
-      }
-    });
-  }
-
-
-
 
   ngAfterViewInit(): void {
 

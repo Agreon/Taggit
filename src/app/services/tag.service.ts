@@ -14,12 +14,16 @@ export class TagService {
     new Tag("Question",
       "Add a Question with Answer",
       "ctrl+1",
-      [new TagInput("Question", "What does BMI mean?"),
-        new TagInput("Answer", "Body Mass Index")]),
+      [new TagInput("Question", ""),
+        new TagInput("Answer", "")]),
     new Tag("TODO",
       "Add a Todo-Item",
       "ctrl+2",
-      [new TagInput("TODO", "Folie 34")])
+      [new TagInput("TODO", "")]),
+    new Tag("Important",
+      "Add a Important Tag",
+      "ctrl+3",
+      [new TagInput("Text", "")])
   ];
 
   constructor(private dbService: DBService) {
@@ -52,12 +56,12 @@ export class TagService {
       this.tags.push(Tag.fromJSON(tag));
       this.allTagsSubject.next(this.tags);
     }, err => {
-      console.log("Err Creating project", err);
+      console.log("Err Creating tag", err);
     });
   }
 
   public renameTag(tag: Tag, name: string): Observable<Tag> {
-    LogService.log("Rename project", name)
+    LogService.log("Rename Tag", name)
     tag.name = name;
 
     return this.dbService.save(tag);

@@ -45,7 +45,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     this.slots = [
       new Slot("Projects", "book", [
         new Slot("Create Project", "plus", null, null, this.createProject)
-      ], false, new Subject<any>(), new Subject<any>(), true, false),
+      ], false, new Subject<any>(), true, false),
       new Slot("Tags", "tags", [
         new Slot("TODO", "tag", null, false, this.tagSelected),
         new Slot("Question", "tag", null, false, this.tagSelected)
@@ -53,22 +53,23 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     ];
 
 
-    // Load Project-Document
+    // Load Projects
     this.projectService.getProjects().subscribe(projects => {
 
       this.slots[0].subSlots = [];
 
       // Create Project
-      this.slots[0].subSlots.push(new Slot("Create Project", "plus", null, false, this.createProject));
+      this.slots[0].subSlots.push(new Slot("Create Project", "plus", null, false, this.createProject, true));
 
       projects.forEach(p => {
         this.slots[0].subSlots.push(new Slot(p.name, "book", [
-          new Slot("Rename", "pencil", null,false, this.renameProject, null, false, true, p),
-          new Slot("Delete", "trash", null, false, this.deleteProject, null, false, true, p)
-        ], true, this.projectSelected, null, false, true, p));
+          new Slot("Rename", "pencil", null,false, this.renameProject, false, true, p),
+          new Slot("Delete", "trash", null, false, this.deleteProject, false, true, p)
+        ], true, this.projectSelected, false, true, p));
       });
     });
 
+    // Load Tags
     this.tagService.getTags().subscribe(tags => {
       this.slots[1].subSlots = [];
 
@@ -77,8 +78,8 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
       tags.forEach(p => {
         this.slots[1].subSlots.push(new Slot(p.name, "tag", [
-          new Slot("Delete", "trash", null, false, this.deleteTag, null, false, true, p)
-        ], true, this.tagSelected, null, false, true, p));
+          new Slot("Delete", "trash", null, false, this.deleteTag, false, true, p)
+        ], true, this.tagSelected, false, true, p));
       });
     });
 
@@ -105,7 +106,8 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     let onCreate = new EventEmitter<Array<ModalInput>>();
     onCreate.subscribe(inputs => {
       this.projectService.createProject(inputs[0].value)
-      this.inputService.setActive("MenuContainer");
+      // TODO: Does not work
+      //this.inputService.setActive("MenuContainer");
     });
 
     // Open Modal on Selection
@@ -113,7 +115,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       console.log("CreateProject");
       let param = new ModalParameter("New Project",[
         new ModalInput("Name","")
-      ], onCreate);
+      ], onCreate, "MenuContainer");
       this.modalService.openModal(param);
     });
 
@@ -121,18 +123,28 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     // Rename Project
     let onRename = new EventEmitter<Array<ModalInput>>();
     onRename.subscribe(inputs => {
+      console.log("Rename",this.slots[0]);
       // Set Name of project without reloading menu
-      this.slots[0].subSlots.filter(s => {return s.active})[0].name = inputs[0].value;
-      // Rename Project in DB TODO: maybe notification with snackbar ('saved')
-      this.projectService.renameProject(this.currentProject, inputs[0].value);
+      let currentSlot = this.slots[0].subSlots.filter(s => {return s.active})[0];
+      currentSlot.name = inputs[0].value;
+      currentSlot.closeSlot();
+
+      // TODO: maybe notification with snackbar ('saved')
+      // TODO: Does not work
+      // Rename Project in DB
+      this.projectService.renameProject(this.currentProject, inputs[0].value).subscribe(() =>{
+        LogService.log("Project renamed");
+      }, err => {
+        LogService.log("Project rename failed", err);
+      });
     });
 
     this.renameProject.subscribe((project) => {
       this.currentProject = project;
       LogService.log("Rename project", project);
       let param = new ModalParameter("Rename Project",[
-        new ModalInput("Name","")
-      ], onRename);
+        new ModalInput("Name",this.currentProject.name)
+      ], onRename, "MenuContainer");
       this.modalService.openModal(param);
     });
 
@@ -141,12 +153,25 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     let onDelete = new EventEmitter<Array<ModalInput>>();
     onDelete.subscribe(inputs => {
       this.projectService.deleteProject(this.currentProject);
+
+      // TODO: .active is not reliable
+      /*let toDelete = -1;
+      for(let i = 0; i < this.slots.length; i++){
+        if(this.slots[i].active){
+          toDelete = i;
+          break;
+        }
+      }
+
+      if(toDelete != -1){
+        this.slots.splice(toDelete, 1);
+      }*/
     });
 
     this.deleteProject.subscribe((project) => {
       this.currentProject = project;
       LogService.log("Delete project");
-      let param = new ModalParameter("Delete Project",[], onDelete, "Are you sure?");
+      let param = new ModalParameter("Delete Project",[], onDelete, "MenuContainer", "Are you sure?");
       this.modalService.openModal(param);
     });
 

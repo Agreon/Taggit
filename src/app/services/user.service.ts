@@ -17,7 +17,7 @@ export class UserService {
      // TODO: Directly login
      LogService.log("Found localStorage", localStorage["taggitToken"]);
       this.dbService.getUserByToken(localStorage["taggitToken"]).subscribe(res => {
-        LogService.log("User logged in from localStorage", res.user);
+        LogService.log("User logged in from localStorage", res);
 
         this.setUser(res.user, localStorage["taggitToken"]);
 

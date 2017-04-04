@@ -101,9 +101,9 @@ export class ProjectService {
 
     console.log("Save doc", document);
 
+    // TODO: Save currentProject in DB?
     this.currentProject.saveDocument(document);
 
-    // TODO: Save currentProject in DB?
     this.httpService.save(this.currentProject).subscribe(() => {
         console.log("Saved project to db", this.currentProject);
       },
@@ -161,6 +161,15 @@ export class ProjectService {
   }
 
   public deleteDocument(document: Document): Observable<any> {
+
+    // Delete from project
+    this.currentProject.removeDocument(document);
+
+    this.httpService.save(this.currentProject).subscribe(() => {
+      console.log("Project updated");
+    }, err => {
+      console.log("Err project update", err);
+    });
     return this.httpService.remove(document);
   }
 

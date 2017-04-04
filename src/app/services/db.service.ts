@@ -6,8 +6,8 @@ import {Storeable} from "../models/storeable";
 @Injectable()
 export class DBService {
 
-  private serverUrl: string = "http://agreon.de:3000";
-  //private serverUrl: string = "http://127.0.0.1:3000";
+  //private serverUrl: string = "http://agreon.de:3000";
+  private serverUrl: string = "http://127.0.0.1:3000";
   private headers: Headers = new Headers();
 
 

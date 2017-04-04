@@ -1,6 +1,7 @@
 <a (click)="selected($event)"
    [class]="slot.active || !slot.collapsed ? 'active' : ''"
-   (mouseover)="hover(slot)">
+   (mouseover)="hover(slot, 'true')"
+   (mouseleave)="hover(slot, 'false')">
 
   <i [class]="iconStyle"></i>
 
@@ -20,7 +21,7 @@
 
 <!-- SubSlots -->
 <ul *ngIf="!slot.collapsed && slot.subSlots" class="treeview-menu">
-  <li *ngFor="let subSlot of slot.subSlots" (mouseover)="hover(subSlot)">
+  <li *ngFor="let subSlot of slot.subSlots" (mouseover)="hover(subSlot, 'true')" (mouseleave)="hover(subSlot, 'false')">
     <menu-slot [Slot]="subSlot"></menu-slot>
   </li>
 </ul>

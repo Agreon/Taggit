@@ -27,8 +27,19 @@ export class Project extends Storeable {
   }
 
   public removeDocument(document: Document){
+    let toDelete = -1;
+    for(let i = 0; i < this.documents.length; i++){
+      if(this.documents[i]._id == document._id){
+        toDelete = i;
+        break;
+      }
+    }
 
-      LogService.log("Removed document", document);
+    if(toDelete != -1){
+      this.documents.splice(toDelete, 1);
+    }
+
+    LogService.log("Removed document", document);
   }
 
   public getDocument(name: string): Document {
