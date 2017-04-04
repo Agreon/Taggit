@@ -44,14 +44,16 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
     this.slots = [
       new Slot("Projects", "book", [
-        new Slot("Create Project", "plus", null, null, this.createProject)
+       // new Slot("Create Project", "plus", null, null, this.createProject)
       ], false, new Subject<any>(), true, false),
       new Slot("Tags", "tags", [
-        new Slot("TODO", "tag", null, false, this.tagSelected),
-        new Slot("Question", "tag", null, false, this.tagSelected)
+       /* new Slot("TODO", "tag", null, false, this.tagSelected),
+        new Slot("Question", "tag", null, false, this.tagSelected)*/
       ])
     ];
 
+    console.log("LOADING");
+    this.loading = true;
 
     // Load Projects
     this.projectService.getProjects().subscribe(projects => {
@@ -67,6 +69,9 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
           new Slot("Delete", "trash", null, false, this.deleteProject, false, true, p)
         ], true, this.projectSelected, false, true, p));
       });
+
+      this.loading = false;
+
     });
 
     // Load Tags
@@ -85,12 +90,21 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
 
     // Load projects when authenticated
-    this.userService.getCurrentUser()
+   /* this.userService.getCurrentUser()
       .filter(x => {if(x) return true;
                     else return false;})
       .subscribe(() => {
       this.projectService.loadProjects();
       //this.tagService.loadTags();
+    });*/
+
+    this.userService.getCurrentUser().subscribe(user => {
+      if(!user){
+        this.projectService.setCurrentDocument(null);
+        //return;
+      }
+      this.loading = true;
+      this.projectService.loadProjects();
     });
   }
 

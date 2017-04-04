@@ -19,6 +19,7 @@ export class MenuTemplateComponent implements OnInit {
   changeMenu: Subject<any> = new Subject<any>();
 
   protected slots: Slot[] = [];
+  protected loading: boolean = false;
 
   constructor() {
   }

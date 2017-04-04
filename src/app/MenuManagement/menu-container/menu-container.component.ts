@@ -25,6 +25,9 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
   @Input("ShowBackBtn")
   showBackBtn: boolean;
 
+  @Input("Loading")
+  loading: boolean;
+
   @Output("OnCancel")
   onCancel: EventEmitter<any> = new  EventEmitter<any>();
 

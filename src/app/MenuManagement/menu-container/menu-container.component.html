@@ -8,7 +8,21 @@
   </div>
 </form>
 
-<ul class="sidebar-menu" #focusHandle>
+<ul *ngIf="loading" class="sidebar-menu">
+  <li class="header">
+    <span *ngIf="showBackBtn"
+          class="backBtn pull-left-container"
+          (click)="backPressed()">
+      <i class="fa fa-angle-left left" ></i>
+    </span>
+    <span>{{name}}</span>
+  </li>
+  <li>
+    <i class="fa fa-spinner"></i>
+    <a>Loading...</a>
+  </li>
+</ul>
+<ul *ngIf="!loading" class="sidebar-menu" #focusHandle>
   <li class="header">
     <span *ngIf="showBackBtn"
           class="backBtn pull-left-container"

@@ -15,55 +15,44 @@
     + remove project from list
       
   + Focus
-   + modal
-      + focus kann in modal-compo gesetzt werden, allerdings weiß man nicht wohin der foucs gehen soll?
-        => Method-param?
-      
    + Editor
-       + set deactive on shortcut
-   
+       + remove focus
    + onMouseHover-focus
-    + maybe hover-variable for setting focus
-     
-     
+      + remove all siblings active
+
   + Tags
     + load
-    
     + store
-    
     + create
       + how to dynamically add inputs?
     
-  + DB
-    + check if project/doc-name already exists
-      + create
-      + rename 
+      + subslots with 
+        + create attribute
+        + rename/remove attribute
+    
+   + Style
+     + Responsiveness
+        + Documentname breaks
+        + scrollbar appears 
+        
+    + menu-name-bar center font
+    + tag-modal 
+      + show tag name in header
+      + v-center name of inputs
       
-   + Responsiveness
-      + Documentname breaks
-      + scrollbar appears
-      + 
+   + Show Error Messages
+      + Snackbar?
+      + Messages
+        + Username existing
+        + doc/project-name existing
+             
 ## General
 + Menü
 
-  + menu-name-bar center font
-
-  + Modals
-     + Beautify 
-         
    + LoadingSpinner
-         
-   + Options-Menu-Slot 
-      => Vlt. später in context-menü (bootstrap?)
-    + Main-menu options?
-    + den parent selectbar machen?   
-      + nicht so gut?  
-   
-   
+            
    + Order Docs/Projects by creationDate  
-      
-   + toolbar
-         + always show 
+      + Better in frontend
 
 + Landing-Page with Login/Register
 

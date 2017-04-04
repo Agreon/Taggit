@@ -26,25 +26,13 @@ export class MenuSlotComponent implements OnInit {
   }
 
   private selected(event): void {
-   // this.slot.onSelected.next(this.slot);
     event.stopPropagation();
-
     this.slot.selectSlot();
-/*
-    // TODO: in slot.ts?
-    if(this.slot.subSlots && !this.slot.showAsOptions){
-      this.slot.collapsed = !this.slot.collapsed;
-    }*/
   }
 
   private optionsSelected(event): void {
-    //this.slot.collapsed = !this.slot.collapsed;
     this.slot.showOptions();
     event.stopPropagation();
-  }
-
-  private hover(slot: Slot, hover: boolean){
-    slot.hovered = hover;
   }
 
 }
