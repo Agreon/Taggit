@@ -9,16 +9,24 @@
       + project-menu still accessible
         => Later from landing page and redirect not a problem
         => SetCurrentProject(null);
+      
+  Menu 
+    + OnCLick slot: this slot should be the only active
         
    REST
-    + Delete throws http error but works 
-    + remove project from list
+    + delete project
+      + remove project from list
+    + frontend
+      + rename project
+        + error thrown is 500 and not 403 when existing
       
   + Focus
    + Editor
        + remove focus
    + onMouseHover-focus
       + remove all siblings active
+    + menu
+      + switch with keycombo to editor
 
   + Tags
     + load
@@ -41,15 +49,14 @@
       + v-center name of inputs
       
    + Show Error Messages
-      + Snackbar?
-      + Messages
+        + authentication stuff
         + Username existing
-        + doc/project-name existing
-             
+       
 ## General
 + Menü
 
    + LoadingSpinner
+        + from adminlte
             
    + Order Docs/Projects by creationDate  
       + Better in frontend
@@ -69,6 +76,10 @@
   + observable.complete()
   + " or '      
   + projects/documents get by _id not name
+ 
+ 
++ Security
+  + Authenticate Client, so that no brute force can be applied to server to get tokens
   
 # NiceToHave
 + Search

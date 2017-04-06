@@ -3,6 +3,7 @@ import {Observable, Subject, BehaviorSubject, ReplaySubject} from "rxjs";
 import {Tag, TagInput} from '../models/tag';
 import {DBService} from "./db.service";
 import {LogService} from "./log.service";
+import {MessageType, UserInformationService, UserMessage} from "./User-Information.service";
 
 @Injectable()
 export class TagService {
@@ -26,7 +27,8 @@ export class TagService {
       [new TagInput("Text", "")])
   ];
 
-  constructor(private dbService: DBService) {
+  constructor(private dbService: DBService,
+              private informationService: UserInformationService) {
     this.allTagsSubject.next(this.tags);
 
   }
@@ -46,29 +48,36 @@ export class TagService {
 
       //this.tags = tags;
       this.allTagsSubject.next(this.tags);
-    }, err => {
-      console.log("Err", err);
     });
   }
 
   public createTag(name: string) {
-    this.dbService.create(new Tag(name,null, null, null)).subscribe(tag => {
+    this.dbService.create(new Tag(name, null, null, null)).subscribe(tag => {
       this.tags.push(Tag.fromJSON(tag));
       this.allTagsSubject.next(this.tags);
-    }, err => {
-      console.log("Err Creating tag", err);
+
+      // Inform User
+      this.informationService.showInformation(new UserMessage(
+        MessageType.SUCCESS,
+        "Tag "+tag.name+" created."
+      ));
     });
   }
 
-  public renameTag(tag: Tag, name: string): Observable<Tag> {
+  public renameTag(tag: Tag, name: string): void {
     LogService.log("Rename Tag", name)
     tag.name = name;
 
-    return this.dbService.save(tag);
+    this.dbService.save(tag).subscribe(() => {
+      this.informationService.showInformation(new UserMessage(
+        MessageType.SUCCESS,
+        "Tag "+tag.name+" renamed"
+      ));
+    });
   }
 
-  public deleteTag(tag: Tag): Observable<any> {
-    return this.dbService.remove(tag);
+  public deleteTag(tag: Tag): void {
+    this.dbService.remove(tag);
   }
 
   public getTags(): Observable<Tag[]> {

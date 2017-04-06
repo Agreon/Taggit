@@ -1,0 +1,8 @@
+<div [class]="alertType" *ngIf="!hidden">
+  <button class="close fa fa-times" type="button" data-dismiss="alert" (click)="hide()"></button>
+  <i *ngIf="message.getTypeString() == 'Error'" class="fa fa-warning"></i>
+  <i *ngIf="message.getTypeString() == 'Warning'" class="fa fa-info"></i>
+  <i *ngIf="message.getTypeString() == 'Success'" class="fa fa-check"></i>
+  <b>{{message.getTypeString()}}: </b>
+  <span>{{message.text}}</span>
+</div>

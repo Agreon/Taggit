@@ -1,0 +1,13 @@
+.alert {
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  min-width: 300px;
+  margin-left: -150px;
+  bottom: 0px;
+}
+
+b {
+  margin-right: 10px;
+  margin-left: 5px;
+}

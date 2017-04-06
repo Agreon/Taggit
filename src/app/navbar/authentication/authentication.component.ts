@@ -5,6 +5,7 @@ import {ModalInput, ModalParameter} from "../../MenuManagement/modal/modal.compo
 import {LogService} from "../../services/log.service";
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
+import {UserMessage, MessageType, UserInformationService} from "../../services/User-Information.service";
 
 /**
  * TODO:
@@ -21,7 +22,8 @@ export class AuthenticationComponent implements OnInit {
   private currentUser: User;
 
   constructor(private modalService: ModalService,
-              private userService: UserService) {
+              private userService: UserService,
+              private informationService: UserInformationService) {
 
   }
 
@@ -37,9 +39,19 @@ export class AuthenticationComponent implements OnInit {
     let signIn = new EventEmitter<any>();
     signIn.subscribe(inputs => {
       this.userService.logIn(inputs[0].value,inputs[1].value).subscribe(res => {
-        console.log("[SUCESS] SignIn", res);
-      }, err => {
-        console.log("Could not signIn",err);
+        if(!res.success){
+          this.informationService.showInformation(new UserMessage(
+            MessageType.ERROR,
+            res.msg
+          ));
+          return;
+        }
+
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "LogIn successfull!"
+        ));
+
       });
     });
 
@@ -55,7 +67,18 @@ export class AuthenticationComponent implements OnInit {
     signUp.subscribe(inputs => {
       this.userService.signUp(inputs[0].value, inputs[1].value).subscribe(res => {
         console.log("AUTH-RES", res);
-        // TODO: if res.err : ShowMessage(err); Just a bootstrap - toolbar with msg
+        if(!res.success){
+          this.informationService.showInformation(new UserMessage(
+            MessageType.ERROR,
+            res.msg
+          ));
+          return;
+        }
+
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Register successfull!"
+        ));
       });
     });
 
@@ -67,5 +90,10 @@ export class AuthenticationComponent implements OnInit {
 
   onSignOut(){
     this.userService.signOut();
+
+    this.informationService.showInformation(new UserMessage(
+      MessageType.SUCCESS,
+      "LogOut successfull!"
+    ));
   }
 }

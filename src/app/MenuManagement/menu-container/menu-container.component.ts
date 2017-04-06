@@ -4,11 +4,6 @@ import {InputReceiver} from "../../models/input-receiver";
 import {InputService} from "../../services/input.service";
 import {MENU_TYPE} from "../menu-manager/menu-manager.component";
 
-/**
- * TODO:
- * + Keyevents from service
- * + stoppropagination
- */
 @Component({
   selector: 'menu-container',
   templateUrl: './menu-container.component.html',
@@ -62,10 +57,6 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
     this.onCancel.emit();
   }
 
-  /**
-   * TODO: catch single Ctrl-key
-   * @param event
-   */
   keyEvent(event: KeyboardEvent) {
     event.stopPropagation();
 
@@ -101,13 +92,11 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
 
     // Escape
     if(event.keyCode == 27 || event.keyCode == 8){
-      console.log("Active", this.activeSlot);
       if(this.activeSlot.collapsed){
         this.onCancel.emit();
       } else  {
         this.activeSlot.closeSlot();
       }
-      console.log("Active 2", this.activeSlot);
     }
 
     // Options

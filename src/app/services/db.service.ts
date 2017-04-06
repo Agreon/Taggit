@@ -2,16 +2,18 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import {Observable, BehaviorSubject} from "rxjs";
 import {Storeable} from "../models/storeable";
+import {environment} from "../../environments/environment";
+import {MessageType, UserInformationService, UserMessage} from "./User-Information.service";
 
 @Injectable()
 export class DBService {
 
-  //private serverUrl: string = "http://agreon.de:3000";
-  private serverUrl: string = "http://127.0.0.1:3000";
   private headers: Headers = new Headers();
 
-
-  constructor(private http: Http) {  }
+  constructor(private http: Http,
+              private informationService: UserInformationService) {
+    console.log("DB connecting to", environment.serverUrl);
+  }
 
   /**
    * Creates a new Storeable
@@ -22,14 +24,23 @@ export class DBService {
     let request = this.createRequestUrl(storeable.type);
 
     return this.http.post(request, storeable.getStoreableContent(), this.headers)
-      .map((res: Response) => res.json());
+      .map((res: Response) => res.json())
+      .catch((error: Response) => {
+        this.handleServerError(error);
+        return Observable.throw(error  || 'Server error')
+      });
   }
 
   public save(storeable: Storeable): Observable<any> {
     let request = this.createRequestUrl(storeable.type,storeable._id);
 
     return this.http.put(request, storeable.getStoreableContent(), this.headers)
-      .catch((error:any) => Observable.throw(error || 'Server error'));;
+      .map((res: Response) => res)
+      //.map((res: Response) => res.json())
+      .catch((error: Response) => {
+        this.handleServerError(error);
+        return Observable.throw(error  || 'Server error')
+      });
   }
 
   public get(type: string, id?: string): Observable<any> {
@@ -37,7 +48,10 @@ export class DBService {
 
     return this.http.get(request, this.headers)
       .map((res: Response) => res.json())
-      .catch((error:any) => Observable.throw(error || 'Server error'));
+      .catch((error: Response) => {
+        this.handleServerError(error);
+        return Observable.throw(error  || 'Server error')
+      });
   }
 
   public remove(storeable: Storeable): Observable<any> {
@@ -45,8 +59,12 @@ export class DBService {
 
     return this.http.delete(request, this.headers)
       .map((res: Response) => res.json())
-      .catch((error:any) => Observable.throw(error || 'Server error'));
+      .catch((error: Response) => {
+        this.handleServerError(error);
+        return Observable.throw(error  || 'Server error')
+      });
   }
+
 
   public authenticate(username: string, password: string): Observable<any>{
     let request = this.createRequestUrl("authenticate");
@@ -61,7 +79,10 @@ export class DBService {
     let request = this.createRequestUrl("userByToken");
 
     return this.http.post(request, { "token": token })
-      .map((res: Response) => res.json());
+      .map((res: Response) => res.json())
+      .catch((error: Response) => {
+        return Observable.throw(error.json() || 'Server error')
+      });
   }
 
   public setHeaders(headers: Headers): void {
@@ -69,11 +90,31 @@ export class DBService {
   }
 
   private createRequestUrl(request: string, id?: string){
-    let url = this.serverUrl + "/" + request;
+    let url = environment.serverUrl + "/" + request;
     if(id){
       url += "/"+id;
     }
     return url;
+  }
+
+  private handleServerError(response: any) {
+    let message = "";
+
+    console.log("ServerError",response);
+
+    if(response.status == 403) {
+      message = response._body;
+      if(!message || message.length == 0){
+        return;
+      }
+    } else {
+      message = "Server Error";
+    }
+
+    this.informationService.showInformation(new UserMessage(
+      MessageType.ERROR,
+      message
+    ));
   }
 
 }

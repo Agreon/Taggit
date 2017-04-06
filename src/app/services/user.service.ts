@@ -4,6 +4,7 @@ import {User} from "../models/user";
 import {DBService} from "./db.service";
 import {Headers} from "@angular/http";
 import {LogService} from "./log.service";
+import {UserMessage, MessageType, UserInformationService} from "./User-Information.service";
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,8 @@ export class UserService {
   private userToken: string;
   private currentUserSubject = new ReplaySubject<User>(1);
 
-  constructor(private dbService: DBService) {
+  constructor(private dbService: DBService,
+              private informationService: UserInformationService) {
     if(localStorage["taggitToken"]){
      // TODO: Directly login
      LogService.log("Found localStorage", localStorage["taggitToken"]);
@@ -42,9 +44,8 @@ export class UserService {
     return this.dbService.create(new User(username, password)).map(res => {
       if(res.success){
         this.setUser(res.user, res.token);
-      } else {
-        console.log("Could not create", res);
       }
+      return res;
     });
 
   }
@@ -52,13 +53,11 @@ export class UserService {
   public logIn(username: string, password: string): Observable<any>{
     return this.dbService.authenticate(username, password)
       .map(res => {
-      console.log("Got res", res);
-      if(res.success){
-        this.setUser(res.user, res.token);
-      }else {
-        Observable.throw(res.message);
-      }
-    });
+        if(res.success){
+          this.setUser(res.user, res.token);
+        }
+        return res;
+      });
   }
 
   /**

@@ -12,6 +12,7 @@ import {InputService} from "../../../services/input.service";
 import {UserService} from "../../../services/user.service";
 import {TagService} from "../../../services/tag.service";
 import {Tag} from "../../../models/tag";
+import {MessageType, UserInformationService, UserMessage} from "../../../services/User-Information.service";
 
 /**
  * TODO: Back-Button
@@ -39,7 +40,8 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
               private modalService: ModalService,
               private inputService: InputService,
               private userService: UserService,
-              private tagService: TagService) {
+              private tagService: TagService,
+              private informationService: UserInformationService) {
     super();
 
     this.slots = [
@@ -137,19 +139,19 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     // Rename Project
     let onRename = new EventEmitter<Array<ModalInput>>();
     onRename.subscribe(inputs => {
-      console.log("Rename",this.slots[0]);
-      // Set Name of project without reloading menu
-      let currentSlot = this.slots[0].subSlots.filter(s => {return s.active})[0];
-      currentSlot.name = inputs[0].value;
-      currentSlot.closeSlot();
 
-      // TODO: maybe notification with snackbar ('saved')
-      // TODO: Does not work
       // Rename Project in DB
-      this.projectService.renameProject(this.currentProject, inputs[0].value).subscribe(() =>{
-        LogService.log("Project renamed");
-      }, err => {
-        LogService.log("Project rename failed", err);
+      this.projectService.renameProject(this.currentProject, inputs[0].value).subscribe(() => {
+
+        // Set Name of project without reloading menu
+        let currentSlot = this.slots[0].subSlots.filter(s => {return s.active})[0];
+        currentSlot.name = inputs[0].value;
+        currentSlot.closeSlot();
+
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Project renamed. "
+        ));
       });
     });
 

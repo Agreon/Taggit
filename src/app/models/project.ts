@@ -62,9 +62,11 @@ export class Project extends Storeable {
       }
     }
 
-    // TODO: Test
+    if(!object.documents){
+      return;
+    }
 
-    // Add new documents
+    // Add documents
     object.documents.forEach(doc => {
       if(this.documents.filter(ownDoc => {
           return ownDoc._id == doc._id;

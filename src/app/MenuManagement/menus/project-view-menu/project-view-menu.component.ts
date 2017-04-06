@@ -85,20 +85,14 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
     onRename.subscribe(inputs => {
       // Set Name of project without reloading menu
-	  // TODO: Active is not reliable; Maybe just the collapsed one, and then collapse it
 
       let currentSlot = this.slots.filter(s => {return s.active})[0];
 
       currentSlot.name = inputs[0].value;
       currentSlot.closeSlot();
 
-      // TODO: maybe notification with snackbar ('saved')
       // Rename Project in DB
-      this.projectService.renameDocument(this.currentDocument, inputs[0].value).subscribe(() =>{
-        LogService.log("Document renamed");
-      }, err => {
-        LogService.log("Document rename failed", err);
-      });
+      this.projectService.renameDocument(this.currentDocument, inputs[0].value);
     });
 
 
@@ -142,8 +136,6 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
     // Create Menu
     this.slots.push(new Slot("Create Document", "plus", null, false, this.createDocument));
-
-    console.log("Le",this.project);
 
     if(this.project.documents.length < 1){
       return;

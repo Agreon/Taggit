@@ -4,6 +4,7 @@ import {Document} from "../models/document";
 import {Subject, Observable, BehaviorSubject, Observer, ReplaySubject} from "rxjs";
 import {DBService} from "./db.service";
 import {LogService} from "./log.service";
+import {MessageType, UserInformationService, UserMessage} from "./User-Information.service";
 
 /**
  * TODO: Order Methods
@@ -20,53 +21,58 @@ export class ProjectService {
   private currentProject: Project;
   private currentDocument: Document;
 
-  constructor(private httpService: DBService) { }
+  constructor(private httpService: DBService,
+              private informationService: UserInformationService) { }
 
   /**
    * Load all projects of a user
    */
   public loadProjects(): void {
-    this.httpService.get("project").subscribe( projects => {
-      console.log("Got projects",projects);
-      projects = projects.data;
-
-      this.projects = projects.map(project => {
+    this.httpService.get("project").subscribe(res => {
+      this.projects = res.map(project => {
         let proj = new Project("");
         proj.fromJSON(project);
         return proj;
       });
-      console.log("Save them as",this.projects);
 
-      //this.projects = projects;
+      LogService.log("Projects loaded", this.projects);
+
       this.allProjectsSubject.next(this.projects);
-    }, err => {
-      console.log("Err", err);
     });
   }
 
   public createProject(name: string) {
-    this.httpService.create(new Project(name)).subscribe(project => {
+    this.httpService.create(new Project(name)).subscribe(res => {
 
-      // Fill with ids and so on
+      // Fill with attribtues
       let proj = new Project("");
-      proj.fromJSON(project);
+      proj.fromJSON(res);
 
       this.projects.push(proj);
       this.allProjectsSubject.next(this.projects);
-    }, err => {
-      console.log("Err Creating project", err);
+
+      // Inform User
+      this.informationService.showInformation(new UserMessage(
+        MessageType.SUCCESS,
+        "Project "+proj.name+" created."
+      ));
     });
   }
 
-  public renameProject(project: Project, name: string): Observable<Project> {
+  public renameProject(project: Project, name: string): Observable<any> {
     LogService.log("Rename project", name)
     project.name = name;
 
     return this.httpService.save(project);
   }
 
-  public deleteProject(project: Project): Observable<any> {
-    return this.httpService.remove(project);
+  public deleteProject(project: Project) {
+    this.httpService.remove(project).subscribe(() => {
+      this.informationService.showInformation(new UserMessage(
+        MessageType.SUCCESS,
+        "Project "+project.name+" deleted"
+      ));
+    });
   }
 
   public getProjects(): Observable<Project[]> {
@@ -101,28 +107,19 @@ export class ProjectService {
 
     console.log("Save doc", document);
 
-    // TODO: Save currentProject in DB?
     this.currentProject.saveDocument(document);
 
-    this.httpService.save(this.currentProject).subscribe(() => {
-        console.log("Saved project to db", this.currentProject);
-      },
-      err => {
-        console.log("Error saving project to db", err);
-      }
-    );
-
     this.httpService.save(document).subscribe((doc) => {
-        console.log("Saved document to db", doc);
-      },
-      err => {
-        console.log("Error saving document to db", err);
-      }
-    );
+        this.httpService.save(this.currentProject).subscribe(() => {
+            this.informationService.showInformation(new UserMessage(
+              MessageType.SUCCESS,
+              "Saved Document."
+            ));
+        });
+      });
   }
 
   /**
-   * TODO: Observable/Promise return
    * @param name
    */
   public createDocument(name: string) {
@@ -134,30 +131,37 @@ export class ProjectService {
       this.currentProjectSubject.next(this.currentProject);
       this.currentDocumentSubject.next(this.currentDocument);
 
-      this.httpService.save(this.currentProject).subscribe(() => {
-        console.log("Project updated");
-      }, err => {
-        console.log("Err project update", err);
-      });
+      console.log("Create doc", this.currentDocument);
 
-    }, err => {
-      console.log("Err Creating document", err);
+      // TODO: This throws error?
+      this.httpService.save(this.currentProject).subscribe(() => {
+        // Inform User
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Document "+document.name+" created."
+        ));
+      });
     });
   }
 
-  public renameDocument(document: Document, name: string): Observable<Document> {
+  public renameDocument(document: Document, name: string) {
     document.name = name;
-    LogService.log("Rename document", document);
+    console.log("Rename document", this.currentProject, document);
 
     this.currentProject.saveDocument(document);
 
     this.httpService.save(this.currentProject).subscribe(() => {
-      console.log("Project updated");
-    }, err => {
-      console.log("Err project update", err);
+     console.log("Saved proj");
+      this.httpService.save(document).subscribe(() => {
+        console.log("Saved doc");
+        // Inform User
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Document renamed."
+        ));
+      });
     });
 
-    return this.httpService.save(document);
   }
 
   public deleteDocument(document: Document): Observable<any> {
@@ -166,9 +170,11 @@ export class ProjectService {
     this.currentProject.removeDocument(document);
 
     this.httpService.save(this.currentProject).subscribe(() => {
-      console.log("Project updated");
-    }, err => {
-      console.log("Err project update", err);
+      // Inform User
+      this.informationService.showInformation(new UserMessage(
+        MessageType.SUCCESS,
+        "Document "+document.name+" deleted."
+      ));
     });
     return this.httpService.remove(document);
   }
@@ -194,7 +200,7 @@ export class ProjectService {
           this.currentDocument.cached = true;
           this.currentProject.saveDocument(this.currentDocument);
           observer.next(this.currentDocument.content);
-        }, err => { LogService.log("Error getting doc content", err); });
+        });
       }
     });
   }
