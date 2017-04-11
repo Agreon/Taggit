@@ -24,7 +24,7 @@
    + Editor
        + remove focus
    + onMouseHover-focus
-      + remove all siblings active
+      + remove all siblings hovered
     + menu
       + switch with keycombo to editor
 
@@ -42,22 +42,17 @@
      + Responsiveness
         + Documentname breaks
         + scrollbar appears 
-        
-    + menu-name-bar center font
-    + tag-modal 
-      + show tag name in header
-      + v-center name of inputs
+      + menu-name-bar center font
+      + tag-modal 
+        + show tag name in header
+        + v-center name of inputs
       
    + Show Error Messages
         + authentication stuff
         + Username existing
        
 ## General
-+ Menü
-
-   + LoadingSpinner
-        + from adminlte
-            
++ Menü    
    + Order Docs/Projects by creationDate  
       + Better in frontend
 
@@ -77,7 +72,6 @@
   + " or '      
   + projects/documents get by _id not name
  
- 
 + Security
   + Authenticate Client, so that no brute force can be applied to server to get tokens
   
@@ -94,6 +88,9 @@
    + Mouse-Animationen
       + OnClick
       +=> in menu-slot 200ms timeout bis das event emittet wird
+
+Snackbar
+   + AnimationIn
 
 # Future
 + Fragen für die eigne Uni veröffentlichen, um so gemienschaftlich einen Fragenkatalog zu erstellen, der beim lernen hilft

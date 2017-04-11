@@ -3,17 +3,17 @@ import {
   ViewChild
 } from '@angular/core';
 import {Subscription} from "rxjs";
-import {LogService} from "../services/log.service";
-import {Tag, TagInput} from "../models/tag";
-import {TagService} from "../services/tag.service";
-import {Document} from "../models/document";
+import {LogService} from "../../services/log.service";
+import {Tag, TagInput} from "../../models/tag";
+import {TagService} from "../../services/tag.service";
+import {Document} from "../../models/document";
 import {forEach} from "@angular/router/src/utils/collection";
-import {ProjectService} from "../services/project.service";
+import {ProjectService} from "../../services/project.service";
 import {ActivatedRouteSnapshot, ActivatedRoute} from "@angular/router";
-import {InputService} from "../services/input.service";
-import {InputReceiver} from "../models/input-receiver";
-import {ModalService} from "../services/modal.service";
-import {ModalInput, ModalParameter} from "../MenuManagement/modal/modal.component";
+import {InputService} from "../../services/input.service";
+import {InputReceiver} from "../../models/input-receiver";
+import {ModalService} from "../../services/modal.service";
+import {ModalInput, ModalParameter} from "../../components/MenuManagement/modal/modal.component";
 
 /**
  * TODO:

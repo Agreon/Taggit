@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
-import {ModalService} from "../../services/modal.service";
+import {ModalService} from "../../../services/modal.service";
 import {Subject} from "rxjs";
-import {InputReceiver} from "../../models/input-receiver";
-import {InputService} from "../../services/input.service";
+import {InputReceiver} from "../../../models/input-receiver";
+import {InputService} from "../../../services/input.service";
 
 export class ModalInput {
   constructor(

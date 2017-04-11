@@ -16,8 +16,8 @@ export class UserService {
   constructor(private dbService: DBService,
               private informationService: UserInformationService) {
     if(localStorage["taggitToken"]){
-     // TODO: Directly login
-     LogService.log("Found localStorage", localStorage["taggitToken"]);
+      // Directly login
+      LogService.log("Found localStorage", localStorage["taggitToken"]);
       this.dbService.getUserByToken(localStorage["taggitToken"]).subscribe(res => {
         LogService.log("User logged in from localStorage", res);
 
@@ -27,6 +27,7 @@ export class UserService {
         this.currentUserSubject.next(User.fromJSON(res.user));
       }, err => {
         console.log("Could not get user by token",err);
+        // TODO: Not for development
         /*
           localStorage["taggitToken"] = null;
           this.userToken = null;
@@ -67,6 +68,11 @@ export class UserService {
     this.currentUser = null;
     localStorage["taggitToken"] = null;
     this.currentUserSubject.next(null);
+    // Inform User
+    this.informationService.showInformation(new UserMessage(
+      MessageType.SUCCESS,
+      "logout successfull."
+    ));
   }
 
   private setUser(user: User, token?: string): void {

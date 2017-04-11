@@ -8,6 +8,7 @@
   </div>
 </form>
 
+<!-- Loading State --->
 <ul *ngIf="loading" class="sidebar-menu">
   <li class="header">
     <span *ngIf="showBackBtn"
@@ -17,11 +18,12 @@
     </span>
     <span>{{name}}</span>
   </li>
-  <li>
-    <i class="fa fa-spinner"></i>
-    <a>Loading...</a>
-  </li>
 </ul>
+<div *ngIf="loading" class="loading-container">
+  <i class="fa fa-refresh fa-spin"></i>
+</div>
+
+<!-- Standart Menu -->
 <ul *ngIf="!loading" class="sidebar-menu" #focusHandle>
   <li class="header">
     <span *ngIf="showBackBtn"

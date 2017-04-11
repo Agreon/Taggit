@@ -1,5 +1,5 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import {ProjectService} from "../services/project.service";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'navbar',

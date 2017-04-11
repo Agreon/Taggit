@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {UserInformationService, UserMessage, MessageType} from "../services/User-Information.service";
+import {UserInformationService, UserMessage, MessageType} from "../../services/User-Information.service";
 
 @Component({
   selector: 'snackbar',

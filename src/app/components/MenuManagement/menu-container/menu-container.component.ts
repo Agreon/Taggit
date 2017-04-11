@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, HostListener, Output, EventEmitter, SimpleChanges, ViewChild} from '@angular/core';
 import {Slot} from "../models/slot";
-import {InputReceiver} from "../../models/input-receiver";
-import {InputService} from "../../services/input.service";
+import {InputReceiver} from "../../../models/input-receiver";
+import {InputService} from "../../../services/input.service";
 import {MENU_TYPE} from "../menu-manager/menu-manager.component";
 
 @Component({

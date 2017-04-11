@@ -14,21 +14,21 @@ import { UserService } from "./services/user.service";
 import { UserInformationService } from "./services/User-Information.service";
 
 // Components
-import { MainEditorComponent } from './main-editor/main-editor.component';
-import { MenuSlotComponent } from './MenuManagement/menu-slot/menu-slot.component';
-import { MenuContainerComponent } from './MenuManagement/menu-container/menu-container.component';
-import { MainMenuComponent } from './MenuManagement/menus/main-menu/main-menu.component';
-import { MenuManagerComponent } from './MenuManagement/menu-manager/menu-manager.component';
-import { ProjectViewMenuComponent } from './MenuManagement/menus/project-view-menu/project-view-menu.component';
-import { MenuTemplateComponent } from './MenuManagement/menus/menu-template/menu-template.component';
+import { MainEditorComponent } from './pages/main-editor/main-editor.component';
+import { MenuSlotComponent } from './components/MenuManagement/menu-slot/menu-slot.component';
+import { MenuContainerComponent } from './components/MenuManagement/menu-container/menu-container.component';
+import { MainMenuComponent } from './components/MenuManagement/menus/main-menu/main-menu.component';
+import { MenuManagerComponent } from './components/MenuManagement/menu-manager/menu-manager.component';
+import { ProjectViewMenuComponent } from './components/MenuManagement/menus/project-view-menu/project-view-menu.component';
+import { MenuTemplateComponent } from './components/MenuManagement/menus/menu-template/menu-template.component';
 import {ProjectService} from "./services/project.service";
 import {Routes, RouterModule} from "@angular/router";
-import { TagButtonComponent } from './main-editor/tag-button/tag-button.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { TagButtonComponent } from './pages/main-editor/tag-button/tag-button.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import {DBService} from "./services/db.service";
-import { ModalComponent } from './MenuManagement/modal/modal.component';
-import { AuthenticationComponent } from './navbar/authentication/authentication.component';
-import { SnackbarComponent } from './snackbar/snackbar.component';
+import { ModalComponent } from './components/MenuManagement/modal/modal.component';
+import { AuthenticationComponent } from './components/navbar/authentication/authentication.component';
+import { SnackbarComponent } from './components/snackbar/snackbar.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},

@@ -111,7 +111,8 @@ export class ProjectService {
 
     this.httpService.save(document).subscribe((doc) => {
         this.httpService.save(this.currentProject).subscribe(() => {
-            this.informationService.showInformation(new UserMessage(
+          // Inform user
+          this.informationService.showInformation(new UserMessage(
               MessageType.SUCCESS,
               "Saved Document."
             ));
@@ -133,7 +134,6 @@ export class ProjectService {
 
       console.log("Create doc", this.currentDocument);
 
-      // TODO: This throws error?
       this.httpService.save(this.currentProject).subscribe(() => {
         // Inform User
         this.informationService.showInformation(new UserMessage(

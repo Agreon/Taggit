@@ -3,16 +3,16 @@ import {Slot} from "../../models/slot";
 import {Subject} from "rxjs";
 import {MenuEvent, MENU_TYPE} from "../../menu-manager/menu-manager.component";
 import {MenuTemplateComponent} from "../menu-template/menu-template.component";
-import {ProjectService} from "../../../services/project.service";
-import {Project} from "../../../models/project";
-import {ModalService} from "../../../services/modal.service";
+import {ProjectService} from "../../../../services/project.service";
+import {Project} from "../../../../models/project";
+import {ModalService} from "../../../../services/modal.service";
 import {ModalInput, ModalParameter} from "../../modal/modal.component";
-import {LogService} from "../../../services/log.service";
-import {InputService} from "../../../services/input.service";
-import {UserService} from "../../../services/user.service";
-import {TagService} from "../../../services/tag.service";
-import {Tag} from "../../../models/tag";
-import {MessageType, UserInformationService, UserMessage} from "../../../services/User-Information.service";
+import {LogService} from "../../../../services/log.service";
+import {InputService} from "../../../../services/input.service";
+import {UserService} from "../../../../services/user.service";
+import {TagService} from "../../../../services/tag.service";
+import {Tag} from "../../../../models/tag";
+import {MessageType, UserInformationService, UserMessage} from "../../../../services/User-Information.service";
 
 /**
  * TODO: Back-Button

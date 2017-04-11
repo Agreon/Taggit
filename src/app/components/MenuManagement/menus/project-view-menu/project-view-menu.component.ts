@@ -3,13 +3,13 @@ import {MenuTemplateComponent} from "../menu-template/menu-template.component";
 import {MENU_TYPE, MenuEvent} from "../../menu-manager/menu-manager.component";
 import {Subject} from "rxjs";
 import {Slot} from "../../models/slot";
-import {ProjectService} from "../../../services/project.service";
-import {Document} from "../../../models/document";
-import {Project} from "../../../models/project";
+import {ProjectService} from "../../../../services/project.service";
+import {Document} from "../../../../models/document";
+import {Project} from "../../../../models/project";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ModalInput, ModalParameter} from "../../modal/modal.component";
-import {ModalService} from "../../../services/modal.service";
-import {LogService} from "../../../services/log.service";
+import {ModalService} from "../../../../services/modal.service";
+import {LogService} from "../../../../services/log.service";
 
 @Component({
   selector: 'project-view-menu',
