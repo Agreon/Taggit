@@ -98,14 +98,12 @@ export class ProjectService {
   }
 
   /**
-   * TODO: Make Observable return?
    * @param document
    */
-  public saveDocument(document: Document) {
-
-    // TODO: Maybe get tags out of doc
-
+  public saveDocument(document: Document): void {
     console.log("Save doc", document);
+
+    document.extractTags();
 
     this.currentProject.saveDocument(document);
 
@@ -123,7 +121,7 @@ export class ProjectService {
   /**
    * @param name
    */
-  public createDocument(name: string) {
+  public createDocument(name: string): void {
     console.log("Create",name);
     this.httpService.create(new Document(name)).subscribe(document => {
       document.cached = true;
@@ -144,7 +142,7 @@ export class ProjectService {
     });
   }
 
-  public renameDocument(document: Document, name: string) {
+  public renameDocument(document: Document, name: string): void {
     document.name = name;
     console.log("Rename document", this.currentProject, document);
 
@@ -204,4 +202,5 @@ export class ProjectService {
       }
     });
   }
+
 }

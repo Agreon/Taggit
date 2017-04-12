@@ -12,6 +12,7 @@ import { InputService } from './services/input.service';
 import { ModalService } from "./services/modal.service";
 import { UserService } from "./services/user.service";
 import { UserInformationService } from "./services/User-Information.service";
+import { LearnService } from "./services/learn.service";
 
 // Components
 import { MainEditorComponent } from './pages/main-editor/main-editor.component';
@@ -29,9 +30,13 @@ import {DBService} from "./services/db.service";
 import { ModalComponent } from './components/MenuManagement/modal/modal.component';
 import { AuthenticationComponent } from './components/navbar/authentication/authentication.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
+import { OverviewComponent } from './pages/overview/overview.component';
+import { LearningComponent } from './pages/learning/learning.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
+  { path: 'Overview', component: OverviewComponent},
+  { path: 'Learning', component: LearningComponent},
   { path: '', redirectTo: 'MainEditor', pathMatch: 'full' }
 ];
 
@@ -49,7 +54,9 @@ const appRoutes: Routes = [
     NavbarComponent,
     ModalComponent,
     AuthenticationComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    OverviewComponent,
+    LearningComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +65,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
     //,TooltipModule.forRoot()
   ],
-  providers: [TagService, ModalService, LogService, InputService, ProjectService, DBService, UserService, UserInformationService],
+  providers: [TagService, ModalService, LearnService, LogService, InputService, ProjectService, DBService, UserService, UserInformationService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })

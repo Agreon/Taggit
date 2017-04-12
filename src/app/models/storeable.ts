@@ -23,4 +23,8 @@ export abstract class Storeable {
 
       return ret;
     }
+
+  public randomString(length): string {
+    return Math.random().toString(length*2).slice(2);
+  }
 }

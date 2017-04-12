@@ -126,7 +126,6 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
   private openDialog(tag: Tag) {
     let insertTag = new EventEmitter<Array<ModalInput>>();
 
-
     let inputs = [];
 
     for(let i = 0; i < tag.inputs.length; i++){
@@ -146,8 +145,11 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       for(let data of inputs){
         tag.setInputValue(data.name,data.value);
       }
+
       this.editor.insertContent(tag.asHtml());
-      this.editor.selection.setContent("");
+      if(this.editor.selection){
+        this.editor.selection.setContent("");
+      }
     });
   }
 

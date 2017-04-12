@@ -10,6 +10,7 @@ import {Router, ActivatedRoute} from "@angular/router";
 import {ModalInput, ModalParameter} from "../../modal/modal.component";
 import {ModalService} from "../../../../services/modal.service";
 import {LogService} from "../../../../services/log.service";
+import {LearnService} from "../../../../services/learn.service";
 
 @Component({
   selector: 'project-view-menu',
@@ -22,11 +23,14 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
   private createDocument = new Subject<string>();
   private renameDocument = new Subject<Document>();
   private deleteDocument = new Subject<Document>();
+  private overviewDocument = new Subject<Document>();
+  private learnDocument = new Subject<Document>();
 
   private project: Project;
   private currentDocument: Document;
 
   constructor(private projectService: ProjectService,
+              private learnService: LearnService,
               private modalService: ModalService,
               private router: Router) {
     super();
@@ -71,7 +75,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       this.modalService.openModal(param);
     });
 
-    // Rename Project
+    // Rename Document
     let onRename = new EventEmitter<Array<ModalInput>>();
 
     this.renameDocument.subscribe((document) => {
@@ -95,6 +99,20 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       this.projectService.renameDocument(this.currentDocument, inputs[0].value);
     });
 
+    // Overview Document
+    this.overviewDocument.subscribe((document) => {
+      this.currentDocument = document;
+      LogService.log("Overview Document", document);
+      //this.projectService.setCurrentDocument(document);
+      this.router.navigate(['/Overview']);
+    });
+
+    // Learn Document
+    this.learnDocument.subscribe((document) => {
+      this.currentDocument = document;
+      LogService.log("Overview Document", document);
+      this.learnService.startLearning(document);
+    });
 
     // Delete Document
     let onDelete = new EventEmitter<Array<ModalInput>>();
@@ -143,6 +161,8 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
     this.project.documents.forEach(d => {
       this.slots.push(new Slot(d.name,"file-text", [
+        new Slot("Overview", "pencil", null, false, this.overviewDocument, false, true, d),
+        new Slot("Learn", "pencil", null, false, this.learnDocument, false, true, d),
         new Slot("Rename", "pencil", null, false, this.renameDocument, false, true, d),
         new Slot("Delete", "trash", null, false, this.deleteDocument, false, true, d)
       ], true, this.selectedDocument));

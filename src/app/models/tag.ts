@@ -18,20 +18,29 @@ export class Tag extends Storeable{
       public inputs: TagInput[]
     ) {
       super();
+
     }
 
+  /** Tags are written in the document like this, bc of editor restrictions
+   <p class='tagged [tagname] [id]'>
+   <strong>[InputName]: </strong>
+   [InputValue]
+   </p>
+   **/
   public asHtml(): string {
     let retHtml = "";
 
-    retHtml += "<p class='tagged "+ this.name + "'>";
+    retHtml += "<span class='tagged "+this.name+"'>";
+
+    let id = this.randomString(12);
+
     this.inputs.forEach((input) => {
-      retHtml += "<p id='"+input.name+"'>";
+      retHtml += "<p class='tagged "+this.name+" "+id+"'>";
       retHtml += "<strong>"+input.name+": </strong>";
       retHtml += input.value;
       retHtml += "</p>";
     });
-
-    retHtml += "</p>";
+    retHtml += "</span>";
 
     return retHtml;
   }

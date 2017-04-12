@@ -38,6 +38,8 @@
         + create attribute
         + rename/remove attribute
     
+    
+    
    + Style
      + Responsiveness
         + Documentname breaks
@@ -91,6 +93,24 @@
 
 Snackbar
    + AnimationIn
+
+## Learn
++ Design
+  + Bei Start auswahl von Tags
+  + im karteikarten-stil
+  + mit großen buttons und tasten-steuerung
+  + Nach frage-beantworten 
+    + karteikarte dreht sich
+    + antwort fährt nach unten aus
+    + Vlt. auch Antwort wo hin schreiben, um abgleichen zu können
++ Architektur 
+  + Jede Dokument und Porjekt muss den fortschritt der jeweiligen tags speichern und anzeigen können
+    + Pro Tag-ID einen Treffer-wert
+    + extra tabelle?
+  + LearnService
+    + startLearning(project/document)
+    + getRandomTag()
+    + setTagSuccess(bool)
 
 # Future
 + Fragen für die eigne Uni veröffentlichen, um so gemienschaftlich einen Fragenkatalog zu erstellen, der beim lernen hilft
