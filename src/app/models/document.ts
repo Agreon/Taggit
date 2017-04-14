@@ -1,8 +1,8 @@
 import {Storeable} from "./storeable";
-import {HoldsTags, StoreTag} from "./learnable";
+import {StoreTag} from "./store-tag";
 import {TagInput} from "./tag";
 
-export class Document extends Storeable implements HoldsTags {
+export class Document extends Storeable {
 
   public type: string = "document";
   public tags: Array<StoreTag> = [];

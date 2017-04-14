@@ -1,18 +1,55 @@
 # TODO
 
-## Release 0.1
-  + Login/register
-    + login works
-    + loadbyToken works
-    + register works
-    + logOut 
-      + project-menu still accessible
-        => Later from landing page and redirect not a problem
-        => SetCurrentProject(null);
-      
-  Menu 
-    + OnCLick slot: this slot should be the only active
-        
+## Konzeption
++ TagManagement
+  + Auf eigener Page?
+  
++ Learning
+  + 2 Pages 
+     + Settings-Page
+        + Wird beim ersten ausführen gezeigt(Oder wenn learntags 0 sind)
+     + Learn-Page
+        + 
+   + Architekturstil
+      + Eigtl. sollte das lernen getrennt von den eigentlichen objekten geschehen (abhängigkeiten)
+      + Aber andererseits erzeuge ich so redundanz durch die inputs?
+      + wenn ich die inputs nicht im learnobj speichere, dann benötige ich allerdings immer 2 db-zugriffe für die lerndaten
+        + TagLevel und TagActive in DocTags?
+        + DocProgress in Doc?
+      + wie würde so ein ablauf aussehen?
+        + get document-tags
+        + get learnobject with doc.id
+        + foreach document.tag 
+          + if in id = learnobject.tag.id
+            + learnobject.tag : name, inputs,
+        + setTags 
+          + learnobject.tags
+        + set active/progress
+          + einfach db-set-learnobject tag 
+          
+  + Komponenten
+    + Statusbar
+        + Input: Prozent
+    + Karteikarte
+      + hat status
+        + question/answer 
+      + input: LearnTag 
+      + learnservice.setsuccess(tag-id, false/true)
+    + TagList
+      + In: TagName, LearnTag[]
+      + template foreach tag 
+        + onclick buttons -> (onclick)="setactive(true/false,tag.id)"
+    + ablauf
+      + service.startLearning(document)
+        + db.getLearnObj(doc.id)
+        + if not existing
+          + create new learnobj 
+          + redirect to learn-settings
+        + if existing
+          + get all data 
+          + redirect to learn-page 
+          
+# Release 0.1      
    REST
     + delete project
       + remove project from list
@@ -28,18 +65,11 @@
     + menu
       + switch with keycombo to editor
 
-  + Tags
-    + load
-    + store
-    + create
-      + how to dynamically add inputs?
-    
-      + subslots with 
-        + create attribute
-        + rename/remove attribute
-    
-    
-    
+   + Show Error Messages
+        + authentication stuff
+        + Username existing
+   
+## Bugs
    + Style
      + Responsiveness
         + Documentname breaks
@@ -48,17 +78,12 @@
       + tag-modal 
         + show tag name in header
         + v-center name of inputs
-      
-   + Show Error Messages
-        + authentication stuff
-        + Username existing
-       
+    + onMouseHover-focus
+      + remove all siblings hovered
+   
 ## General
-+ Menü    
-   + Order Docs/Projects by creationDate  
-      + Better in frontend
 
-+ Landing-Page with Login/Register
++ Landing-Page with Login/Register-Modal
 
 + Editor
   + Markdown view?
@@ -68,7 +93,6 @@
     + Collapse-Button
     + Tooltips wieder rein?
   
-
 + Code-Quali
   + observable.complete()
   + " or '      
@@ -77,40 +101,44 @@
 + Security
   + Authenticate Client, so that no brute force can be applied to server to get tokens
   
-# NiceToHave
+## Learn
+  + Design
+    + Bei Start auswahl von Tags
+    + im karteikarten-stil
+    + mit großen buttons und tasten-steuerung
+    + Nach frage-beantworten 
+      + karteikarte dreht sich
+      + antwort fährt nach unten aus
+      + Vlt. auch Antwort wo hin schreiben, um abgleichen zu können
+  + Architektur 
+    + Jede Dokument und Porjekt muss den fortschritt der jeweiligen tags speichern und anzeigen können
+      + Pro Tag-ID einen Treffer-wert
+      + extra tabelle?
+    + LearnService
+      + startLearning(project/document)
+      + getRandomTag()
+      + setTagSuccess(bool)
+     
+# NiceToHave    
++ Rewrite editor
+  + hover-highlighting of what text is part of a taginput
+  
 + Search
 	+ DragnDrop to order projects/document
 	+ Link freigeben (public)
 		+ einfach get /id des docs
 		+ wenn bool: public, show 
 + Menu
+   + Order Docs/Projects by creationDate  
+      + Better in frontend
    + MenuToggle
       + Nachschauen welche klassen in admineLte
       + Vorerst Weglassen?
    + Mouse-Animationen
       + OnClick
       +=> in menu-slot 200ms timeout bis das event emittet wird
-
 Snackbar
    + AnimationIn
-
-## Learn
-+ Design
-  + Bei Start auswahl von Tags
-  + im karteikarten-stil
-  + mit großen buttons und tasten-steuerung
-  + Nach frage-beantworten 
-    + karteikarte dreht sich
-    + antwort fährt nach unten aus
-    + Vlt. auch Antwort wo hin schreiben, um abgleichen zu können
-+ Architektur 
-  + Jede Dokument und Porjekt muss den fortschritt der jeweiligen tags speichern und anzeigen können
-    + Pro Tag-ID einen Treffer-wert
-    + extra tabelle?
-  + LearnService
-    + startLearning(project/document)
-    + getRandomTag()
-    + setTagSuccess(bool)
 
 # Future
 + Fragen für die eigne Uni veröffentlichen, um so gemienschaftlich einen Fragenkatalog zu erstellen, der beim lernen hilft

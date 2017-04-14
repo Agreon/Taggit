@@ -110,8 +110,8 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     // Learn Document
     this.learnDocument.subscribe((document) => {
       this.currentDocument = document;
-      LogService.log("Overview Document", document);
-      this.learnService.startLearning(document);
+      LogService.log("Learn Document", document);
+      this.learnService.startDocumentLearning(document);
     });
 
     // Delete Document
@@ -162,7 +162,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.project.documents.forEach(d => {
       this.slots.push(new Slot(d.name,"file-text", [
         new Slot("Overview", "pencil", null, false, this.overviewDocument, false, true, d),
-        new Slot("Learn", "pencil", null, false, this.learnDocument, false, true, d),
+        new Slot("Learn", "leanpub", null, false, this.learnDocument, false, true, d),
         new Slot("Rename", "pencil", null, false, this.renameDocument, false, true, d),
         new Slot("Delete", "trash", null, false, this.deleteDocument, false, true, d)
       ], true, this.selectedDocument));

@@ -32,6 +32,9 @@ import { AuthenticationComponent } from './components/navbar/authentication/auth
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { LearningComponent } from './pages/learning/learning.component';
+import { FlashcardComponent } from './pages/learning/flashcard/flashcard.component';
+import { TagListComponent } from './pages/learning/tag-list/tag-list.component';
+import { ProgressBarComponent } from './pages/learning/progress-bar/progress-bar.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
@@ -56,7 +59,10 @@ const appRoutes: Routes = [
     AuthenticationComponent,
     SnackbarComponent,
     OverviewComponent,
-    LearningComponent
+    LearningComponent,
+    FlashcardComponent,
+    TagListComponent,
+    ProgressBarComponent
   ],
   imports: [
     BrowserModule,
