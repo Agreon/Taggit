@@ -1,0 +1,77 @@
+var Document = require('../models/document');
+
+exports.getAll = function(req, res, next) {
+    Document.find({}, function(err, projects){
+        if(err) {
+            return res.status(500).send(err);
+        }
+        res.send(projects);
+    });
+};
+
+exports.getOne = function(req, res, next){
+    Document.find({_id: req.params.id}, function(err, document){
+        if(err) {
+            return res.status(500).send(err);
+        }
+        console.log("Found",document);
+        if(document.length == 0){
+        	res.status(403).send("Document not found!");
+        } else {
+        	res.send(document[0]);
+        }        
+    });
+};
+
+exports.create = function (req, res, next) {
+    console.log("Create Document", req.body);
+    var document = new Document({
+        name: req.body.name
+    });
+
+    Document.findByName(document.ownerID, document.name, function(err, documents){
+        if(err){
+            return res.status(500).send(err);
+        }
+
+        if(documents.length > 0){
+            console.log("Already existing");
+            return res.status(403).send("Document with this name already existing!");
+        }
+
+        document.save(function (err, document) {
+            if(err) {
+                return res.status(500).send(err);
+            }
+            res.send(document);
+        });        
+    });
+};
+
+
+exports.save = function (req, res, next) {
+	let toUpdate = req.body;
+	toUpdate.updated_at = new Date();
+	delete toUpdate._id;	// Remove id
+
+    console.log("Update Document", toUpdate);
+	console.log("Params",req.params, req.params.id);
+
+	Document.update({_id: req.params.id}, toUpdate, function(err, numAffected, response){
+		if(err){
+            return res.status(500).send(err);
+		}
+		res.send({});
+	});
+};
+
+exports.remove = function(req, res, next) {
+	console.log("Delete",req.params.id);
+	Document.remove({_id: req.params.id},function(err) {
+		if(err){
+            return res.status(500).send(err);
+		}
+		res.send({});
+	});
+}
+
