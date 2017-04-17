@@ -18,8 +18,11 @@
             {{input.label}}
           </div>
           <div class="col-lg-9 col-md-9 col-sm-9">
-            <input *ngIf="!input.hidden" type="text" [(ngModel)]="input.value" #inputField>
-            <input *ngIf="input.hidden" type="password" [(ngModel)]="input.value" #inputField>
+            <input *ngIf="input.type == 'text'" type="text" [(ngModel)]="input.value" #inputField>
+            <input *ngIf="input.type == 'hidden'" type="password" [(ngModel)]="input.value" #inputField>
+            <select *ngIf="input.type == 'select'" (change)="selectChange($event, input.name)" #inputField>
+              <option *ngFor="let option of input.options">{{option}}</option>
+            </select>
           </div>
         </div>
       </div>

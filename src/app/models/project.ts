@@ -1,8 +1,10 @@
 import {Document} from "./document";
 import {LogService} from "../services/log.service";
 import {Storeable} from "./storeable";
+import {HoldsTags} from "./HoldsTags";
+import {StoreTag} from "./store-tag";
 
-export class Project extends Storeable {
+export class Project extends Storeable implements HoldsTags {
 
   public type: string = "project";
 
@@ -46,6 +48,16 @@ export class Project extends Storeable {
     return this.documents.filter(d => {
       return d.name == name;
     })[0];
+  }
+
+  public getTags(): Array<StoreTag> {
+      let tags = [];
+
+      for(let doc of this.documents){
+        tags.concat(doc.getTags());
+      }
+
+      return tags;
   }
 
   /**

@@ -111,7 +111,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.learnDocument.subscribe((document) => {
       this.currentDocument = document;
       LogService.log("Learn Document", document);
-      this.learnService.startDocumentLearning(document);
+      this.learnService.startLearning(document);
     });
 
     // Delete Document

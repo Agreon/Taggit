@@ -23,6 +23,7 @@ import { MenuManagerComponent } from './components/MenuManagement/menu-manager/m
 import { ProjectViewMenuComponent } from './components/MenuManagement/menus/project-view-menu/project-view-menu.component';
 import { MenuTemplateComponent } from './components/MenuManagement/menus/menu-template/menu-template.component';
 import {ProjectService} from "./services/project.service";
+import {CookieService} from "angular2-cookie/core";
 import {Routes, RouterModule} from "@angular/router";
 import { TagButtonComponent } from './pages/main-editor/tag-button/tag-button.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -31,17 +32,18 @@ import { ModalComponent } from './components/MenuManagement/modal/modal.componen
 import { AuthenticationComponent } from './components/navbar/authentication/authentication.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { OverviewComponent } from './pages/overview/overview.component';
-import { LearningComponent } from './pages/learning/learning.component';
-import { FlashcardComponent } from './pages/learning/flashcard/flashcard.component';
-import { TagListComponent } from './pages/learning/tag-list/tag-list.component';
+import { LearningComponent } from './pages/learning/learning/learning.component';
+import { FlashcardComponent } from './pages/learning/learning/flashcard/flashcard.component';
+import { TagListComponent } from './pages/learning/learn-settings/tag-list/tag-list.component';
 import { ProgressBarComponent } from './pages/learning/progress-bar/progress-bar.component';
+import { LearnSettingsComponent } from './pages/learning/learn-settings/learn-settings.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
   { path: 'Overview', component: OverviewComponent},
   { path: 'Learning', component: LearningComponent},
-  { path: '', redirectTo: 'MainEditor', pathMatch: 'full' }
-];
+  { path: 'LearnSettings', component: LearnSettingsComponent},
+  { path: '', redirectTo: 'MainEditor', pathMatch: 'full' }];
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ const appRoutes: Routes = [
     LearningComponent,
     FlashcardComponent,
     TagListComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    LearnSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +74,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
     //,TooltipModule.forRoot()
   ],
-  providers: [TagService, ModalService, LearnService, LogService, InputService, ProjectService, DBService, UserService, UserInformationService],
+  providers: [TagService, ModalService, LearnService, LogService, InputService, ProjectService, DBService, UserService, UserInformationService, CookieService],
   entryComponents: [AppComponent, MainMenuComponent, ProjectViewMenuComponent],
   bootstrap: [AppComponent]
 })

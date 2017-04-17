@@ -5,6 +5,7 @@ import {DBService} from "./db.service";
 import {Headers} from "@angular/http";
 import {LogService} from "./log.service";
 import {UserMessage, MessageType, UserInformationService} from "./User-Information.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Injectable()
 export class UserService {
@@ -14,26 +15,54 @@ export class UserService {
   private currentUserSubject = new ReplaySubject<User>(1);
 
   constructor(private dbService: DBService,
-              private informationService: UserInformationService) {
-    if(localStorage["taggitToken"]){
+              private informationService: UserInformationService,
+              private activeRoute: ActivatedRoute
+            ) {
+
+    let token = this.getToken();
+
+    if(!token){
+      //this.signOut();
+    }
+
+
+      token = "JWT "+token;
       // Directly login
-      LogService.log("Found localStorage", localStorage["taggitToken"]);
-      this.dbService.getUserByToken(localStorage["taggitToken"]).subscribe(res => {
+      LogService.log("Found Token", token);
+      this.dbService.getUserByToken(token).subscribe(res => {
         LogService.log("User logged in from localStorage", res);
 
-        this.setUser(res.user, localStorage["taggitToken"]);
+        this.setUser(res.user, token);
 
         this.dbService.setHeaders(this.createAuthHeaders());
         this.currentUserSubject.next(User.fromJSON(res.user));
       }, err => {
         console.log("Could not get user by token",err);
         // TODO: Not for development
+        window.location.href = ""
         /*
           localStorage["taggitToken"] = null;
           this.userToken = null;
          */
       });
+
+
+  }
+
+  private getToken(): string {
+    console.log("URL", window.location.href);
+    let params = window.location.href.split('?');
+
+    if(!params || params.length < 2){
+      return null;
     }
+    let tokenpair = params[1].split('=');
+
+    if(tokenpair.length < 2){
+      return null;
+    }
+
+    return tokenpair[1];
   }
 
   public getCurrentUser(): Observable<User> {
@@ -66,20 +95,20 @@ export class UserService {
    */
   public signOut(): void {
     this.currentUser = null;
-    localStorage["taggitToken"] = null;
     this.currentUserSubject.next(null);
     // Inform User
     this.informationService.showInformation(new UserMessage(
       MessageType.SUCCESS,
       "logout successfull."
     ));
+    //window.location.href = "";
+    // TODO: Redircet to landingpage/logout
   }
 
   private setUser(user: User, token?: string): void {
     this.currentUser = User.fromJSON(user);
     if(token){
       this.userToken = token;
-      localStorage["taggitToken"] = token;
       this.dbService.setHeaders(this.createAuthHeaders());
     }
     this.currentUserSubject.next(this.currentUser);

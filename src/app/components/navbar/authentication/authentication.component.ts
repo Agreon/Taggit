@@ -57,7 +57,7 @@ export class AuthenticationComponent implements OnInit {
 
     this.modalService.openModal(new ModalParameter("Sign In", [
       new ModalInput("Username", ""),
-      new ModalInput("Password", "", null, true)
+      new ModalInput("Password", "", null, "hidden")
     ], signIn, "MenuContainer", "Please enter your credentials."));
   }
 
@@ -84,7 +84,7 @@ export class AuthenticationComponent implements OnInit {
 
     this.modalService.openModal(new ModalParameter("Sign Up", [
       new ModalInput("Username", ""),
-      new ModalInput("Password", "", null, true)
+      new ModalInput("Password", "", null, "hidden")
     ], signUp, "MenuContainer", "Please enter your credentials."));
   }
 

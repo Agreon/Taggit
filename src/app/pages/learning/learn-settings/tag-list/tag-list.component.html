@@ -1,0 +1,16 @@
+<h3>{{tagType}}</h3>
+
+<table class="table table-hover">
+  <tr>
+    <th width="10%">Active</th>
+    <th>Question</th>
+    <th>Level</th>
+    <th>Reset</th>
+  </tr>
+  <tr *ngFor="let tag of tags">
+    <td><input type="checkbox" (click)="setActive($event, tag)"></td>
+    <td>{{tag.tagData.inputs[0].value}}</td>
+    <td><span class="badge bg-blue">{{tag.level}}</span></td>
+    <td><i class="fa fa-undo" (click)="resetProgress()"></i></td>
+  </tr>
+</table>

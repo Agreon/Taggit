@@ -2,26 +2,16 @@
   <section class="content-header">
     <div class="row">
       <div class="col col-lg-3">
-        <a class="btn btn-lg btn-success">
-          Add Tag
-          <i class="fa fa-plus"></i>
-        </a>
       </div>
       <div class="col col-lg-6">
-        <b>Progress</b><br>
         <progress-bar [Value]="40"></progress-bar>
       </div>
       <div class="col col-lg-3">
-        <a class="btn btn-lg btn-success pull-right">
-          Start Learning
-          <i class="fa fa-play"></i>
-        </a>
+        <!-- TODO: App-Button (admin-lte) of settings -->
       </div>
     </div>
   </section>
   <section class="content">
-    <tag-list [TagType]="'Question'" [Tags]="'[{}]'">
-    </tag-list>
     <flashcard></flashcard>
   </section>
 </div>

@@ -44,7 +44,12 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
   constructor(private projectService: ProjectService,
               private tagService: TagService,
               private inputService: InputService,
-              private modalService: ModalService){
+              private modalService: ModalService,
+              private route: ActivatedRoute){
+
+    this.route.params.subscribe(res => {
+      console.log("QUery", res);
+    });
 
     inputService.addReciever("MainEditor",this);
 
@@ -132,7 +137,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       let newInput = new ModalInput(tag.inputs[i].name, "");
 
       // Set selection as value for first input
-      if(i == 0){
+      if(i == 0 && this.editor.selection){
         newInput['value'] = this.editor.selection.getContent();
       }
 

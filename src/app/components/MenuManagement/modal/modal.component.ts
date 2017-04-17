@@ -9,7 +9,8 @@ export class ModalInput {
     public name: string,
     public value: string,
     public label?: string,
-    public hidden: boolean = false
+    public type: string = "text",
+    public options: Array<string> = []
   ) {
     if(!label){
       this.label = name;
@@ -62,6 +63,20 @@ export class ModalComponent implements InputReceiver {
       this.show();
     });
 
+  }
+
+  private selectChange(event: any, name: string){
+    console.log("evt",event, name);
+    if(!event.options[0]){
+      return;
+    }
+
+    for(let input of this.parameter.inputs){
+      if(input.name == name){
+        input.value = event.options[0];
+        break;
+      }
+    }
   }
 
   keyEvent(event: KeyboardEvent) {

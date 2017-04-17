@@ -1,0 +1,25 @@
+<div class="mainContent">
+  <section class="content-header">
+    <div class="row">
+      <div class="col col-lg-3">
+        <a class="btn btn-lg btn-success" (click)="addTags()">
+          Add Tags
+          <i class="fa fa-plus"></i>
+        </a>
+      </div>
+      <div class="col col-lg-6">
+        <progress-bar [Value]="learnObject.progress"></progress-bar>
+      </div>
+      <div class="col col-lg-3">
+        <a class="btn btn-lg btn-success pull-right" (click)="startLearning()">
+          Start Learning
+          <i class="fa fa-play"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="content">
+    <tag-list *ngFor="let type of learnObject.getTagTypes()" [TagType]="type" [Tags]="learnObject.getTagsOfType(type)">
+    </tag-list>
+  </section>
+</div>

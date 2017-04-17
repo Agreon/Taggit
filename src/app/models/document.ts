@@ -1,8 +1,9 @@
 import {Storeable} from "./storeable";
 import {StoreTag} from "./store-tag";
 import {TagInput} from "./tag";
+import {HoldsTags} from "./HoldsTags";
 
-export class Document extends Storeable {
+export class Document extends Storeable implements HoldsTags{
 
   public type: string = "document";
   public tags: Array<StoreTag> = [];
@@ -79,6 +80,14 @@ export class Document extends Storeable {
         }
     }
   }
+
+  // Tags
+
+  getTags(): Array<StoreTag> {
+    return this.tags;
+  }
+
+  // Storeable
 
   public static fromJSON(object: any): Document {
     let document = new Document("");

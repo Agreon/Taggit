@@ -68,6 +68,9 @@
    + Show Error Messages
         + authentication stuff
         + Username existing
+  + Modal
+    + Vlt. AdminLTE-Box nehmen
+      + sieht schick aus (form-elements)
    
 ## Bugs
    + Style
@@ -122,7 +125,9 @@
 # NiceToHave    
 + Rewrite editor
   + hover-highlighting of what text is part of a taginput
-  
+
++ charts for learn-progress 
+  + @see admin-lte - dashboard
 + Search
 	+ DragnDrop to order projects/document
 	+ Link freigeben (public)
