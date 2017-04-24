@@ -5,11 +5,6 @@
   + Auf eigener Page?
   
 + Learning
-  + 2 Pages 
-     + Settings-Page
-        + Wird beim ersten ausführen gezeigt(Oder wenn learntags 0 sind)
-     + Learn-Page
-        + 
    + Architekturstil
       + Eigtl. sollte das lernen getrennt von den eigentlichen objekten geschehen (abhängigkeiten)
       + Aber andererseits erzeuge ich so redundanz durch die inputs?
@@ -30,24 +25,7 @@
   + Komponenten
     + Statusbar
         + Input: Prozent
-    + Karteikarte
-      + hat status
-        + question/answer 
-      + input: LearnTag 
-      + learnservice.setsuccess(tag-id, false/true)
-    + TagList
-      + In: TagName, LearnTag[]
-      + template foreach tag 
-        + onclick buttons -> (onclick)="setactive(true/false,tag.id)"
-    + ablauf
-      + service.startLearning(document)
-        + db.getLearnObj(doc.id)
-        + if not existing
-          + create new learnobj 
-          + redirect to learn-settings
-        + if existing
-          + get all data 
-          + redirect to learn-page 
+
           
 # Release 0.1      
    REST
@@ -73,20 +51,20 @@
       + sieht schick aus (form-elements)
    
 ## Bugs
-   + Style
+	+ AutoFocus not working
+		+ Aber nur aus Editor heraus, von menü klappts
+	
+	+ Style
      + Responsiveness
-        + Documentname breaks
-        + scrollbar appears 
-      + menu-name-bar center font
+        + scrollbar in editor appears wenn page-height kleiner als erwartet
+ 
       + tag-modal 
-        + show tag name in header
         + v-center name of inputs
++ Menu    
     + onMouseHover-focus
       + remove all siblings hovered
    
 ## General
-
-+ Landing-Page with Login/Register-Modal
 
 + Editor
   + Markdown view?
@@ -147,3 +125,10 @@ Snackbar
 
 # Future
 + Fragen für die eigne Uni veröffentlichen, um so gemienschaftlich einen Fragenkatalog zu erstellen, der beim lernen hilft
+=> public / private Lerngruppen
+	+ Fragen aus existierenden Lernobjekten importieren
+	+ Ersteller->Moderator
+	+ Fragen melden 
+	+ Fragen upvoten/downvoten
+	+ Diskussion zu fragen
+ 

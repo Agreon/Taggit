@@ -67,10 +67,6 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     });
 
      this.projectService.getCurrentDocument().subscribe(d => {
-        if(!d){
-          return;
-        }
-
        console.log("Current Doc", d);
        this.document = d;
 
@@ -144,7 +140,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       inputs.push(newInput);
     }
 
-    this.modalService.openModal(new ModalParameter("Insert Tag", inputs, insertTag, "MainEditor"));
+    this.modalService.openModal(new ModalParameter("Insert Tag - "+tag.name, inputs, insertTag, "MainEditor"));
 
     insertTag.subscribe(inputs => {
       for(let data of inputs){

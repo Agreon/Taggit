@@ -16,9 +16,12 @@ span, i {
 
 .backBtn {
   float: left;
-  font-size: 20px;
+  font-size: 1.7em;
   cursor: pointer;
-  width: 20px;
+  width: 1.5em;
+  position: absolute;
+  left: 0;
+  bottom: 0.24em;
 }
 
 .loading-container {

@@ -19,20 +19,25 @@ export class UserService {
               private activeRoute: ActivatedRoute
             ) {
 
-    let token = this.getToken();
+    let token = this.getTokenFromURL();
 
+    // If token was not in url, check the localStorage
     if(!token){
-      //this.signOut();
+      if(localStorage["taggitToken"]){
+        token = localStorage["taggitToken"];
+      }else {
+        //this.signOut();
+      }
     }
 
-
-      token = "JWT "+token;
       // Directly login
       LogService.log("Found Token", token);
       this.dbService.getUserByToken(token).subscribe(res => {
         LogService.log("User logged in from localStorage", res);
 
         this.setUser(res.user, token);
+
+        localStorage["taggitToken"] = token;
 
         this.dbService.setHeaders(this.createAuthHeaders());
         this.currentUserSubject.next(User.fromJSON(res.user));
@@ -49,7 +54,7 @@ export class UserService {
 
   }
 
-  private getToken(): string {
+  private getTokenFromURL(): string {
     console.log("URL", window.location.href);
     let params = window.location.href.split('?');
 
@@ -62,7 +67,7 @@ export class UserService {
       return null;
     }
 
-    return tokenpair[1];
+    return "JWT "+tokenpair[1];
   }
 
   public getCurrentUser(): Observable<User> {

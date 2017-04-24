@@ -9,3 +9,8 @@
   float: left;
   width: 90%;
 }
+
+.navbar-custom-menu{
+  position: absolute;
+  right: 5px;
+}

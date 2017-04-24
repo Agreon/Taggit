@@ -97,6 +97,7 @@ export class ModalComponent implements InputReceiver {
     // Focus first Element
     setTimeout(() => {
       if(this.inputs.length > 0){
+        console.log("Should focus on ", this.inputs.first);
         this.inputs.first.nativeElement.focus()
       }
     },3);
