@@ -182,13 +182,13 @@ export class ProjectService {
    * Gets the content of a document
    * @param name
    */
-  public loadDocumentContent(name: string): Observable<string> {
+  public loadDocument(id: string): Observable<Document> {
 
-    let doc = this.currentProject.getDocument(name);
+    let doc = this.currentProject.getDocument(id);
 
-    return Observable.create((observer: Observer<string>) => {
+    return Observable.create((observer: Observer<Document>) => {
       if(doc.cached){
-        observer.next(doc.content);
+        observer.next(doc);
       } else {
         // Load from db
         this.httpService.get("document", doc._id).subscribe(document => {
@@ -197,7 +197,7 @@ export class ProjectService {
           // Set cache-status
           this.currentDocument.cached = true;
           this.currentProject.saveDocument(this.currentDocument);
-          observer.next(this.currentDocument.content);
+          observer.next(this.currentDocument);
         });
       }
     });

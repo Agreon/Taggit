@@ -4,7 +4,9 @@
   </a>
 -->
 
-  <span class="documentName" *ngIf="documentName | async">{{projectName | async }} - {{documentName | async }}</span>
+  <span class="documentName" *ngIf="documentName | async">
+    {{projectName | async }} - {{documentName | async }}
+  </span>
   <div class="navbar-custom-menu">
     <authentication></authentication>
   <!--  <ul class="nav navbar-nav">

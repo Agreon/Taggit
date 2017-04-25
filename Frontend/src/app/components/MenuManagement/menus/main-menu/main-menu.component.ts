@@ -14,9 +14,7 @@ import {TagService} from "../../../../services/tag.service";
 import {Tag} from "../../../../models/tag";
 import {MessageType, UserInformationService, UserMessage} from "../../../../services/User-Information.service";
 
-/**
- * TODO: Back-Button
- */
+
 @Component({
   selector: 'main-menu',
   templateUrl: 'main-menu.component.html',
@@ -45,16 +43,12 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     super();
 
     this.slots = [
-      new Slot("Projects", "book", [
-       // new Slot("Create Project", "plus", null, null, this.createProject)
-      ], false, new Subject<any>(), true, false),
-      new Slot("Tags", "tags", [
-       /* new Slot("TODO", "tag", null, false, this.tagSelected),
-        new Slot("Question", "tag", null, false, this.tagSelected)*/
-      ])
+      new Slot("Projects", "book", [], false, new Subject<any>(), true, false),
+      new Slot("Tags", "tags", [])
     ];
 
-    console.log("LOADING");
+    // TODO: Maybe in Init
+    let startTime = Date.now();
     this.loading = true;
 
     // Load Projects
@@ -73,7 +67,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       });
 
       this.loading = false;
-
+      LogService.log("Loadingtime", Date.now() - startTime);
     });
 
     // Load Tags
@@ -105,6 +99,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
         this.projectService.setCurrentDocument(null);
         //return;
       }
+      startTime = Date.now();
       this.loading = true;
       this.projectService.loadProjects();
     });
@@ -122,8 +117,6 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     let onCreate = new EventEmitter<Array<ModalInput>>();
     onCreate.subscribe(inputs => {
       this.projectService.createProject(inputs[0].value)
-      // TODO: Does not work
-      //this.inputService.setActive("MenuContainer");
     });
 
     // Open Modal on Selection
@@ -170,18 +163,18 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     onDelete.subscribe(inputs => {
       this.projectService.deleteProject(this.currentProject);
 
-      // TODO: .active is not reliable
-      /*let toDelete = -1;
-      for(let i = 0; i < this.slots.length; i++){
-        if(this.slots[i].active){
+      let subSlots = this.slots[0].subSlots;
+      let toDelete = -1;
+      for(let i = 0; i < subSlots.length; i++){
+        if(subSlots[i].eventPayload && subSlots[i].eventPayload._id == this.currentProject._id){
           toDelete = i;
           break;
         }
       }
 
       if(toDelete != -1){
-        this.slots.splice(toDelete, 1);
-      }*/
+        this.slots[0].subSlots.splice(toDelete, 1);
+      }
     });
 
     this.deleteProject.subscribe((project) => {

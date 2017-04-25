@@ -14,10 +14,11 @@ export class Project extends Storeable implements HoldsTags {
   ){
     super();
     this.excludedFromDB.push("documents");
+    this.excludedFromDB.push("cached");
   }
 
   public saveDocument(document: Document) {
-    let found = this.getDocument(document.name);
+    let found = this.getDocument(document._id);
 
     if(found){
       let index = this.documents.indexOf(found);
@@ -44,9 +45,9 @@ export class Project extends Storeable implements HoldsTags {
     LogService.log("Removed document", document);
   }
 
-  public getDocument(name: string): Document {
+  public getDocument(id: string): Document {
     return this.documents.filter(d => {
-      return d.name == name;
+      return d._id == id;
     })[0];
   }
 
@@ -58,6 +59,15 @@ export class Project extends Storeable implements HoldsTags {
       }
 
       return tags;
+  }
+
+  public isChached(): boolean {
+      for(let doc of this.documents){
+        if(!doc.cached) {
+          return false;
+        }
+      }
+      return true;
   }
 
   /**

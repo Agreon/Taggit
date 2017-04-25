@@ -21,7 +21,7 @@ export class AuthenticationComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getCurrentUser().subscribe(res => {
-      console.log("CurrentUser", res);
+      LogService.log("CurrentUser", res);
       this.currentUser = res;
     });
   }

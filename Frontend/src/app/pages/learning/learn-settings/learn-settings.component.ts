@@ -37,6 +37,11 @@ export class LearnSettingsComponent implements OnInit {
    this.learnObject = this.learnService.getLearnObject();
    console.log("Init Settings", this.learnObject);
 
+    /**
+     * TODO: Load learnobject-tags
+     */
+
+
   }
 
 
@@ -45,10 +50,14 @@ export class LearnSettingsComponent implements OnInit {
 
     let tags = this.learnService.getObjectTags();
 
+    console.log("AllTags",tags);
+
     tags = tags.filter(tag => tag.inputs.length > 1);
 
 
     let types = Helper.distinctArray(tags, "tagType");
+
+    // TODO: this.learnObject klappt nicht.. muss erst gepullt werden
 
     // Filter out if already in learnObject
     types = types.filter(type => {
@@ -58,8 +67,6 @@ export class LearnSettingsComponent implements OnInit {
         }
       }
     });
-
-
 
     console.log("Types", types);
 

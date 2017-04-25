@@ -7,6 +7,8 @@
 var app = require('../src/app');
 var debug = require('debug')('taggitbackend:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
@@ -19,13 +21,19 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = http.createServer(app).listen(port);
 
 /**
- * Listen on provided port, on all network interfaces.
- */
+ * Create HTTPS Server
+ * TODO: Cert and key store
+ *//*
+var options = {
+  key: fs.readFileSync('../keys/key.pem'),
+  cert: fs.readFileSync('../keys/cert.cert')
+};
+var secureServer = https.createServer(options, app).listen(443);
+*/
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 

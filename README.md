@@ -1,3 +1,21 @@
+# Intro
+
+Taggit - A multifunctional Learning Tool
+
+
+# Shortcuts
+
+## Menu
+* Enter: Select MenuItem
+* ctrl: show options of MenuItem
+* escape: cancel
+* x: Switch to Editor
+ 
+## Editor
+* ctrl+<Tag-Number>: Insert Tag at caret; If somethign is selected, it will be put in the first tag-input
+* alt+w: Focus Menu / Editor
+
+
 # TODO
 
 ## Konzeption
@@ -29,27 +47,21 @@
           
 # Release 0.1      
    REST
-    + delete project
-      + remove project from list
     + frontend
       + rename project
         + error thrown is 500 and not 403 when existing
       
+    + delete document by id and not active
+      
   + Focus
+  	+ OnStartup focus Menu 
+  	
+  + key-combinations
+  	
    + Editor
-       + remove focus
-   + onMouseHover-focus
-      + remove all siblings hovered
-    + menu
-      + switch with keycombo to editor
-
-   + Show Error Messages
-        + authentication stuff
-        + Username existing
-  + Modal
-    + Vlt. AdminLTE-Box nehmen
-      + sieht schick aus (form-elements)
-   
+       + remove focus imperatively
+       + ctrl-alt-w is activating options in Menu
+		+ => TagModal on MainEditor not working 
 ## Bugs
 	+ AutoFocus not working
 		+ Aber nur aus Editor heraus, von menü klappts
@@ -82,7 +94,9 @@
 + Security
   + Authenticate Client, so that no brute force can be applied to server to get tokens
   
-## Learn
+## Learn	
+	=> Wenn man neue tags hinzugefügt hat, werden sie automatisch mit eingefügt?
+
   + Design
     + Bei Start auswahl von Tags
     + im karteikarten-stil
@@ -101,6 +115,12 @@
       + setTagSuccess(bool)
      
 # NiceToHave    
+
+  + Modal
+    + Vlt. AdminLTE-Box nehmen
+      + sieht schick aus (form-elements)
+   
+
 + Rewrite editor
   + hover-highlighting of what text is part of a taginput
 
@@ -131,4 +151,5 @@ Snackbar
 	+ Fragen melden 
 	+ Fragen upvoten/downvoten
 	+ Diskussion zu fragen
- 
+Bedenken: Lernfortschritt pro Nutzer
+

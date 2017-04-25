@@ -70,9 +70,9 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
        console.log("Current Doc", d);
        this.document = d;
 
-       this.projectService.loadDocumentContent(this.document.name).subscribe(content => {
-         console.log("Got Content", content);
-         self.editor.setContent(content);
+       this.projectService.loadDocument(this.document._id).subscribe(doc => {
+         console.log("Got Content", doc.content);
+         self.editor.setContent(doc.content);
          self.editor.focus();
        });
     });
@@ -201,9 +201,11 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     // Curstom shortcuts
 
     // Switch to Menu
-    editor.addShortcut("ctrl+alt+w", "MenuSwitch", () => {
+    editor.addShortcut("alt+w", "MenuSwitch", () => {
       this.inputService.setActive("MenuContainer");
       console.log("switch");
+     // editor.execCommand('mceFocus', false);
+      //tinymce.execCommand("mceFocus", false );
       // TODO: Remove focus
 
     });

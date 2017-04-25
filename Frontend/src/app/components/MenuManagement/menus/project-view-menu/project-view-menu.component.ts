@@ -63,7 +63,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     // Create Document Callback
     onCreate.subscribe(inputs => {
       this.projectService.createDocument(inputs[0].value);
-      // TODO: Set Active
+      // TODO: Set Active, maybe not necessary
     });
 
     // On Create Document-Button
@@ -111,7 +111,12 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.learnDocument.subscribe((document) => {
       this.currentDocument = document;
       LogService.log("Learn Document", document);
-      this.learnService.startLearning(document);
+
+      // Get whole document if not cached // TODO: Start Loading
+      this.projectService.loadDocument(document._id).subscribe(doc => {
+        this.learnService.startLearning(doc);
+      });
+
     });
 
     // Delete Document

@@ -2,6 +2,7 @@ import {Storeable} from "./storeable";
 import {StoreTag} from "./store-tag";
 import {TagInput} from "./tag";
 import {HoldsTags} from "./HoldsTags";
+import {LogService} from "../services/log.service";
 
 export class Document extends Storeable implements HoldsTags{
 
@@ -49,7 +50,7 @@ export class Document extends Storeable implements HoldsTags{
       }
     });
 
-    console.log("Tags in doc", this.tags);
+    LogService.log("Tags in doc", this.tags);
   }
 
   private getUntil(content: string, delim: string, start: number): string {

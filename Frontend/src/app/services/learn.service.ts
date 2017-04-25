@@ -24,25 +24,26 @@ export class LearnService {
   public startLearning(learnable: HoldsTags){
     this.currentObject = learnable;
 
+    console.log("Learning with", learnable);
+
     this.dbService.get("learnObject", learnable._id).subscribe(res => {
-      console.log("LearnObejct found", res);
 
       if(res.length == 0){
         console.log("Not found", learnable);
 
-         this.learnObject = new LearnObject(learnable._id);
-         this.router.navigate(['/LearnSettings']);
+        this.learnObject = new LearnObject(learnable._id);
+        this.router.navigate(['/LearnSettings']);
         return;
       }
+      console.log("LearnObejct found", res[0]);
+
+
       this.learnObject = res[0];
       this.router.navigate(['/Learning']);
 
     });
   }
 
-  public getTags(): Array<LearnTag> {
-    return this.learnObject.tags;
-  }
 
   public getLearnObject(): LearnObject {
     return this.learnObject;
