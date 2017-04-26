@@ -95,10 +95,10 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     });*/
 
     this.userService.getCurrentUser().subscribe(user => {
-      if(!user){
+     /* if(!user){
         this.projectService.setCurrentDocument(null);
         //return;
-      }
+      }*/
       startTime = Date.now();
       this.loading = true;
       this.projectService.loadProjects();

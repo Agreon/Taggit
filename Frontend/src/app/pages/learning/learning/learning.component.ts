@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {LearnService} from "../../../services/learn.service";
 import {LearnObject} from "../../../models/learn-object";
+import {Router} from "@angular/router";
 
 /**
  * Requirements:
@@ -20,10 +21,16 @@ export class LearningComponent implements OnInit {
    * @param learnService
    */
 
-  constructor(private learnService: LearnService) {
+  constructor(private learnService: LearnService,
+              private router: Router) {
+
   }
 
   ngOnInit() {
+  }
+
+  private onNavigateSettigs(){
+    this.router.navigate(["/LearnSettings"]);
   }
 
 

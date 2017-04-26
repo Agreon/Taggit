@@ -34,14 +34,10 @@ export class LearnSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-   this.learnObject = this.learnService.getLearnObject();
-   console.log("Init Settings", this.learnObject);
-
-    /**
-     * TODO: Load learnobject-tags
-     */
-
-
+    this.learnService.getLearnObject().subscribe(lo => {
+      this.learnObject = lo;
+      console.log("Update LO", this.learnObject);
+    });
   }
 
 
@@ -54,10 +50,7 @@ export class LearnSettingsComponent implements OnInit {
 
     tags = tags.filter(tag => tag.inputs.length > 1);
 
-
     let types = Helper.distinctArray(tags, "tagType");
-
-    // TODO: this.learnObject klappt nicht.. muss erst gepullt werden
 
     // Filter out if already in learnObject
     types = types.filter(type => {
@@ -66,9 +59,8 @@ export class LearnSettingsComponent implements OnInit {
           return false;
         }
       }
+      return true;
     });
-
-    console.log("Types", types);
 
     // TODO: If length == 0, deactivate button
     if(types.length == 0) {
@@ -88,7 +80,7 @@ export class LearnSettingsComponent implements OnInit {
         }
       }
       this.learnService.setLearnObject(this.learnObject);
-      this.dbService.save(this.learnObject);
+      this.dbService.save(this.learnObject); // TODO: Here?
     });
 
     this.modalService.openModal(new ModalParameter(

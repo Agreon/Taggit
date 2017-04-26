@@ -7,12 +7,18 @@ import {Project} from "../models/project";
 import {Document} from "../models/document";
 import {Storeable} from "../models/storeable";
 import {HoldsTags} from "../models/HoldsTags";
+import {Subject} from "rxjs/Subject";
+import {ReplaySubject} from "rxjs/ReplaySubject";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class LearnService {
 
   private learnObject: LearnObject;
   private currentObject: HoldsTags;
+
+  private learnObjectSubject = new ReplaySubject<LearnObject>(1);
+
 
   // Learning
   private currentTag: number;
@@ -30,27 +36,24 @@ export class LearnService {
 
       if(res.length == 0){
         console.log("Not found", learnable);
-
         this.learnObject = new LearnObject(learnable._id);
-        this.router.navigate(['/LearnSettings']);
-        return;
+      } else {
+        this.learnObject = res[0];
       }
-      console.log("LearnObejct found", res[0]);
 
-
-      this.learnObject = res[0];
-      this.router.navigate(['/Learning']);
-
+      this.learnObjectSubject.next(this.learnObject);
+      this.router.navigate(['/LearnSettings']);
     });
   }
 
 
-  public getLearnObject(): LearnObject {
-    return this.learnObject;
+  public getLearnObject(): Observable<LearnObject> {
+    return this.learnObjectSubject.asObservable();
   }
 
   public setLearnObject(learnObject: LearnObject) {
     this.learnObject = learnObject;
+    this.learnObjectSubject.next(this.learnObject);
   }
 
   public getObjectTags(): Array<StoreTag> {

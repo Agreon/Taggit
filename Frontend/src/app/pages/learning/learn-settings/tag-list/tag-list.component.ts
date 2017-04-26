@@ -23,9 +23,8 @@ export class TagListComponent implements OnInit {
   }
 
   private setActive(evt: any, tag: LearnTag){
-    console.log("SetActive",evt);
-   // tag.active = evt.
-    this.tagChange.emit();
+    tag.active = evt.target.checked;
+    this.tagChange.emit(tag);
   }
 
   private resetProgress(tag: LearnTag) {

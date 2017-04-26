@@ -46,6 +46,7 @@ export class Project extends Storeable implements HoldsTags {
   }
 
   public getDocument(id: string): Document {
+      console.log(this.documents, id);
     return this.documents.filter(d => {
       return d._id == id;
     })[0];

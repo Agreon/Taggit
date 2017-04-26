@@ -1,25 +1,30 @@
-<div class="box">
+<div class="box box-primary">
+  <div class="container-fluid">
 
-
-  <div class="row">
-    <span>
-      Some Question
-    </span>
-  </div>
-
-  <div class="row">
-    <div class="btn btn-success btn-block">
-      Ready
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="btn btn-lg btn-danger">
-      False Answer
+    <div class="row questionCount">
+      <span>Question 5 / 20</span>
     </div>
 
-    <div class="btn btn-lg btn-success pull-right">
-      Right Answer
+    <div class="row questionRow">
+      <span>
+        What are the advantages of TCP over UDP?
+      </span>
+    </div>
+
+    <div class="row" *ngIf="state == 0">
+      <div (click)="onReady()" class="btn btn-success btn-block readyBtn" >
+        <span>Show Answer</span>
+      </div>
+    </div>
+
+    <div class="row answerButtons" *ngIf="state == 1">
+      <div (click)="onSuccess(false)" class="btn btn-lg btn-danger">
+        False Answer
+      </div>
+
+      <div (click)="onSuccess(true)" class="btn btn-lg btn-success pull-right">
+        Right Answer
+      </div>
     </div>
   </div>
 </div>

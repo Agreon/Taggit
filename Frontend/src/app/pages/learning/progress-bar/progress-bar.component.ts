@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'progress-bar',
@@ -10,16 +10,17 @@ export class ProgressBarComponent implements OnInit {
   @Input()
   Value: number = 0;
 
-  private currentWidth: string = "width: 0%";
+  private currentWidth: string = "0%";
 
   constructor() { }
 
   ngOnInit() {
-    this.currentWidth = "width: 50%";
   }
 
-  ngOnChanges(){
-
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes["Value"]){
+      this.currentWidth = this.Value+"%";
+    }
   }
 
 }

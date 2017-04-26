@@ -19,7 +19,7 @@ import {LearnService} from "../../../../services/learn.service";
 })
 export class ProjectViewMenuComponent extends MenuTemplateComponent implements OnInit{
 
-  private selectedDocument = new Subject<string>();
+  private selectedDocument = new Subject<Document>();
   private createDocument = new Subject<string>();
   private renameDocument = new Subject<Document>();
   private deleteDocument = new Subject<Document>();
@@ -50,10 +50,10 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.selectedDocument.subscribe(d => {
 
       this.slots.forEach(slot => {
-        slot.active = slot.name == d;
+        slot.active = slot.name == d.name;
       });
 
-      this.projectService.setCurrentDocument(this.project.getDocument(d));
+      this.projectService.setCurrentDocument(this.project.getDocument(d._id));
       this.router.navigate(['/MainEditor']);
     });
 
@@ -170,7 +170,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
         new Slot("Learn", "leanpub", null, false, this.learnDocument, false, true, d),
         new Slot("Rename", "pencil", null, false, this.renameDocument, false, true, d),
         new Slot("Delete", "trash", null, false, this.deleteDocument, false, true, d)
-      ], true, this.selectedDocument));
+      ], true, this.selectedDocument, false, true, d));
     });
 
     if(this.slots.length < 1){

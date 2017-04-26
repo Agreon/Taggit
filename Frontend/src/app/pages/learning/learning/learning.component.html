@@ -2,12 +2,16 @@
   <section class="content-header">
     <div class="row">
       <div class="col col-lg-3">
+
       </div>
       <div class="col col-lg-6">
         <progress-bar [Value]="40"></progress-bar>
       </div>
       <div class="col col-lg-3">
-        <!-- TODO: App-Button (admin-lte) of settings -->
+        <a (click)="onNavigateSettigs()" class="btn btn-lg btn-default settingsBtn"> <!-- btn-app -->
+          Learn-Settings
+          <i class="fa fa-cog"></i>
+        </a>
       </div>
     </div>
   </section>

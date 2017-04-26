@@ -16,3 +16,7 @@
 flashcard {
   width: 75%;
 }
+
+.settingsBtn {
+  float: right;
+}

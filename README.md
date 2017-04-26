@@ -18,6 +18,7 @@ Taggit - A multifunctional Learning Tool
 
 # TODO
 
+
 ## Konzeption
 + TagManagement
   + Auf eigener Page?
@@ -59,12 +60,20 @@ Taggit - A multifunctional Learning Tool
   + key-combinations
   	
    + Editor
+   		=> Look for Angular2 Integration-page!
        + remove focus imperatively
        + ctrl-alt-w is activating options in Menu
 		+ => TagModal on MainEditor not working 
 ## Bugs
 	+ AutoFocus not working
 		+ Aber nur aus Editor heraus, von menü klappts
+	
+	+ Switch from site to MainEditor 2. time 
+		=> editor undefined error
+		
+	
+	+ Seite wird 2x geladen
+		+ oder zumindest die projekte
 	
 	+ Style
      + Responsiveness

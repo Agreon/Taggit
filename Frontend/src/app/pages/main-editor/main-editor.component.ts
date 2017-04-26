@@ -44,16 +44,12 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
   constructor(private projectService: ProjectService,
               private tagService: TagService,
               private inputService: InputService,
-              private modalService: ModalService,
-              private route: ActivatedRoute){
-
-    this.route.params.subscribe(res => {
-      console.log("QUery", res);
-    });
+              private modalService: ModalService){
 
     inputService.addReciever("MainEditor",this);
 
     let self = this;
+
     this.subscription = tagService.getTags().subscribe(tags => {
       this.tags = tags;
 
@@ -72,8 +68,13 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
        this.projectService.loadDocument(this.document._id).subscribe(doc => {
          console.log("Got Content", doc.content);
-         self.editor.setContent(doc.content);
-         self.editor.focus();
+
+         if(self.editor){
+           self.editor.setContent(doc.content);
+           // TODO: Maybe throws exception
+           self.editor.focus();
+         }
+
        });
     });
   }
