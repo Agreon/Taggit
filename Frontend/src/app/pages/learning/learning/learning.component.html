@@ -5,7 +5,7 @@
 
       </div>
       <div class="col col-lg-6">
-        <progress-bar [Value]="40"></progress-bar>
+        <progress-bar [Value]="learnProgress"></progress-bar>
       </div>
       <div class="col col-lg-3">
         <a (click)="onNavigateSettigs()" class="btn btn-lg btn-default settingsBtn"> <!-- btn-app -->
@@ -16,6 +16,10 @@
     </div>
   </section>
   <section class="content">
-    <flashcard></flashcard>
+    <flashcard [LearnTag]="currentTag"
+               (QuestionCompleted)="onQuestionCompleted($event)"
+               [CurrTag]="learnService.getCurrentTagNum()"
+               [TotalTags]="learnService.getTagAmount()"
+               [Active]="inputEnabled"></flashcard>
   </section>
 </div>

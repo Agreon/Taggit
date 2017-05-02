@@ -15,7 +15,7 @@ export class TagListComponent implements OnInit {
   tags: Array<LearnTag> = [];
 
   @Output("TagChange")
-  tagChange: EventEmitter<any> = new EventEmitter();
+  tagChange: EventEmitter<LearnTag> = new EventEmitter();
 
   constructor() { }
 
@@ -29,7 +29,7 @@ export class TagListComponent implements OnInit {
 
   private resetProgress(tag: LearnTag) {
     tag.level = 0;
-    this.tagChange.emit();
+    this.tagChange.emit(tag);
   }
 
 }

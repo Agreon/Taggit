@@ -24,10 +24,6 @@ Taggit - A multifunctional Learning Tool
   + Auf eigener Page?
   
 + Learning
-   + Architekturstil
-      + Eigtl. sollte das lernen getrennt von den eigentlichen objekten geschehen (abhängigkeiten)
-      + Aber andererseits erzeuge ich so redundanz durch die inputs?
-      + wenn ich die inputs nicht im learnobj speichere, dann benötige ich allerdings immer 2 db-zugriffe für die lerndaten
         + TagLevel und TagActive in DocTags?
         + DocProgress in Doc?
       + wie würde so ein ablauf aussehen?
@@ -40,12 +36,19 @@ Taggit - A multifunctional Learning Tool
           + learnobject.tags
         + set active/progress
           + einfach db-set-learnobject tag 
-          
-  + Komponenten
-    + Statusbar
-        + Input: Prozent
-
-          
+	+ Learn-Content is escaped.    
+   	+ Load TagData for existing tags
+  		=> Problem wenn man lerngruppen hat, die nur Lernobjekte haben?
+  		=> Macht aber auch Sinn, wenn man in den Gruppen Dokumente erstellen mag		
+  		
+  		 	
+   	+ add new tags onload
+   	
+   	+ calculate learnobject-progress
+  	+ show level-labels in diffrent colors
+   
+  
+  
 # Release 0.1      
    REST
     + frontend
@@ -59,12 +62,19 @@ Taggit - A multifunctional Learning Tool
   	
   + key-combinations
   	
+  + OnQuestion-Tag
+  	+ Inputs
+  		=> Als TextBox
+  		=> Oder definierbar
+  	
    + Editor
    		=> Look for Angular2 Integration-page!
        + remove focus imperatively
        + ctrl-alt-w is activating options in Menu
 		+ => TagModal on MainEditor not working 
 ## Bugs
+	+ constant Sitereload when no connection to server
+		
 	+ AutoFocus not working
 		+ Aber nur aus Editor heraus, von menü klappts
 	
@@ -128,8 +138,6 @@ Taggit - A multifunctional Learning Tool
   + Modal
     + Vlt. AdminLTE-Box nehmen
       + sieht schick aus (form-elements)
-   
-
 + Rewrite editor
   + hover-highlighting of what text is part of a taginput
 
@@ -149,8 +157,11 @@ Taggit - A multifunctional Learning Tool
    + Mouse-Animationen
       + OnClick
       +=> in menu-slot 200ms timeout bis das event emittet wird
-Snackbar
++ Snackbar
    + AnimationIn
+
++ LearnSettings
+	+ Order-Questions by Level
 
 # Future
 + Fragen für die eigne Uni veröffentlichen, um so gemienschaftlich einen Fragenkatalog zu erstellen, der beim lernen hilft

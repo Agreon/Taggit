@@ -26,7 +26,6 @@ export class LearnSettingsComponent implements OnInit {
   private learnObject: LearnObject;
 
   constructor(private learnService: LearnService,
-              private router: Router,
               private userInformationService: UserInformationService,
               private dbService: DBService,
               private modalService: ModalService) {
@@ -40,7 +39,9 @@ export class LearnSettingsComponent implements OnInit {
     });
   }
 
-
+  private tagChanged(tag: LearnTag) {
+    this.learnObject.addTag(tag);
+  }
 
   private addTags(){
 
@@ -80,7 +81,14 @@ export class LearnSettingsComponent implements OnInit {
         }
       }
       this.learnService.setLearnObject(this.learnObject);
-      this.dbService.save(this.learnObject); // TODO: Here?
+
+      console.log("Saving..",this.learnObject);
+
+      this.dbService.save(this.learnObject).subscribe(res => {
+          console.log("Saved",res);
+      }, err => {
+        console.log("Err",err);
+      }); // TODO: Here?
     });
 
     this.modalService.openModal(new ModalParameter(
@@ -98,7 +106,7 @@ export class LearnSettingsComponent implements OnInit {
         "You cannot learn without active tags"));
       return;
     }
-    this.router.navigate(['/Learning']);
-}
+    this.learnService.initLearning();
+  }
 
 }

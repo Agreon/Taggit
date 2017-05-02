@@ -1,4 +1,4 @@
-<h3>{{tagType}}</h3>
+<!--<h3>{{tagType}}</h3>
 
 <table class="table table-hover">
   <tr>
@@ -14,3 +14,25 @@
     <td><i class="fa fa-undo" (click)="resetProgress()"></i></td>
   </tr>
 </table>
+-->
+<div class="box box-success">
+  <div class="box-header">
+    <h3 class="box-title">{{tagType}}</h3>
+  </div>
+  <div class="box-body">
+    <table class="table table-hover">
+      <tr>
+        <th width="6%" style="text-align: center">Active</th>
+        <th>Question</th>
+        <th style="text-align: center">Level</th>
+        <th style="text-align: center">Reset</th>
+      </tr>
+      <tr *ngFor="let tag of tags">
+        <td style="text-align: center"><input type="checkbox" [checked]="tag.active" (click)="setActive($event, tag)"></td>
+        <td>{{tag.tagData.inputs[0].value}}</td>
+        <td style="text-align: center"><span class="badge bg-blue">{{tag.level}}</span></td>
+        <td style="text-align: center"><i class="fa fa-undo" (click)="resetProgress()"></i></td>
+      </tr>
+    </table>
+  </div>
+</div>

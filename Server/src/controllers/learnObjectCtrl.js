@@ -16,7 +16,7 @@ exports.getAll = function(req, res, next) {
     if (!decoded) {
         return res.status(403).send('Authentication failed. User not found.');
     }
-    Project.find({
+    LearnObject.find({
             ownerID: decoded._id
         }, function(err, learnobjects) {
             if (err) {
@@ -38,7 +38,9 @@ exports.getOne = function(req, res, next){
         return res.status(403).send('Authentication failed. User not found.');
     }
 
-    LearnObject.find({_id: req.params.id}, function(err, learnobjects){
+    console.log("Params",req.params);
+
+    LearnObject.find({objectID: req.params.id}, function(err, learnobjects){
         if(err) {
             return res.status(500).send(err);
         }
@@ -59,20 +61,26 @@ exports.create = function (req, res, next) {
         return res.status(403).send('Authentication failed. User not found.');
     }
 
-    console.log("Create Learnobj", req.params);
+    let toUpdate = req.body;
+    toUpdate.updated_at = new Date();
+	delete toUpdate._id;	// Remove id
 
-    var learnobject = new LearnObject({
-      // objectID: req.params.objectID
-    });
+    var learnobject = new LearnObject(toUpdate);
+    learnobject.ownerID = decoded._id;
+    delete learnobject._id;
 
-    LearnObject.findByName(learnobject.ownerID, learnobject.name, function(err, learnobjects){
+    console.log("Inserting", learnobject);
+
+    LearnObject.find({ objectID: LearnObject.objectID, ownerID: learnobject.ownerID }, function(err, learnobjects) {
         if(err){
             return res.status(500).send(err);
         }
 
+        console.log("Found", learnobjects);
+
         if(learnobjects.length > 0){
             console.log("Already existing");
-            return res.status(403).send("LearnObject with this name already existing!");
+            return res.status(403).send("LearnObject with this objectID already existing!");
         }
 
         learnobject.save(function (err, learnobject) {

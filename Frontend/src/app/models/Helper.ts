@@ -28,4 +28,23 @@ export class Helper {
 
     return retArr;
   }
+
+  public static convertUmlautes(input: string): string {
+      input = input.replace("&auml;","ä");
+      input = input.replace("&ouml;","ö");
+      input = input.replace("&üuml;","ü");
+
+      input = input.replace(/\u00dc/g,"Ü");
+      input = input.replace(/\u00fc/g,"ü");
+
+      input = input.replace(/\u00c4/g,"Ä");
+      input = input.replace(/\u00e4/g,"ä");
+
+      input = input.replace(/\u00d6/g,"Ö");
+      input = input.replace(/\u00f6/g,"ö");
+
+      input = input.replace(/\u00df/g,"ß");
+
+      return input;
+  }
 }

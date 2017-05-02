@@ -19,7 +19,7 @@
     </div>
   </section>
   <section class="content">
-    <tag-list *ngFor="let type of learnObject.getTagTypes()" [TagType]="type" [Tags]="learnObject.getTagsOfType(type)">
+    <tag-list *ngFor="let type of learnObject.getTagTypes()" [TagType]="type" [Tags]="learnObject.getTagsOfType(type)" (TagChange)="tagChanged($event)">
     </tag-list>
   </section>
 </div>

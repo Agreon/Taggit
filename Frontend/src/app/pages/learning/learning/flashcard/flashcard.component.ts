@@ -1,8 +1,8 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {LearnService} from "../../../../services/learn.service";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {LearnTag} from "../../../../models/learn-object";
 import {InputReceiver} from "../../../../models/input-receiver";
 import {InputService} from "../../../../services/input.service";
+import {Helper} from "../../../../models/Helper";
 
 @Component({
   selector: 'flashcard',
@@ -11,25 +11,47 @@ import {InputService} from "../../../../services/input.service";
 })
 export class FlashcardComponent implements OnInit, InputReceiver {
 
-  // TODO: set value?!
-  focusHandle: ViewChild;
+  @Input("LearnTag")
+  learnTag: LearnTag;
 
-  private currentTag: LearnTag;
+  @Input("CurrTag")
+  currTag: number;
+
+  @Input("TotalTags")
+  totalTags: number;
+
+  @Input("Active")
+  active: boolean;
+
+  @Output("QuestionCompleted")
+  questionCompleted: EventEmitter<any> = new EventEmitter();
+
+  // TODO: set value?!
+  public focusHandle: ViewChild;
   private state: number = 0;
 
-  // TODO: Maybe learnservice only in parent
-  constructor(private learnService: LearnService,
-              private inputService: InputService) {
+  constructor(private inputService: InputService) {
     this.inputService.addReciever("Flashcard",this);
   }
 
   ngOnInit() {
-    /*this.learnService.initLearning();
-    this.currentTag = this.learnService.nextTag();*/
     this.inputService.setActive("Flashcard");
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    if(changes["learnTag"]){
+      console.log("New Question", this.learnTag);
+      this.learnTag.tagData.inputs[0].value = Helper.convertUmlautes(this.learnTag.tagData.inputs[0].value);
+      this.learnTag.tagData.inputs[1].value = Helper.convertUmlautes(this.learnTag.tagData.inputs[1].value);
+      this.state = 0;
+    }
+  }
+
   keyEvent(event: KeyboardEvent) {
+
+    if(!this.active){
+      return;
+    }
 
     if(this.state == 0){
       // OnSubmit
@@ -52,22 +74,9 @@ export class FlashcardComponent implements OnInit, InputReceiver {
       this.state = 1;
   }
 
-  /**
-   * TODO: Get new question
-   * @param success
-   */
   private onSuccess(success: boolean) {
     console.log("Success?",success);
-    /*this.learnService.setSuccess(success);
-    this.currentTag = this.learnService.nextTag();*/
+    this.questionCompleted.emit(success);
   }
-
-
-  /**
-   * TODO: OnSelect if success
-   * learnService.setSuccess();
-   * learnService.nextTag(id, success)
-   *    learnService calculates tag-level and sets progress
-   */
 
 }

@@ -4,8 +4,12 @@
 var mongoose = require('mongoose');
 
 var LearnObjectSchema = new mongoose.Schema({
-    objectID: {
+    objectID: { // Referenced Object
         type: mongoose.Schema.Types.ObjectId,
+    },
+    ownerID: { // Referenced Owner
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     tags: {
         type: [],
@@ -40,5 +44,6 @@ LearnObjectSchema.pre('save', function(next) {
 
     next();
 });
+
 
 module.exports = mongoose.model('LearnObject', LearnObjectSchema, "LearnObjects");

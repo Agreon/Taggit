@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {LearnService} from "../../../services/learn.service";
-import {LearnObject} from "../../../models/learn-object";
+import {LearnObject, LearnTag} from "../../../models/learn-object";
 import {Router} from "@angular/router";
 
 /**
@@ -21,18 +21,40 @@ export class LearningComponent implements OnInit {
    * @param learnService
    */
 
+  private currentTag: LearnTag;
+  private learnProgress: number = 0;
+  private inputEnabled: boolean = true;
+
   constructor(private learnService: LearnService,
               private router: Router) {
 
   }
 
   ngOnInit() {
+    this.currentTag = this.learnService.nextTag(false);
   }
 
   private onNavigateSettigs(){
     this.router.navigate(["/LearnSettings"]);
   }
 
+  private onQuestionCompleted(success: boolean){
+    let newTag = this.learnService.nextTag(success);
 
+    this.inputEnabled = false;
+
+        // Wait for Animation
+        setTimeout(() => {
+          if(!newTag){
+            this.router.navigate(["/LearnSettings"]);
+          } else {
+            this.inputEnabled = true;
+            this.currentTag = newTag;
+            this.learnProgress = this.learnService.getLearnProgress();
+          }
+
+        },1000);
+
+  }
 
 }

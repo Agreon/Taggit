@@ -2,12 +2,18 @@
   <div class="container-fluid">
 
     <div class="row questionCount">
-      <span>Question 5 / 20</span>
+      <span>Question {{currTag}} / {{totalTags}}</span>
     </div>
 
-    <div class="row questionRow">
+    <div *ngIf="state == 0" class="row textRow">
       <span>
-        What are the advantages of TCP over UDP?
+        {{learnTag.tagData.inputs[0].value}}
+      </span>
+    </div>
+
+    <div *ngIf="state == 1" class="row textRow">
+      <span>
+        {{learnTag.tagData.inputs[1].value}}
       </span>
     </div>
 

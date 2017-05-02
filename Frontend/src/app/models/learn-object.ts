@@ -29,7 +29,6 @@ export class LearnObject extends Storeable {
     public progress: number = 0
   ) {
     super();
-    this.excludedFromDB.push("tags");
   }
 
   public getTagsOfType(type: string): Array<LearnTag> {
@@ -53,6 +52,48 @@ export class LearnObject extends Storeable {
       }
     });
     return types;
+  }
+
+  /**
+   * Fills Tags from Learnable-Object
+   * @param tags
+   */
+  public fillTagData(tags: Array<StoreTag>) {
+    tags.forEach(tag => {
+
+        if(tag.inputs.length < 2){
+          return;
+        }
+
+        let updateTag = this.tags.filter(ownTag => {
+          return ownTag.tagID == tag.id;
+        });
+
+        // If existing
+        if(updateTag.length > 0){
+          updateTag[0].tagData = tag;
+        } else {
+          this.tags.push(new LearnTag(tag.id, tag));
+        }
+    });
+  }
+
+  /**
+   * Adds a Tag and updates a tag if already existing
+   * @param tag
+   */
+  public addTag(tag: LearnTag){
+    let found = this.tags.filter(ownTag => {
+        return ownTag.tagID == tag.tagID;
+    })[0];
+
+    if(found){
+      found.level = tag.level;
+      found.active = tag.active;
+      found.tagData = tag.tagData;
+    } else {
+      this.tags.push(tag);
+    }
   }
 
   public removeTag(tagID: string){

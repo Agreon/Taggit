@@ -55,7 +55,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
       LogService.log("Tags",tags);
 
-      this.initEditor();
+      //this.initEditor();
 
       if(this.document.content){
         self.editor.setContent(this.document.content);
@@ -77,6 +77,10 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
        });
     });
+  }
+
+  ngAfterViewInit(){
+    this.initEditor();
   }
 
   private tagClicked(tag: Tag){
@@ -153,10 +157,6 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
         this.editor.selection.setContent("");
       }
     });
-  }
-
-  ngAfterViewInit(): void {
-
   }
 
   keyEvent(event: KeyboardEvent) {
