@@ -25,8 +25,7 @@ export class LearnObject extends Storeable {
   public tags: Array<LearnTag> = [];
 
   constructor(
-    public objectID: string,
-    public progress: number = 0
+    public objectID: string
   ) {
     super();
   }
@@ -102,13 +101,23 @@ export class LearnObject extends Storeable {
     });
   }
 
+  /**
+   * Returns the whole progress of the learnobject according to the level of the tags
+   * @returns {number}
+   */
   public getProgress(): number {
-    return 0;
+    let max = this.tags.length * 3;
+    let current = 0;
+
+    for(let tag of this.tags) {
+        current += tag.level;
+    }
+
+    return (current / max) * 100;
   }
 
 
   // Storeable
-
   public static fromJSON(object: any): LearnObject {
     let obj = new LearnObject("");
 

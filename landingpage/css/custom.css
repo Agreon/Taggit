@@ -1,3 +1,9 @@
 .intro-message{
     padding-bottom: 16%;
 }
+
+@media(max-width:1199px) {
+    .img-responsive {
+        margin-top: 50px;
+    }
+}

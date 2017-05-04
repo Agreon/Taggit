@@ -39,19 +39,6 @@ Taggit - A multifunctional Learning Tool
   		=> Problem wenn man lerngruppen hat, die nur Lernobjekte haben?
   		=> Macht aber auch Sinn, wenn man in den Gruppen Dokumente erstellen mag		
   		  
-
-## Bugs
-	+ Switch from site to MainEditor 2. time 
-		=> editor undefined error
-
-
-# NiceToHave    
-
-	+ Link freigeben (public)
-		+ einfach get /id des docs
-		+ wenn bool: public, show 
-
-
 # Future
 + Fragen für die eigne Uni veröffentlichen, um so gemienschaftlich einen Fragenkatalog zu erstellen, der beim lernen hilft
 => public / private Lerngruppen
