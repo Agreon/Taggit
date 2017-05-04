@@ -37,13 +37,15 @@ import { FlashcardComponent } from './pages/learning/learning/flashcard/flashcar
 import { TagListComponent } from './pages/learning/learn-settings/tag-list/tag-list.component';
 import { ProgressBarComponent } from './pages/learning/progress-bar/progress-bar.component';
 import { LearnSettingsComponent } from './pages/learning/learn-settings/learn-settings.component';
+import { IntroductionComponent } from './pages/introduction/introduction.component';
 
 const appRoutes: Routes = [
   { path: 'MainEditor', component: MainEditorComponent},
   { path: 'Overview', component: OverviewComponent},
   { path: 'Learning', component: LearningComponent},
   { path: 'LearnSettings', component: LearnSettingsComponent},
-  { path: '', redirectTo: 'MainEditor', pathMatch: 'full' }];
+  { path: '', component: IntroductionComponent}
+];
 
 @NgModule({
   declarations: [
@@ -65,7 +67,8 @@ const appRoutes: Routes = [
     FlashcardComponent,
     TagListComponent,
     ProgressBarComponent,
-    LearnSettingsComponent
+    LearnSettingsComponent,
+    IntroductionComponent
   ],
   imports: [
     BrowserModule,

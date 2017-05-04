@@ -4,6 +4,7 @@ import {Observable, BehaviorSubject} from "rxjs";
 import {Storeable} from "../models/storeable";
 import {environment} from "../../environments/environment";
 import {MessageType, UserInformationService, UserMessage} from "./User-Information.service";
+import {LogService} from "./log.service";
 
 @Injectable()
 export class DBService {
@@ -12,7 +13,7 @@ export class DBService {
 
   constructor(private http: Http,
               private informationService: UserInformationService) {
-    console.log("DB connecting to", environment.serverUrl);
+    LogService.log("DB connecting to", environment.serverUrl);
   }
 
   /**
@@ -100,7 +101,7 @@ export class DBService {
   private handleServerError(response: any) {
     let message = "";
 
-    console.log("ServerError",response);
+    LogService.log("ServerError",response);
 
     if(response.status == 403) {
       message = response._body;

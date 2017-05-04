@@ -4,9 +4,14 @@ import {User} from "../models/user";
 import {DBService} from "./db.service";
 import {Headers} from "@angular/http";
 import {LogService} from "./log.service";
-import {UserMessage, MessageType, UserInformationService} from "./User-Information.service";
-import {ActivatedRoute} from "@angular/router";
+import {UserMessage, MessageType, UserInformationService} from "./User-Information.service";import {
+  ActivatedRoute, NavigationEnd,
+  Router
+} from "@angular/router";
 
+/**
+ * TODO: Remove unused methods
+ */
 @Injectable()
 export class UserService {
 
@@ -14,11 +19,12 @@ export class UserService {
   private userToken: string;
   private currentUserSubject = new ReplaySubject<User>(1);
 
+  private previousPage: string;
+
   constructor(private dbService: DBService,
               private informationService: UserInformationService,
-              private activeRoute: ActivatedRoute
-            ) {
-
+              private router: Router) {
+    this.getPreviousPage();
     let token = this.getTokenFromURL();
 
     // If token was not in url, check the localStorage
@@ -26,7 +32,7 @@ export class UserService {
       if(localStorage["taggitToken"]){
         token = localStorage["taggitToken"];
       }else {
-        //this.signOut();
+        this.signOut();
       }
     }
 
@@ -34,17 +40,13 @@ export class UserService {
       LogService.log("Found Token", token);
       this.dbService.getUserByToken(token).subscribe(res => {
         LogService.log("User logged in from localStorage", res);
-
-        this.setUser(res.user, token);
-
         localStorage["taggitToken"] = token;
-
-        this.dbService.setHeaders(this.createAuthHeaders());
-        this.currentUserSubject.next(User.fromJSON(res.user));
+        this.setUser(res.user, token);
       }, err => {
         console.log("Could not get user by token",err);
+        this.signOut();
         // TODO: Not for development
-        window.location.href = ""
+       // window.location.href = ""
         /*
           localStorage["taggitToken"] = null;
           this.userToken = null;
@@ -55,7 +57,6 @@ export class UserService {
   }
 
   private getTokenFromURL(): string {
-    console.log("URL", window.location.href);
     let params = window.location.href.split('?');
 
     if(!params || params.length < 2){
@@ -68,6 +69,10 @@ export class UserService {
     }
 
     return "JWT "+tokenpair[1];
+  }
+
+  private getPreviousPage() {
+
   }
 
   public getCurrentUser(): Observable<User> {
@@ -106,7 +111,8 @@ export class UserService {
       MessageType.SUCCESS,
       "logout successfull."
     ));
-    //window.location.href = "";
+
+    //window.location.href = "taggit.agreon.de/logout";
     // TODO: Redircet to landingpage/logout
   }
 

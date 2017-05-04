@@ -2,6 +2,20 @@
     padding-bottom: 16%;
 }
 
+#loginBtn {
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+#showMore a{
+    cursor: pointer;
+    color: white;
+}
+
+.toServices:hover {
+    text-decoration: none;
+}
+
 @media(max-width:1199px) {
     .img-responsive {
         margin-top: 50px;

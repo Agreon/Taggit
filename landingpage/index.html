@@ -51,13 +51,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a id="loginBtn">Start App</a>
+                        <button id="loginBtn" class="btn btn-success">Start App</button>
                     </li>
                     <li>
-                        <a href="#services">About</a>
+                        <a class="toServices" href="#services">About</a>
                     </li>
                     <li>
-                        <a href="http://github.com/Agreon/Taggit">Github</a>
+                        <a href="http://github.com/Agreon/Taggit" target="_blank">Github</a>
                     </li>
                 </ul>
             </div>
@@ -77,13 +77,13 @@
                         <h1>Taggit</h1>
                         <h3>A multifunctional learning tool</h3>
                         <hr class="intro-divider">
-                        <div>
-                            <span class="label">Start App!</span>
-                        </div>
+                        <button id="loginBtn" class="btn btn-success btn-lg">Start App</button>
                     </div>
                     <div id="showMore">
-                     <h3>See how it works!</h3>
-                    <span>v</span>
+                        <a href="#services" class="toServices">
+                            <h3>See how it works!</h3>
+                            <span>v</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
 
     <!-- Page Content -->
 
-	<a  name="services"></a>
+	<a id="services"></a>
     <div class="content-section-a">
 
         <div class="container-fluid">

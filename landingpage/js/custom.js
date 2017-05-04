@@ -12,9 +12,12 @@ $( document ).ready(function() {
     console.log("localStorage",localStorage);
 
     // TODO: IF logout -> delete localStorage
-
-    if(localStorage["taggitToken"]){
-        //window.location.href = "http://localhost:4200?token="+localStorage["taggitToken"].split(" ")[1];
+    if(contains(window.location.href,"logout")){
+        console.log("Logout");
+        localStorage.removeItem("taggitToken");
+    }
+    else if(localStorage["taggitToken"]){
+        window.location.href = "http://localhost:4200?token="+localStorage["taggitToken"].split(" ")[1];
     }
 });
 
@@ -48,6 +51,15 @@ $("#registerModal").on("keyup",function(evt){
         register();
     }
 });
+
+/**
+ * Scrolling
+ */
+$(".toServices").click(function(evt){
+    evt.preventDefault();
+    scrollTo("services");
+})
+
 
 /**
  * Methods
@@ -110,4 +122,27 @@ function httpRequest(url, type, data, cb){
         console.log("ERR", err);
     }
     }).done(cb);
+}
+
+function scrollTo(id){
+    $('html,body').animate({
+        scrollTop: $("#"+id).offset().top},
+        'slow');
+}
+
+function contains(str, search){
+    for(var i = 0; i < str.length - search.length; i++){
+        var found = true;
+        for(var j = 0; j < search.length; j++){
+            if(str[i] != search[i+j]){
+                found = false;
+                break;
+            }
+        }
+        if(found){
+            return true;
+        }
+    }
+
+    return false;
 }

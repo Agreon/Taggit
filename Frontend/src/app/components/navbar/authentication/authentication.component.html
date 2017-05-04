@@ -3,4 +3,7 @@
     <a class="userName"><b>{{currentUser.username}}</b></a>
     <a class="signOut" (click)="onSignOut()"><i class="fa fa-sign-out"></i></a>
   </div>
+  <div *ngIf="!currentUser">
+    <a href="#"><b>Loading Userdata...</b></a>
+  </div>
 </div>
