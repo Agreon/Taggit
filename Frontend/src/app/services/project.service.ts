@@ -119,6 +119,7 @@ export class ProjectService {
   }
 
   /**
+   * TODO: Give back Observers
    * @param name
    */
   public createDocument(name: string): void {
@@ -142,6 +143,11 @@ export class ProjectService {
     });
   }
 
+  /**
+   * TODO: Give Back Observer!
+   * @param document
+   * @param name
+   */
   public renameDocument(document: Document, name: string): void {
     document.name = name;
     console.log("Rename document", this.currentProject, document);

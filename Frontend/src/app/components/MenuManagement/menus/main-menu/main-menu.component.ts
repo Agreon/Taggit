@@ -133,6 +133,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     let onRename = new EventEmitter<Array<ModalInput>>();
     onRename.subscribe(inputs => {
 
+      this.loading = true;
       // Rename Project in DB
       this.projectService.renameProject(this.currentProject, inputs[0].value).subscribe(() => {
 
@@ -140,6 +141,8 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
         let currentSlot = this.slots[0].subSlots.filter(s => {return s.active})[0];
         currentSlot.name = inputs[0].value;
         currentSlot.closeSlot();
+
+        this.loading = false;
 
         this.informationService.showInformation(new UserMessage(
           MessageType.SUCCESS,

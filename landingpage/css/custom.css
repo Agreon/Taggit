@@ -7,6 +7,10 @@
     font-weight: bold;
 }
 
+#loginInfo {
+    color: red;
+}
+
 #showMore a{
     cursor: pointer;
     color: white;
@@ -14,6 +18,18 @@
 
 .toServices:hover {
     text-decoration: none;
+}
+
+.modal-dialog {
+    max-width: 400px;
+}
+
+#keepCredentials{
+    margin-top: 2px;
+}
+
+.modal checkbox {
+    margin-top: 20px;
 }
 
 @media(max-width:1199px) {

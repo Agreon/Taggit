@@ -11,13 +11,14 @@ $( document ).ready(function() {
     console.log( "ready!" );
     console.log("localStorage",localStorage);
 
-    // TODO: IF logout -> delete localStorage
+    // IF logout -> delete localStorage
     if(contains(window.location.href,"logout")){
         console.log("Logout");
         localStorage.removeItem("taggitToken");
     }
     else if(localStorage["taggitToken"]){
-        window.location.href = "http://localhost:4200?token="+localStorage["taggitToken"].split(" ")[1];
+       // TODO: Not until logout works
+       // window.location.href = "http://localhost:4200?token="+localStorage["taggitToken"].split(" ")[1];
     }
 });
 
@@ -27,17 +28,14 @@ $("#loginBtn").click(function(){
         return;
     }
     $("#loginModal").modal();
+    $("#loginInfo").hide();
+    $("#loginName").focus();
 });
 
-
-$("#registerBtn").click(function(){
-    $("#registerModal").modal();
-});
 
 /**Form-Handling */
 $("#loginSubmit").click(login);
 
-$("#registerSubmit").click(register);
 
 $("#loginModal").on("keyup",function(evt){
     // On Enter
@@ -45,11 +43,20 @@ $("#loginModal").on("keyup",function(evt){
         login();
     }
 });
-$("#registerModal").on("keyup",function(evt){
-    // On Enter
-    if(evt.keyCode == 13){
-        register();
-    }
+
+$("#switchRegister").click(function(){
+    if(loginMode == 0){
+        loginMode = 1;
+        $("#switchRegister").text("Already got an Account? Login!");
+        $("#modal-title").text("Register");
+        $("#emailField").show();
+    }else {
+        loginMode = 0;
+        $("#switchRegister").text("Don't got an Account yet? Register!");
+        $("#modal-title").text("Login");
+        $("#emailField").hide();
+    }    
+    $("#loginInfo").hide();
 });
 
 /**
@@ -66,52 +73,47 @@ $(".toServices").click(function(evt){
  */
 
 function login(){
- console.log("Login");
-
     var name = $("#loginName").val();
     var pwd = $("#loginPassword").val();
+    var keepCredenitals = $("#keepCredentials")[0].checked;
 
-   httpRequest("/authenticate", "post", {username: name, password: pwd}, function(res){
+    var sendObj = {
+        username: name,
+        password: pwd
+    };
+
+    var request = "/authenticate";
+
+    // If Register-mode add email and change request
+    if(loginMode == 1){
+        var email = $("#email").val();
+        sendObj.email = email;
+        request = "/User";
+    }
+
+   httpRequest(request, "post", sendObj, function(res){
        if(!res.success){
-           console.log("Err", res.msg);
+           console.log("Err", res);
+           setLoginError(res.msg);
            return;
        }
        console.log("Login", res.token.split(" "));
 
        if(!res.token){
            console.log("err",res);
+           setLoginError(res.msg);
            return;
        }
        $("#loginModal").hide();
 
-        localStorage["taggitToken"] = res.token;
-        var url = appAddress+"?token="+localStorage["taggitToken"].split(" ")[1];
+        if(keepCredenitals){
+            localStorage["taggitToken"] = res.token;
+        }
+
+        var url = appAddress+"?token="+res.token.split(" ")[1];
         window.location.href = url;
    });
 }
-
-function register(){
-    console.log("Register");
-
-    var name = $("#registerName").val();
-    var pwd = $("#registerPassword").val();
-
-/**
- * TODO: If mode == 0 req: "authenticate" else req: "User"
- */
-
-   httpRequest("/User", "post", {username: name, password: pwd}, function(res){
-       if(!res.success){
-           console.log("Err", res.msg);
-           return;
-       }
-       console.log("Success register",res);
-        localStorage["taggitToken"] = res.token;
-        var url = appAddress+"?token="+localStorage["taggitToken"].split(" ")[1];
-        window.location.href = url;
-   });
-}
-
 
 function httpRequest(url, type, data, cb){
  $.ajax({
@@ -119,9 +121,15 @@ function httpRequest(url, type, data, cb){
     type: type,
     data: data,
     error: function(err) {
+       setLoginError("Sorry, we got an Servererror"); 
         console.log("ERR", err);
     }
     }).done(cb);
+}
+
+function setLoginError(err){
+    $("#loginInfo").html("<i class='fa fa-exclamation-triangle'></i>&nbsp;"+err);
+    $("#loginInfo").show();
 }
 
 function scrollTo(id){
