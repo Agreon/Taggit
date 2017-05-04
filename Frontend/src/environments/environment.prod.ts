@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  serverUrl: "http://agreon.de:3000"
+  serverUrl: "https://agreon.de:3001"
 };
