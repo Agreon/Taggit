@@ -1,8 +1,8 @@
 var loginMode = 0;
-var serverAddress = "http://localhost:3000";
-//var serverAddress = "https://agreon.de:3001";
-var appAddress = "http://localhost:4200";
-//var appAddress = "https://agreon.de:444";
+//var serverAddress = "http://localhost:3000";
+var serverAddress = "https://agreon.de:3001";
+//var appAddress = "http://localhost:4200";
+var appAddress = "https://agreon.de:444";
 
 /**
  * Redirect if set
@@ -22,7 +22,7 @@ $( document ).ready(function() {
     }
 });
 
-$("#loginBtn").click(function(){
+$(".loginBtn").click(function(){
     if(localStorage["taggitToken"]){
         window.location.href = appAddress+"?token="+localStorage["taggitToken"].split(" ")[1];
         return;

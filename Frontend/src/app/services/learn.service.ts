@@ -10,6 +10,7 @@ import {HoldsTags} from "../models/HoldsTags";
 import {Subject} from "rxjs/Subject";
 import {ReplaySubject} from "rxjs/ReplaySubject";
 import {Observable} from "rxjs/Observable";
+import {Helper} from "../models/Helper";
 
 @Injectable()
 export class LearnService {
@@ -94,12 +95,15 @@ export class LearnService {
         return tag.active;
     });
 
-    /**
-     * TODO: Shuffle tags
-     */
+
+    // Make Index for every Tag
+    let indexes = [];
     for(let i = 0; i < tags.length; i++){
-      this.learnQueue1.push(i);
+      indexes.push(i);
     }
+
+    // Shuffle Indexes and enter in queue
+    this.learnQueue1 = Helper.shuffleArray(indexes);
 
     this.tagAmount = this.learnQueue1.length;
 
@@ -107,8 +111,10 @@ export class LearnService {
   }
 
   /**
-   * Maybe instead of random: Queue with tags
-   * TODO: if currentTag == null, dont weight input-bool
+   * TODO: Maybe we only need one queue ( but how do we distinguis answered false a second time?
+   * Sets Tag-Level according to success and returns a new one from the queue
+   * @param success result of the last question
+   * @returns {LearnTag} A new Tag from the queue
    */
   public nextTag(success: boolean): LearnTag {
 

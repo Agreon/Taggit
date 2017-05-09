@@ -1,4 +1,11 @@
 export class Helper {
+
+  /**
+   * Distincts an Array by a selected parameter
+   * @param arr
+   * @param param
+   * @returns {Array<any>}
+   */
   public static distinctArray(arr: Array<any>, param?: string): Array<any> {
     let retArr: Array<any> = [];
     arr.forEach(elem => {
@@ -27,6 +34,44 @@ export class Helper {
     });
 
     return retArr;
+  }
+
+  /**
+   * Shuffles an Array
+   * @param input
+   * @returns {Array}
+   */
+  public static shuffleArray(input: Array<any>): Array<any> {
+      let retArr = [];
+      let alreadyUsed = [];
+
+      // Init full length
+      for(let i = 0; i < input.length; i++){
+        retArr.push(null);
+      }
+
+      for(let i = 0; i < input.length; i++){
+          let rand;
+
+          // Search for free place in target array
+          do {
+            rand = Math.floor(Math.random() * input.length);
+          } while(this.contains(alreadyUsed, rand));
+
+          retArr[rand] = input[i];
+          alreadyUsed.push(rand);
+      }
+
+      return retArr;
+  }
+
+  public static contains(arr: Array<any>, search: any): boolean {
+      for(let a of arr){
+        if(a === search){
+          return true;
+        }
+      }
+      return false;
   }
 
   public static convertUmlautes(input: string): string {

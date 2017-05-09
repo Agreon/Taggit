@@ -164,20 +164,28 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     // Delete Project
     let onDelete = new EventEmitter<Array<ModalInput>>();
     onDelete.subscribe(inputs => {
-      this.projectService.deleteProject(this.currentProject);
+      this.projectService.deleteProject(this.currentProject).subscribe(() => {
 
-      let subSlots = this.slots[0].subSlots;
-      let toDelete = -1;
-      for(let i = 0; i < subSlots.length; i++){
-        if(subSlots[i].eventPayload && subSlots[i].eventPayload._id == this.currentProject._id){
-          toDelete = i;
-          break;
+        let subSlots = this.slots[0].subSlots;
+        let toDelete = -1;
+        for(let i = 0; i < subSlots.length; i++){
+          if(subSlots[i].eventPayload && subSlots[i].eventPayload._id == this.currentProject._id){
+            toDelete = i;
+            break;
+          }
         }
-      }
 
-      if(toDelete != -1){
-        this.slots[0].subSlots.splice(toDelete, 1);
-      }
+        if(toDelete != -1){
+          this.slots[0].subSlots.splice(toDelete, 1);
+        }
+
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Project "+this.currentProject.name+" deleted"
+        ));
+      });
+
+
     });
 
     this.deleteProject.subscribe((project) => {

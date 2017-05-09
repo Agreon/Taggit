@@ -1,8 +1,12 @@
+.intro-header {
+    height: 100%
+}
+
 .intro-message{
     padding-bottom: 16%;
 }
 
-#loginBtn {
+.loginBtn {
     margin-top: 8px;
     font-weight: bold;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Project} from "../models/project";
 import {Document} from "../models/document";
 import {Subject, Observable, BehaviorSubject, Observer, ReplaySubject} from "rxjs";
@@ -22,7 +22,8 @@ export class ProjectService {
   private currentDocument: Document;
 
   constructor(private httpService: DBService,
-              private informationService: UserInformationService) { }
+              private informationService: UserInformationService) {
+  }
 
   /**
    * Load all projects of a user
@@ -54,25 +55,20 @@ export class ProjectService {
       // Inform User
       this.informationService.showInformation(new UserMessage(
         MessageType.SUCCESS,
-        "Project "+proj.name+" created."
+        "Project " + proj.name + " created."
       ));
     });
   }
 
   public renameProject(project: Project, name: string): Observable<any> {
-    LogService.log("Rename project", name)
+    LogService.log("Rename project", name);
     project.name = name;
 
     return this.httpService.save(project);
   }
 
-  public deleteProject(project: Project) {
-    this.httpService.remove(project).subscribe(() => {
-      this.informationService.showInformation(new UserMessage(
-        MessageType.SUCCESS,
-        "Project "+project.name+" deleted"
-      ));
-    });
+  public deleteProject(project: Project): Observable<any> {
+    return this.httpService.remove(project);
   }
 
   public getProjects(): Observable<Project[]> {
@@ -97,9 +93,6 @@ export class ProjectService {
     return this.currentDocumentSubject.asObservable();
   }
 
-  /**
-   * @param document
-   */
   public saveDocument(document: Document): void {
     console.log("Save doc", document);
 
@@ -108,39 +101,59 @@ export class ProjectService {
     this.currentProject.saveDocument(document);
 
     this.httpService.save(document).subscribe((doc) => {
-        this.httpService.save(this.currentProject).subscribe(() => {
-          // Inform user
-          this.informationService.showInformation(new UserMessage(
-              MessageType.SUCCESS,
-              "Saved Document."
-            ));
-        });
+      this.httpService.save(this.currentProject).subscribe(() => {
+        // Inform user
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Saved Document."
+        ));
       });
+    });
   }
 
   /**
    * TODO: Give back Observers
    * @param name
    */
-  public createDocument(name: string): void {
-    console.log("Create",name);
-    this.httpService.create(new Document(name)).subscribe(document => {
-      document.cached = true;
-      this.currentDocument = Document.fromJSON(document);
-      this.currentProject.saveDocument(this.currentDocument);
-      this.currentProjectSubject.next(this.currentProject);
-      this.currentDocumentSubject.next(this.currentDocument);
+  public createDocument(name: string): Promise<boolean> {
+    console.log("Create", name);
+    return new Promise<boolean>((resolve, reject) => {
+      this.httpService.create(new Document(name)).subscribe(document => {
+        document.cached = true;
+        this.currentDocument = Document.fromJSON(document);
+        this.currentProject.saveDocument(this.currentDocument);
+        this.currentProjectSubject.next(this.currentProject);
+        this.currentDocumentSubject.next(this.currentDocument);
 
-      console.log("Create doc", this.currentDocument);
+        console.log("Create doc", this.currentDocument);
 
-      this.httpService.save(this.currentProject).subscribe(() => {
-        // Inform User
-        this.informationService.showInformation(new UserMessage(
-          MessageType.SUCCESS,
-          "Document "+document.name+" created."
-        ));
-      });
+        this.httpService.save(this.currentProject).subscribe(() => {
+          // Inform User
+          this.informationService.showInformation(new UserMessage(
+            MessageType.SUCCESS,
+            "Document " + document.name + " created."
+          ));
+          resolve(true);
+        }, err => {reject(false);});
+      }, err => {reject(false);});
     });
+    // this.httpService.create(new Document(name)).subscribe(document => {
+    /*  document.cached = true;
+     this.currentDocument = Document.fromJSON(document);
+     this.currentProject.saveDocument(this.currentDocument);
+     this.currentProjectSubject.next(this.currentProject);
+     this.currentDocumentSubject.next(this.currentDocument);
+
+     console.log("Create doc", this.currentDocument);
+
+     this.httpService.save(this.currentProject).subscribe(() => {
+     // Inform User
+     this.informationService.showInformation(new UserMessage(
+     MessageType.SUCCESS,
+     "Document "+document.name+" created."
+     ));
+     });*/
+    // });
   }
 
   /**
@@ -155,7 +168,7 @@ export class ProjectService {
     this.currentProject.saveDocument(document);
 
     this.httpService.save(this.currentProject).subscribe(() => {
-     console.log("Saved proj");
+      console.log("Saved proj");
       this.httpService.save(document).subscribe(() => {
         console.log("Saved doc");
         // Inform User
@@ -168,6 +181,11 @@ export class ProjectService {
 
   }
 
+  /**
+   * TODO: Give back observer
+   * @param document
+   * @returns {Observable<any>}
+   */
   public deleteDocument(document: Document): Observable<any> {
 
     // Delete from project
@@ -177,7 +195,7 @@ export class ProjectService {
       // Inform User
       this.informationService.showInformation(new UserMessage(
         MessageType.SUCCESS,
-        "Document "+document.name+" deleted."
+        "Document " + document.name + " deleted."
       ));
     });
     return this.httpService.remove(document);
@@ -193,7 +211,7 @@ export class ProjectService {
     let doc = this.currentProject.getDocument(id);
 
     return Observable.create((observer: Observer<Document>) => {
-      if(doc.cached){
+      if (doc.cached) {
         observer.next(doc);
       } else {
         // Load from db

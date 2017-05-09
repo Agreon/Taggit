@@ -20,7 +20,7 @@
     <link href="css/custom.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -51,7 +51,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <button id="loginBtn" class="btn btn-success">Start App</button>
+                        <button class="btn btn-success loginBtn">Start App</button>
                     </li>
                     <li>
                         <a class="toServices" href="#services">About</a>
@@ -77,23 +77,16 @@
                         <h1>Taggit</h1>
                         <h3>A multifunctional learning tool</h3>
                         <hr class="intro-divider">
-                        <button id="loginBtn" class="btn btn-success btn-lg">Start App</button>
+                        <button class="btn btn-success btn-lg loginBtn">Start App</button>
                     </div>
                     <div id="showMore">
                         <a href="#services" class="toServices">
                             <h3>See how it works!</h3>
-                            <span>v</span>
+                            <span><i class="fa fa-arrow-down"></i></span>
                         </a>
                     </div>
                 </div>
             </div>
-            <!--<div class="row" id="seeWorking">
-                <div class="col-lg-12">
-                    <h3>See how it works!</h3>
-                    <span>v</span>
-                </div>
-            </div>-->
-
         </div>
         <!-- /.container -->
 
@@ -239,7 +232,7 @@
         <div class="modal-body">
             <form role="form">
                 <p>Please enter your credentials.</p>
-                <p id="loginInfo"><i class="fa fa-exclamation-triangle"></i></p>
+                <p id="loginInfo"></p>
                 <div class="form-group">
                     <label for="loginName">Username</label>
                     <input type="text" id="loginName" placeholder="Username" class="form-control">
@@ -261,11 +254,13 @@
             </form>
         </div>
         <div class="modal-footer">
-            <div class="pull-left" style="margin-top: 0.4em">
+            <div style="margin-top: 0.4em; float: left">
               <a id="switchRegister">Don't got an Account yet? Register!</a>
             </div>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" id="loginSubmit" class="btn btn-success">Submit</button>
+            <div style="float: right">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="loginSubmit" class="btn btn-success">Submit</button>
+            </div>
         </div>
       </div>
       

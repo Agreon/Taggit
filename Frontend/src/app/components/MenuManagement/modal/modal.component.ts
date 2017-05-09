@@ -1,18 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {Component, EventEmitter, ViewChild, ViewChildren} from "@angular/core";
 import {ModalService} from "../../../services/modal.service";
-import {Subject} from "rxjs";
 import {InputReceiver} from "../../../models/input-receiver";
 import {InputService} from "../../../services/input.service";
+import {LogService} from "../../../services/log.service";
 
 export class ModalInput {
-  constructor(
-    public name: string,
-    public value: string,
-    public label?: string,
-    public type: string = "text",
-    public options: Array<string> = []
-  ) {
-    if(!label){
+  constructor(public name: string,
+              public value: string,
+              public label?: string,
+              public type: string = "text",
+              public options: Array<string> = []) {
+    if (!label) {
       this.label = name;
     }
   }
@@ -22,13 +20,12 @@ export class ModalInput {
  * OnKeyBoard-Input! is 'input-reciever'!
  */
 export class ModalParameter {
-  constructor(
-    public header: string,
-    public inputs: Array<ModalInput>,
-    public onSubmit: EventEmitter<any>,
-    public focusSource?: string,
-    public description?: string
-  ) {}
+  constructor(public header: string,
+              public inputs: Array<ModalInput>,
+              public onSubmit: EventEmitter<any>,
+              public focusSource?: string,
+              public description?: string) {
+  }
 
   public getInput(name: string): ModalInput {
     return this.inputs.filter(input => {
@@ -65,14 +62,14 @@ export class ModalComponent implements InputReceiver {
 
   }
 
-  private selectChange(event: any, name: string){
-    console.log("evt",event, name);
-    if(!event.options[0]){
+  private selectChange(event: any, name: string) {
+    console.log("evt", event, name);
+    if (!event.options[0]) {
       return;
     }
 
-    for(let input of this.parameter.inputs){
-      if(input.name == name){
+    for (let input of this.parameter.inputs) {
+      if (input.name == name) {
         input.value = event.options[0];
         break;
       }
@@ -96,11 +93,13 @@ export class ModalComponent implements InputReceiver {
 
     // Focus first Element
     setTimeout(() => {
-      if(this.inputs.length > 0){
-        console.log("Should focus on ", this.inputs.first);
+      if (this.inputs.length > 0) {
+        LogService.log("Should focus on ", this.inputs.first);
         this.inputs.first.nativeElement.focus()
+      } else {
+        console.log("No inputs");
       }
-    },3);
+    }, 30);
   }
 
   public hide(): void {
@@ -109,8 +108,8 @@ export class ModalComponent implements InputReceiver {
       this.visibleAnimate = false;
 
       // Set Focus to previous component
-      if(this.parameter.focusSource)
-      this.inputService.setActive(this.parameter.focusSource);
+      if (this.parameter.focusSource)
+        this.inputService.setActive(this.parameter.focusSource);
     });
   }
 
