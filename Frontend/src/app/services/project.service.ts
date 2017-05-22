@@ -115,8 +115,8 @@ export class ProjectService {
    * TODO: Give back Observers
    * @param name
    */
-  public createDocument(name: string): Promise<boolean> {
-    console.log("Create", name);
+  public createDocument(name: string): void {
+   /* console.log("Create", name);
     return new Promise<boolean>((resolve, reject) => {
       this.httpService.create(new Document(name)).subscribe(document => {
         document.cached = true;
@@ -136,28 +136,30 @@ export class ProjectService {
           resolve(true);
         }, err => {reject(false);});
       }, err => {reject(false);});
-    });
-    // this.httpService.create(new Document(name)).subscribe(document => {
-    /*  document.cached = true;
-     this.currentDocument = Document.fromJSON(document);
-     this.currentProject.saveDocument(this.currentDocument);
-     this.currentProjectSubject.next(this.currentProject);
-     this.currentDocumentSubject.next(this.currentDocument);
+    });*/
+     this.httpService.create(new Document(name)).subscribe(document => {
+        document.cached = true;
+       this.currentDocument = Document.fromJSON(document);
+       this.currentProject.saveDocument(this.currentDocument);
+       this.currentProjectSubject.next(this.currentProject);
+       this.currentDocumentSubject.next(this.currentDocument);
 
-     console.log("Create doc", this.currentDocument);
+       console.log("Create doc", this.currentDocument);
 
-     this.httpService.save(this.currentProject).subscribe(() => {
-     // Inform User
-     this.informationService.showInformation(new UserMessage(
-     MessageType.SUCCESS,
-     "Document "+document.name+" created."
-     ));
-     });*/
-    // });
+       this.httpService.save(this.currentProject).subscribe(() => {
+       // Inform User
+       this.informationService.showInformation(new UserMessage(
+       MessageType.SUCCESS,
+       "Document "+document.name+" created."
+       ));
+       });
+     });
   }
 
   /**
    * TODO: Give Back Observer!
+   * TODO: Document-content is deleted?
+   *        + maybe if not cached?
    * @param document
    * @param name
    */

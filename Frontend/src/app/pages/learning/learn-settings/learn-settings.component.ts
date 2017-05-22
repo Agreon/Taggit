@@ -30,13 +30,15 @@ export class LearnSettingsComponent implements OnInit {
               private dbService: DBService,
               private modalService: ModalService) {
 
-  }
-
-  ngOnInit() {
-    this.learnService.getLearnObject().subscribe(lo => {
+    // TODO: This is called every time the route happens
+    learnService.getLearnObject().subscribe(lo => {
       this.learnObject = lo;
       console.log("Update LO", this.learnObject);
     });
+
+  }
+
+  ngOnInit() {
   }
 
   private tagChanged(tag: LearnTag) {

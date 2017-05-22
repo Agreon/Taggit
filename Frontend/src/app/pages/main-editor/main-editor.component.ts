@@ -19,8 +19,6 @@ import {ModalInput, ModalParameter} from "../../components/MenuManagement/modal/
  * TODO:
  * + Tag-Toolbar
  *  + Eigene wird wohl leichter sein
- * + Plugins
- *    + Save usw
  * + Styling
  * + remove Selfs
  */
@@ -38,6 +36,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
   private editor;
   private subscription: Subscription;
+  private currentContent: string = "<p></p>";
 
   private tags: Tag[] = [];
 
@@ -62,19 +61,25 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       }
     });
 
+    console.log("Constructor called");
+
      this.projectService.getCurrentDocument().subscribe(d => {
-       console.log("Current Doc", d);
+       LogService.log("Current Doc", d);
        this.document = d;
 
        this.projectService.loadDocument(this.document._id).subscribe(doc => {
-         console.log("Got Content", doc.content);
+         LogService.log("Got Content", doc.content);
+
+         tinymce.EditorManager.execCommand("mceAddEditor",true, "mainEditor");
+         self.editor = tinymce.EditorManager.editors[0];
+
+         this.currentContent = doc.content;
 
          if(self.editor){
            self.editor.setContent(doc.content);
            // TODO: Maybe throws exception
            self.editor.focus();
          }
-
        });
     });
   }
@@ -88,8 +93,11 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
   }
 
   private contentClicked(){
-    console.log("Content");
-    this.editor.focus();
+    LogService.log("editor focused");
+
+    if(this.editor){
+      this.editor.focus();
+    }
   }
 
   /**
@@ -176,7 +184,14 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       height: "100%",
       resize: false,
       setup: function(editor){
+        LogService.log("Editor Setup");
         self.editorSetup(editor);
+
+        // Just bc...
+        setTimeout(() => {
+          self.editor.setContent(self.currentContent);
+          self.editor.focus();
+        }, 10);
       },
       save_onsavecallback: function() {
         self.document.content = self.editor.getContent();
@@ -193,6 +208,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     });
 
     editor.on('focus', () => {
+      console.log("Focus");
       this.inputService.setActive("MainEditor");
     });
 
@@ -203,12 +219,13 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
     // Switch to Menu
     editor.addShortcut("alt+w", "MenuSwitch", () => {
+      // Has to be done this way, thanks to tinymce
+      setTimeout(() => {
+        tinymce.EditorManager.execCommand("mceRemoveEditor",true, "mainEditor");
+        this.editor = null;
+      },20);
       this.inputService.setActive("MenuContainer");
       console.log("switch");
-     // editor.execCommand('mceFocus', false);
-      //tinymce.execCommand("mceFocus", false );
-      // TODO: Remove focus
-
     });
 
     // Add Tag Shortcuts

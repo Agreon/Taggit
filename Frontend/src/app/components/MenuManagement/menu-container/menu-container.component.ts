@@ -49,7 +49,6 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
       }*/
 
       this.setActive(this.slots[0]);
-      //this.activeSlot = this.slots[0];
     }
   }
 
@@ -103,6 +102,7 @@ export class MenuContainerComponent implements OnInit, InputReceiver {
     if(event.keyCode == 17) {
       this.activeSlot.showOptions();
     }
+
     if(event.keyCode == 88){
         this.inputService.setActive("MainEditor");
         console.log("switch");

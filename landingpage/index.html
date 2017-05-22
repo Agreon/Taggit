@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Learn in a new way!">
-    <meta name="author" content="">
+    <meta name="author" content="Daniel Huth">
 
     <title>Taggit - A multifunctional learning tool</title>
 
@@ -18,6 +18,7 @@
     <link href="css/landing-page.css" rel="stylesheet">
 
     <link href="css/custom.css" rel="stylesheet">
+
 
     <!-- Custom Fonts -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -30,6 +31,38 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!--Disable Google onCookie -->
+    <script type="text/javascript">
+        var gaProperty = 'UA-40643805-4';
+        var disableStr = 'ga-disable-' + gaProperty;
+        if (document.cookie.indexOf(disableStr + '=true') > -1) {
+            window[disableStr] = true;
+        }
+
+        function gaOptout() {
+            document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;
+            path = /';
+            window[disableStr] = true;
+        }
+    </script>
+
+    <!-- Google Analytics -->
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-40643805-4', 'auto');
+        ga('send', 'pageview');
+    </script>
 </head>
 
 <body>
@@ -70,7 +103,6 @@
     <a name="about"></a>
     <div class="intro-header">
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-12">
                     <div class="intro-message">
@@ -95,7 +127,7 @@
 
     <!-- Page Content -->
 
-	<a id="services"></a>
+    <a id="services"></a>
     <div class="content-section-a">
 
         <div class="container-fluid">
@@ -104,10 +136,18 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h3 class="section-heading">All your documents in one place</h3>
-                    <p class="lead">A special thanks to <a target="_blank" href="http://join.deathtothestockphoto.com/">Death to the Stock Photo</a> for providing the photographs that you see in this template. Visit their website to become a member.</p>
+                    <p class="lead">
+                        Connect all the tools you use to Taggit and avoid all that constant switching between apps. <br>
+                        Write Transcripts and add Tags like Questions or ToDos on the fly.<br>
+                        Of course with Markdown-Support ;)
+                        <!--Connect all the tools you use to Slack and avoid all that constant switching between apps. 
+                        Set up your integration so that you get all your notifications directly within Slack
+                        —from support requests, code check-ins, and error logs to sales leads—
+                        all of them searchable in one central archive.-->
+                    </p>
                 </div>
-                <div class="col-lg-6 col-lg-offset-1 col-sm-6">
-                    <img class="img-responsive" src="img/editor.png" alt="">
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="img/editor_2.png" alt="">
                 </div>
             </div>
 
@@ -125,11 +165,11 @@
                 <div class="col-lg-4 col-lg-offset-1 col-sm-push-6  col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">3D Device Mockups<br>by PSDCovers</h2>
-                    <p class="lead">Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to download some of their awesome, free photoshop actions!</p>
+                    <h2 class="section-heading">Extract Tags.</h2>
+                    <p class="lead">Extract your previously added Tags and create customizable and shareable Learn-Databases!</p>
                 </div>
-                <div class="col-lg-6 col-lg-offset-1 col-sm-pull-6  col-sm-6">
-                    <img class="img-responsive" src="img/learn.png" alt="">
+                <div class="col-lg-5 col-lg-offset-2 col-sm-pull-6 col-sm-6">
+                    <img class="img-responsive" src="img/pic_settings.png" alt="">
                 </div>
             </div>
 
@@ -147,11 +187,13 @@
                 <div class="col-lg-5 col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">Google Web Fonts and<br>Font Awesome Icons</h2>
-                    <p class="lead">This template features the 'Lato' font, part of the <a target="_blank" href="http://www.google.com/fonts">Google Web Font library</a>, as well as <a target="_blank" href="http://fontawesome.io">icons from Font Awesome</a>.</p>
+                    <h2 class="section-heading">Learn.</h2>
+                    <!--<p class="lead">This template features the 'Lato' font, part of the <a target="_blank" href="http://www.google.com/fonts">Google Web Font library</a>, as well as <a target="_blank" href="http://fontawesome.io">icons from Font Awesome</a>.</p>
+                -->
+                    <p class="lead">Learn your previously added Questions with an intelligent Learn-Manager</p>
                 </div>
-                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                    <img class="img-responsive" src="img/phones.png" alt="">
+                <div class="col-lg-6 col-lg-offset-1 col-sm-6">
+                    <img class="img-responsive" src="img/pic_learning.png" alt="">
                 </div>
             </div>
 
@@ -161,7 +203,7 @@
     </div>
     <!-- /.content-section-a -->
 
-	<a  name="contact"></a>
+    <a name="contact"></a>
     <div class="banner">
 
         <div class="container">
@@ -206,11 +248,11 @@
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#services">Services</a>
+                            <a href="/impressum.html">Impressum</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#contact">Contact</a>
+                            <a href="https://github.com/Agreon/Taggit">Contact</a>
                         </li>
                     </ul>
                     <p class="copyright text-muted small">Yet no Copyright &copy; Agreon 2017. No Rights Reserved</p>
@@ -219,53 +261,53 @@
         </div>
     </footer>
 
-<!-- Login Modal -->
-  <div class="modal fade" id="loginModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 id="modal-title" class="modal-title">Login</h4>
-        </div>
-        <div class="modal-body">
-            <form role="form">
-                <p>Please enter your credentials.</p>
-                <p id="loginInfo"></p>
-                <div class="form-group">
-                    <label for="loginName">Username</label>
-                    <input type="text" id="loginName" placeholder="Username" class="form-control">
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="modal-title" class="modal-title">Login</h4>
                 </div>
-                <div class="form-group">   
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" placeholder="Password" class="form-control">
-                </div>
-                <div id="emailField" class="form-group" style="display: none">
-                    <label>Email</label>
-                    <input type="text" id="email" placeholder="Email" class="form-control">
-                </div>
-                <div class="checkbox">
-                    <label>
+                <div class="modal-body">
+                    <form role="form">
+                        <p>Please enter your credentials.</p>
+                        <p id="loginInfo">Alpha Version</p>
+                        <div class="form-group">
+                            <label for="loginName">Username</label>
+                            <input type="text" id="loginName" placeholder="Username" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" placeholder="Password" class="form-control">
+                        </div>
+                        <div id="emailField" class="form-group" style="display: none">
+                            <label>Email (optional)</label>
+                            <input type="text" id="email" placeholder="Email" class="form-control">
+                        </div>
+                        <div class="checkbox">
+                            <label>
                         <input type="checkbox" id="keepCredentials">
                         Remember me
                     </label>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <div style="margin-top: 0.4em; float: left">
-              <a id="switchRegister">Don't got an Account yet? Register!</a>
+                <div class="modal-footer">
+                    <div style="margin-top: 0.4em; float: left">
+                        <a id="switchRegister">Don't got an Account yet? Register!</a>
+                    </div>
+                    <div style="float: right">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="loginSubmit" class="btn btn-success">Submit</button>
+                    </div>
+                </div>
             </div>
-            <div style="float: right">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="loginSubmit" class="btn btn-success">Submit</button>
-            </div>
+
         </div>
-      </div>
-      
     </div>
-  </div>
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
@@ -274,6 +316,7 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script src="js/custom.js"></script>
+
 
 </body>
 

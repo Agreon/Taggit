@@ -3,6 +3,8 @@ import {StoreTag} from "./store-tag";
 
 /**
  * Wrapper object for tag, so that learn-attributes dont have to be stored in main collection
+ * TODO: We have to save the tagdata to the db as well, so that additional tags can be added
+ 		=> Maybe make it optional (if empty, load it from learnObject) 
  */
 export class LearnTag {
   constructor(

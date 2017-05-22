@@ -112,8 +112,8 @@ export class UserService {
       "logout successfull."
     ));
 
-    //window.location.href = "taggit.agreon.de/logout";
     // TODO: Redircet to landingpage/logout
+    window.location.href = "https://taggit.agreon.de/logout";
   }
 
   private setUser(user: User, token?: string): void {

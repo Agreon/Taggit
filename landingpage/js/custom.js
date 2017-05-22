@@ -1,8 +1,8 @@
 var loginMode = 0;
-//var serverAddress = "http://localhost:3000";
-var serverAddress = "https://agreon.de:3001";
-//var appAddress = "http://localhost:4200";
-var appAddress = "https://agreon.de:444";
+var serverAddress = "http://localhost:3000";
+//var serverAddress = "https://agreon.de:3001";
+var appAddress = "http://localhost:4200";
+//var appAddress = "https://agreon.de:444";
 
 /**
  * Redirect if set
@@ -28,7 +28,7 @@ $(".loginBtn").click(function(){
         return;
     }
     $("#loginModal").modal();
-    $("#loginInfo").hide();
+    setLoginError("Alpha Version!");
     $("#loginName").focus();
 });
 
