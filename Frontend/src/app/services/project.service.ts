@@ -115,7 +115,7 @@ export class ProjectService {
    * TODO: Give back Observers
    * @param name
    */
-  public createDocument(name: string): void {
+  public createDocument(name: string, projectID: string): void {
    /* console.log("Create", name);
     return new Promise<boolean>((resolve, reject) => {
       this.httpService.create(new Document(name)).subscribe(document => {
@@ -137,8 +137,8 @@ export class ProjectService {
         }, err => {reject(false);});
       }, err => {reject(false);});
     });*/
-     this.httpService.create(new Document(name)).subscribe(document => {
-        document.cached = true;
+     this.httpService.create(new Document(name, "", projectID)).subscribe(document => {
+       document.cached = true;
        this.currentDocument = Document.fromJSON(document);
        this.currentProject.saveDocument(this.currentDocument);
        this.currentProjectSubject.next(this.currentProject);
@@ -158,29 +158,17 @@ export class ProjectService {
 
   /**
    * TODO: Give Back Observer!
-   * TODO: Document-content is deleted?
-   *        + maybe if not cached?
    * @param document
    * @param name
    */
-  public renameDocument(document: Document, name: string): void {
-    document.name = name;
-    console.log("Rename document", this.currentProject, document);
-
-    this.currentProject.saveDocument(document);
-
-    this.httpService.save(this.currentProject).subscribe(() => {
-      console.log("Saved proj");
-      this.httpService.save(document).subscribe(() => {
-        console.log("Saved doc");
-        // Inform User
-        this.informationService.showInformation(new UserMessage(
-          MessageType.SUCCESS,
-          "Document renamed."
-        ));
-      });
+  public renameDocument(document: Document, name: string): Observable<any> {
+    return this.loadDocumentContent(document._id).flatMap(doc => {
+      doc.name = name;
+      this.currentProject.saveDocument(doc);
+      return this.httpService.save(this.currentProject).flatMap(() => {
+          return this.httpService.save(doc);
+      })
     });
-
   }
 
   /**
@@ -206,9 +194,9 @@ export class ProjectService {
 
   /**
    * Gets the content of a document
-   * @param name
+   * @param id
    */
-  public loadDocument(id: string): Observable<Document> {
+  public loadDocumentContent(id: string): Observable<Document> {
 
     let doc = this.currentProject.getDocument(id);
 
@@ -218,15 +206,15 @@ export class ProjectService {
       } else {
         // Load from db
         this.httpService.get("document", doc._id).subscribe(document => {
-          console.log("got doc", document);
-          this.currentDocument = Document.fromJSON(document);
-          // Set cache-status
-          this.currentDocument.cached = true;
-          this.currentProject.saveDocument(this.currentDocument);
-          observer.next(this.currentDocument);
+          let fullDocument = Document.fromJSON(document);
+          fullDocument.cached = true;
+          this.currentProject.saveDocument(fullDocument);
+          observer.next(fullDocument);
         });
       }
     });
   }
+
+
 
 }

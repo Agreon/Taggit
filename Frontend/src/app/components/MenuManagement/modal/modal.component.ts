@@ -4,6 +4,10 @@ import {InputReceiver} from "../../../models/input-receiver";
 import {InputService} from "../../../services/input.service";
 import {LogService} from "../../../services/log.service";
 
+/**
+ * Type: text, select, hiddden
+ * Git-Issue[#18]: Add mandatory-parameter to ModalInput, that is checked onSubmit [feature]
+ */
 export class ModalInput {
   constructor(public name: string,
               public value: string,

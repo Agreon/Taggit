@@ -4,7 +4,7 @@ import {StoreTag} from "./store-tag";
 /**
  * Wrapper object for tag, so that learn-attributes dont have to be stored in main collection
  * TODO: We have to save the tagdata to the db as well, so that additional tags can be added
- 		=> Maybe make it optional (if empty, load it from learnObject) 
+ 		=> Maybe make it optional (if empty, load it from learnObject)
  */
 export class LearnTag {
   constructor(
@@ -125,6 +125,15 @@ export class LearnObject extends Storeable {
 
     for(let attr in object){
       if(object.hasOwnProperty(attr)){
+
+        if(attr == "tags"){
+          obj.tags = [];
+          for(let tag of object.tags){
+            obj.tags.push(new LearnTag(tag.tagID, tag.tagData, tag.level, tag.active));
+          }
+          continue;
+        }
+
         obj[attr] = object[attr];
       }
     }
@@ -136,6 +145,8 @@ export class LearnObject extends Storeable {
     let content = super.getStoreableContent();
     content.tags = [];
 
+    // TODO: ERROR ON SECOND SAVE
+    console.log("Tags", this.tags);
     for (let tag of this.tags){
       content.tags.push(tag.getStoreableContent());
     }

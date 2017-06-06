@@ -4,9 +4,9 @@
 var mongoose = require('mongoose');
 
 var DocumentSchema = new mongoose.Schema({
-    ownerID: {
+    projectID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Project'
     },
     name: String, 
     tags: {

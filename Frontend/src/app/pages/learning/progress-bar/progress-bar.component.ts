@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 
+
 @Component({
   selector: 'progress-bar',
   templateUrl: './progress-bar.component.html',

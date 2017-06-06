@@ -12,11 +12,13 @@ export class Document extends Storeable implements HoldsTags{
   constructor(
     public name: string,
     public content: string = "",
+    public projectID: string = "",
     public cached: boolean = false
   ) {
     super();
     // Exclude cached
     this.excludedFromDB.push("cached");
+    this.excludedFromDB.push("tags");
   }
 
   /**
@@ -103,6 +105,19 @@ export class Document extends Storeable implements HoldsTags{
   }
 
   public getStoreableContent(): any {
-    return super.getStoreableContent();
+    let content = super.getStoreableContent();
+    content.tags = [];
+
+    for (let tag of this.tags){
+
+      let _inputs = [];
+      for(let input of tag.inputs){
+        _inputs.push({name: input.name, value: input.value});
+      }
+
+      content.tags.push({id: tag.id, tagType: tag.tagType, inputs: _inputs});
+    }
+
+    return content;
   }
 }

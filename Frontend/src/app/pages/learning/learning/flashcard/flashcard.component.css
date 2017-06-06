@@ -5,6 +5,13 @@
   padding: 15px;
 }
 
+@media only screen and (max-width: 768px) {
+  .box {
+    max-width: 100% !important;
+  }
+}
+
+
 .textRow {
   text-align: center;
   font-weight: 700;

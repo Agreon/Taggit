@@ -15,6 +15,9 @@ import {Tag} from "../../../../models/tag";
 import {MessageType, UserInformationService, UserMessage} from "../../../../services/User-Information.service";
 
 
+/**
+ * Git-Issue[#19]: Add Learning to Projects [feature]
+ */
 @Component({
   selector: 'main-menu',
   templateUrl: 'main-menu.component.html',
@@ -31,12 +34,10 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
   private createTag = new Subject<any>();
   private deleteTag = new Subject<Tag>();
 
-
   private currentProject: Project;
 
   constructor(private projectService: ProjectService,
               private modalService: ModalService,
-              private inputService: InputService,
               private userService: UserService,
               private tagService: TagService,
               private informationService: UserInformationService) {
@@ -85,15 +86,6 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     });
 
 
-    // Load projects when authenticated
-   /* this.userService.getCurrentUser()
-      .filter(x => {if(x) return true;
-                    else return false;})
-      .subscribe(() => {
-      this.projectService.loadProjects();
-      //this.tagService.loadTags();
-    });*/
-
     this.userService.getCurrentUser().subscribe(user => {
      /* if(!user){
         this.projectService.setCurrentDocument(null);
@@ -106,9 +98,9 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
   }
 
   ngOnInit() {
-    // Project onSelected
+    // Select Project
     this.projectSelected.subscribe((project: Project) => {
-      console.log("PROJECT",project);
+      LogService.log("PROJECT",project);
       this.projectService.setCurrentProject(project);
       this.changeMenu.next(new MenuEvent(MENU_TYPE.PROJECT_VIEW));
     });
@@ -128,21 +120,20 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
       this.modalService.openModal(param);
     });
 
-
     // Rename Project
     let onRename = new EventEmitter<Array<ModalInput>>();
     onRename.subscribe(inputs => {
 
-      this.loading = true;
       // Rename Project in DB
       this.projectService.renameProject(this.currentProject, inputs[0].value).subscribe(() => {
 
         // Set Name of project without reloading menu
-        let currentSlot = this.slots[0].subSlots.filter(s => {return s.active})[0];
+        let currentSlot = this.slots[0].subSlots.filter(s => {
+          return s.eventPayload && s.eventPayload._id == this.currentProject._id;
+        })[0];
+
         currentSlot.name = inputs[0].value;
         currentSlot.closeSlot();
-
-        this.loading = false;
 
         this.informationService.showInformation(new UserMessage(
           MessageType.SUCCESS,

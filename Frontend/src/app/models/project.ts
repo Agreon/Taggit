@@ -24,6 +24,7 @@ export class Project extends Storeable implements HoldsTags {
       let index = this.documents.indexOf(found);
       this.documents[index] = document;
     } else {
+      document.projectID = this._id;
       this.documents.push(document);
     }
     LogService.log("Saved document in", this.documents);
@@ -46,7 +47,6 @@ export class Project extends Storeable implements HoldsTags {
   }
 
   public getDocument(id: string): Document {
-      console.log(this.documents, id);
     return this.documents.filter(d => {
       return d._id == id;
     })[0];
@@ -94,6 +94,7 @@ export class Project extends Storeable implements HoldsTags {
       if(this.documents.filter(ownDoc => {
           return ownDoc._id == doc._id;
         }).length == 0){
+          doc.projectID = this._id;
           this.documents.push(Document.fromJSON(doc));
       }
     });

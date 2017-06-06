@@ -9,12 +9,20 @@ import {ModalService} from "../../../services/modal.service";
 import {ModalInput, ModalParameter} from "../../../components/MenuManagement/modal/modal.component";
 import {Helper} from "../../../models/Helper";
 import {find} from "rxjs/operator/find";
+import {LogService} from "../../../services/log.service";
 
 
 /**
  * TOOD:
- * Order-By Level
- *
+ * Git-Issue[9]: { Add Questions to LearnObject, that are not in it as tags
+ * >>
+ * HowTo Redesign 'AddQuestion'-Modal?
+ *  You either have Extraction or Adding
+ * Make it possible to delete it from list.
+ * <<
+ * [feature] }
+ * Git-Issue[10]: Both buttons should be in one row, in responsive mode [bug]
+ * Git-Issue: Revert all Questions of a type, or all questions of a LO [feature]
  */
 @Component({
   selector: 'app-learn-settings',
@@ -45,12 +53,13 @@ export class LearnSettingsComponent implements OnInit {
     this.learnObject.addTag(tag);
   }
 
-  private addTags(){
+  private addQuestions(){
 
     let tags = this.learnService.getObjectTags();
 
-    console.log("AllTags",tags);
+    LogService.log("AllTags",tags);
 
+    // Only get those with 2 inputs
     tags = tags.filter(tag => tag.inputs.length > 1);
 
     let types = Helper.distinctArray(tags, "tagType");
@@ -65,7 +74,7 @@ export class LearnSettingsComponent implements OnInit {
       return true;
     });
 
-    // TODO: If length == 0, deactivate button
+    // TODO: Later remove, wehn questions can be added manually
     if(types.length == 0) {
       this.userInformationService.showInformation(new UserMessage(
         MessageType.WARNING,
@@ -75,34 +84,55 @@ export class LearnSettingsComponent implements OnInit {
 
     let onSelect = new EventEmitter<Array<ModalInput>>();
     onSelect.subscribe(res => {
-      console.log("Selected", res);
+      LogService.log("Selected", res);
 
       for(let tag of tags){
         if(tag.tagType == res[0].value){
           this.learnObject.tags.push(new LearnTag(tag.id,tag));
+          break;
         }
       }
+
+      /*if(res.filter(r => r.name == "Question")[0].length == 0) {
+          LogService.log("Question not used");
+
+          if(!res[2].value) {
+              // TODO: Throw error
+          }
+          for(let tag of tags){
+            if(tag.tagType == res[2].value){
+              this.learnObject.tags.push(new LearnTag(tag.id,tag));
+              break;
+            }
+          }
+      } else {
+         // TODO: Read Inputs
+      }*/
+
       this.learnService.setLearnObject(this.learnObject);
 
-      console.log("Saving..",this.learnObject);
+      LogService.log("Saving..",this.learnObject);
 
       this.dbService.save(this.learnObject).subscribe(res => {
-          console.log("Saved",res);
+        console.log("Saved",res);
       }, err => {
-        console.log("Err",err);
-      }); // TODO: Here?
+        console.log("Err",err);        // TODO: Here?*/
+      });
+      return;
     });
 
     this.modalService.openModal(new ModalParameter(
       "Select Tag",
-      [new ModalInput("Tag", types[0], "", "select", types)],
+      [ //new ModalInput("Question", ""),
+        //new ModalInput("Answer", ""),
+        new ModalInput("Tag", types[0], "Or extract Tags", "select", types)],
       onSelect
     ));
   }
 
   private startLearning(){
     // Only if at least one active tag is selected, learn
-    if(this.learnObject.tags.filter(tag => {return tag.active;}).length == 0){
+    if(this.learnObject.tags.filter(tag => tag.active).length == 0){
       this.userInformationService.showInformation(new UserMessage(
         MessageType.WARNING,
         "You cannot learn without active tags"));

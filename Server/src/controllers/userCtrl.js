@@ -36,6 +36,12 @@ exports.signUp = function(req, res){
             "local.username": req.body.username,
             "local.password": req.body.password
         });
+
+
+        if(req.body.email){
+            newUser.email = req.body.email;
+        }
+
         // save the user
         newUser.save(function(err) {
             if (err) {

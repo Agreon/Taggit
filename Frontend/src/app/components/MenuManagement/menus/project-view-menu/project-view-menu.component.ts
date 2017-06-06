@@ -11,6 +11,7 @@ import {ModalInput, ModalParameter} from "../../modal/modal.component";
 import {ModalService} from "../../../../services/modal.service";
 import {LogService} from "../../../../services/log.service";
 import {LearnService} from "../../../../services/learn.service";
+import {MessageType, UserInformationService, UserMessage} from "../../../../services/User-Information.service";
 
 @Component({
   selector: 'project-view-menu',
@@ -32,6 +33,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
   constructor(private projectService: ProjectService,
               private learnService: LearnService,
               private modalService: ModalService,
+              private informationService: UserInformationService,
               private router: Router) {
     super();
 
@@ -39,9 +41,6 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     this.projectService.getCurrentProject().subscribe(project => {
       console.log("Got Project", project);
 
-      if(!project){
-        return;
-      }
       this.project = project;
       this.updateView();
     });
@@ -52,7 +51,6 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       this.slots.forEach(slot => {
         slot.active = slot.name == d.name;
       });
-
       this.projectService.setCurrentDocument(this.project.getDocument(d._id));
       this.router.navigate(['/MainEditor']);
     });
@@ -62,8 +60,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
     // Create Document Callback
     onCreate.subscribe(inputs => {
-      // TODO: Set Active, maybe not necessary
-      this.projectService.createDocument(inputs[0].value);
+      this.projectService.createDocument(inputs[0].value, this.project._id);
     });
 
     // On Create Document-Button
@@ -79,7 +76,9 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     let onRename = new EventEmitter<Array<ModalInput>>();
 
     this.renameDocument.subscribe((document) => {
+
       this.currentDocument = document;
+
       LogService.log("Rename Document", document);
       let param = new ModalParameter("Rename Document",[
         new ModalInput("Name", document.name)
@@ -87,16 +86,29 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       this.modalService.openModal(param);
     });
 
+
     onRename.subscribe(inputs => {
-      // Set Name of project without reloading menu
 
-      let currentSlot = this.slots.filter(s => {return s.active})[0];
 
-      currentSlot.name = inputs[0].value;
-      currentSlot.closeSlot();
+      // Rename Document in DB
+      this.projectService.renameDocument(this.currentDocument, inputs[0].value)
+        .subscribe(() => {
 
-      // Rename Project in DB
-      this.projectService.renameDocument(this.currentDocument, inputs[0].value);
+          // Set Name of project without reloading menu
+          let currentSlot = this.slots.filter(s => {
+            return s.eventPayload && s.eventPayload._id == this.currentDocument._id;
+          })[0];
+
+          currentSlot.name = inputs[0].value;
+          currentSlot.closeSlot();
+
+        // Inform User
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Document renamed."
+        ));
+      });
+
     });
 
     // Overview Document
@@ -113,12 +125,16 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       LogService.log("Learn Document", document);
 
       // Get whole document if not cached // TODO: Start Loading
-      this.projectService.loadDocument(document._id).subscribe(doc => {
+      this.projectService.loadDocumentContent(document._id).subscribe(doc => {
+        this.projectService.setCurrentDocument(doc);
         this.learnService.startLearning(doc);
       });
 
     });
 
+    /**
+     * @type {EventEmitter<Array<ModalInput>>}
+     */
     // Delete Document
     let onDelete = new EventEmitter<Array<ModalInput>>();
 
@@ -131,12 +147,11 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
     onDelete.subscribe(inputs => {
       this.projectService.deleteDocument(this.currentDocument).subscribe(res => {
-        console.log("deleted", res);
-
+        LogService.log("Deleted Document", res);
 
         let toDelete = -1;
         for(let i = 0; i < this.slots.length; i++){
-          if(this.slots[i].active){
+          if(this.slots[i].eventPayload && this.slots[i].eventPayload._id == this.currentDocument._id){
             toDelete = i;
             break;
           }

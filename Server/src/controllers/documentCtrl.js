@@ -1,4 +1,6 @@
 var Document = require('../models/document');
+var Project = require('../models/project');
+var ObjectId = require('mongodb').ObjectId;
 
 exports.getAll = function(req, res, next) {
     Document.find({}, function(err, projects){
@@ -26,25 +28,28 @@ exports.getOne = function(req, res, next){
 exports.create = function (req, res, next) {
     console.log("Create Document", req.body);
     var document = new Document({
-        name: req.body.name
+        name: req.body.name,
+        projectID: req.body.projectID
     });
 
-    Document.findByName(document.ownerID, document.name, function(err, documents){
-        if(err){
-            return res.status(500).send(err);
-        }
-
-        if(documents.length > 0){
-            console.log("Already existing");
-            return res.status(403).send("Document with this name already existing!");
-        }
-
-        document.save(function (err, document) {
-            if(err) {
+    Project.containsDocument(document, function(err, contains){
+            if(err){
                 return res.status(500).send(err);
             }
-            res.send(document);
-        });        
+
+            // Already Document with name in db
+            if(contains){
+                return res.status(403).send("A document with this name is already existing!");
+            }
+
+            // Save it 
+            document.save(function (err, document) {
+                if(err) {
+                    return res.status(500).send(err);
+                }
+                res.send(document);
+            });
+
     });
 };
 
@@ -57,8 +62,9 @@ exports.save = function (req, res, next) {
     console.log("Update Document", toUpdate);
 	console.log("Params",req.params, req.params.id);
 
-	Document.update({_id: req.params.id}, toUpdate, function(err, numAffected, response){
+	Document.update({_id: ObjectId(req.params.id)}, toUpdate, function(err, numAffected, response){
 		if(err){
+            console.error(err);
             return res.status(500).send(err);
 		}
 		res.send({});

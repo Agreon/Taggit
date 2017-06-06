@@ -18,7 +18,7 @@
   <section class="content">
     <flashcard [LearnTag]="currentTag"
                (QuestionCompleted)="onQuestionCompleted($event)"
-               [CurrTag]="learnService.getCurrentTagNum()"
+               [CurrTag]="learnService.getCurrentTagNum()+1"
                [TotalTags]="learnService.getTagAmount()"
                [Active]="inputEnabled"></flashcard>
   </section>

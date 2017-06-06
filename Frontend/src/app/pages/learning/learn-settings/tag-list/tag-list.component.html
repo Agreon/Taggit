@@ -13,7 +13,10 @@
       <tr *ngFor="let tag of tags">
         <td style="text-align: center"><input type="checkbox" [checked]="tag.active" (click)="setActive($event, tag)"></td>
         <td>{{tag.tagData.inputs[0].value}}</td>
-        <td style="text-align: center"><span class="badge bg-blue">{{tag.level}}</span></td>
+        <td style="text-align: center">
+          <span *ngIf="tag.level == 3" class="badge bg-green">{{tag.level}}</span>
+          <span *ngIf="tag.level != 3" class="badge bg-blue">{{tag.level}}</span>
+        </td>
         <td style="text-align: center"><i class="fa fa-undo" (click)="resetProgress(tag)"></i></td>
       </tr>
     </table>

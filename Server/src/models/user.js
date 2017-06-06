@@ -13,6 +13,10 @@ var userSchema = mongoose.Schema({
 			required: true
 		}
 	},
+    email: {
+        type: String, 
+        default: ""
+    },
     updated_at: {
         type: Date,
         default: Date.now()

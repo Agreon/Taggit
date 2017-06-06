@@ -3,6 +3,7 @@ import {LearnTag} from "../../../../models/learn-object";
 import {InputReceiver} from "../../../../models/input-receiver";
 import {InputService} from "../../../../services/input.service";
 import {Helper} from "../../../../models/Helper";
+import {LogService} from "../../../../services/log.service";
 
 @Component({
   selector: 'flashcard',
@@ -40,7 +41,7 @@ export class FlashcardComponent implements OnInit, InputReceiver {
 
   ngOnChanges(changes: SimpleChanges){
     if(changes["learnTag"]){
-      console.log("New Question", this.learnTag);
+      LogService.log("New Question", this.learnTag);
       this.learnTag.tagData.inputs[0].value = Helper.convertUmlautes(this.learnTag.tagData.inputs[0].value);
       this.learnTag.tagData.inputs[1].value = Helper.convertUmlautes(this.learnTag.tagData.inputs[1].value);
       this.state = 0;
@@ -67,15 +68,11 @@ export class FlashcardComponent implements OnInit, InputReceiver {
     }
   }
 
-  /**
-   * TODO: Show Answer
-   */
   private onReady(){
       this.state = 1;
   }
 
   private onSuccess(success: boolean) {
-    console.log("Success?",success);
     this.questionCompleted.emit(success);
   }
 

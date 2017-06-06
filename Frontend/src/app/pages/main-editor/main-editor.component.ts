@@ -7,9 +7,7 @@ import {LogService} from "../../services/log.service";
 import {Tag, TagInput} from "../../models/tag";
 import {TagService} from "../../services/tag.service";
 import {Document} from "../../models/document";
-import {forEach} from "@angular/router/src/utils/collection";
 import {ProjectService} from "../../services/project.service";
-import {ActivatedRouteSnapshot, ActivatedRoute} from "@angular/router";
 import {InputService} from "../../services/input.service";
 import {InputReceiver} from "../../models/input-receiver";
 import {ModalService} from "../../services/modal.service";
@@ -21,6 +19,11 @@ import {ModalInput, ModalParameter} from "../../components/MenuManagement/modal/
  *  + Eigene wird wohl leichter sein
  * + Styling
  * + remove Selfs
+ */
+/**
+ * Git-Issue[#8]: Show Scrollbar, but remove it from main-window [style]
+ * Git-Issue[#17]: Auto-Focus modal-input, maybe use built in >> https//www.tinymce.com/docs/advanced/creating-custom-dialogs/ << [feature]
+ * Git-Issue: Show Loading spinner in editor, while doc-content is loaded [feature]
  */
 @Component({
   selector: 'main-editor',
@@ -61,13 +64,13 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
       }
     });
 
-    console.log("Constructor called");
-
-     this.projectService.getCurrentDocument().subscribe(d => {
+     this.projectService.getCurrentDocument()
+       .distinctUntilChanged()
+       .subscribe(d => {
        LogService.log("Current Doc", d);
        this.document = d;
 
-       this.projectService.loadDocument(this.document._id).subscribe(doc => {
+       this.projectService.loadDocumentContent(this.document._id).subscribe(doc => {
          LogService.log("Got Content", doc.content);
 
          tinymce.EditorManager.execCommand("mceAddEditor",true, "mainEditor");
@@ -213,6 +216,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
     });
 
     editor.on('init', function(args) {
+
     });
 
     // Curstom shortcuts

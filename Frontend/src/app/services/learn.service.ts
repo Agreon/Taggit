@@ -65,6 +65,10 @@ export class LearnService {
     return this.learnObjectSubject.asObservable();
   }
 
+  public saveLearnObject(): Observable<any> {
+    return this.dbService.save(this.learnObject);
+  }
+
   public setLearnObject(learnObject: LearnObject) {
     this.learnObject = learnObject;
     this.learnObjectSubject.next(this.learnObject);
@@ -89,7 +93,7 @@ export class LearnService {
     this.currentTag = null;
 
     /**
-     * TODO: Filter tags: maybe with starting at level-param
+     * Git-Issue: Filter tags: maybe with starting at level-param [feature]
      */
     let tags = this.learnObject.tags.filter(tag => {
         return tag.active;
@@ -111,16 +115,15 @@ export class LearnService {
   }
 
   /**
-   * TODO: Maybe we only need one queue ( but how do we distinguis answered false a second time?
    * Sets Tag-Level according to success and returns a new one from the queue
    * @param success result of the last question
    * @returns {LearnTag} A new Tag from the queue
    */
   public nextTag(success: boolean): LearnTag {
 
-    if(this.currentTag){
+    if(this.currentTag !== null){
       if(success){
-        if(this.learnObject.tags[this.currentTag].level < 3){
+        if(this.learnObject.tags[this.currentTag].level < 3 ){
           this.learnObject.tags[this.currentTag].level++;
         }
       } else {
@@ -158,7 +161,7 @@ export class LearnService {
   }
 
   public getCurrentTagNum(): number {
-    return this.tagAmount - (this.learnQueue1.length + this.learnQueue2.length);
+    return this.tagAmount - (this.learnQueue1.length + this.learnQueue2.length + 1);
   }
 
 }
