@@ -85,7 +85,6 @@ export class Document extends Storeable implements HoldsTags{
   }
 
   // Tags
-
   getTags(): Array<StoreTag> {
     return this.tags;
   }

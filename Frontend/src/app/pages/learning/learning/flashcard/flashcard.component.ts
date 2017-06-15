@@ -42,8 +42,8 @@ export class FlashcardComponent implements OnInit, InputReceiver {
   ngOnChanges(changes: SimpleChanges){
     if(changes["learnTag"]){
       LogService.log("New Question", this.learnTag);
-      this.learnTag.tagData.inputs[0].value = Helper.convertUmlautes(this.learnTag.tagData.inputs[0].value);
-      this.learnTag.tagData.inputs[1].value = Helper.convertUmlautes(this.learnTag.tagData.inputs[1].value);
+      this.learnTag.question = Helper.convertUmlautes(this.learnTag.question);
+      this.learnTag.answer = Helper.convertUmlautes(this.learnTag.answer);
       this.state = 0;
     }
   }

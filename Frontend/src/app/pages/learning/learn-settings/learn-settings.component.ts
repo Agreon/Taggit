@@ -22,7 +22,7 @@ import {LogService} from "../../../services/log.service";
  * <<
  * [feature] }
  * Git-Issue[10]: Both buttons should be in one row, in responsive mode [bug]
- * Git-Issue: Revert all Questions of a type, or all questions of a LO [feature]
+ * Git-Issue[#20]: Revert all Questions of a type, or all questions of a LO [feature]
  */
 @Component({
   selector: 'app-learn-settings',
@@ -67,7 +67,7 @@ export class LearnSettingsComponent implements OnInit {
     // Filter out if already in learnObject
     types = types.filter(type => {
       for (let tag of this.learnObject.tags){
-        if(tag.tagData.tagType == type){
+        if(tag.tagType == type){
           return false;
         }
       }
@@ -88,8 +88,7 @@ export class LearnSettingsComponent implements OnInit {
 
       for(let tag of tags){
         if(tag.tagType == res[0].value){
-          this.learnObject.tags.push(new LearnTag(tag.id,tag));
-          break;
+          this.learnObject.tags.push(new LearnTag(tag.id, tag.tagType, tag.inputs[0].value, tag.inputs[1].value));
         }
       }
 

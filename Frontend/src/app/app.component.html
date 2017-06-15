@@ -15,6 +15,9 @@
   </aside>
 
   <div class="content-wrapper">
+    <div *ngIf="loading" class="loadingOverlay" style="text-align: center; overflow-y: inherit">
+      <i class="fa fa-refresh fa-spin" style="font-size: 6em; margin-top: 20%"></i>
+    </div>
       <router-outlet></router-outlet>
   </div>
 

@@ -33,6 +33,8 @@ export class UserInformationService {
 
   private informationSubject: Subject<UserMessage> = new Subject<UserMessage>();
 
+  private loadingSubject: Subject<boolean> = new Subject<boolean>();
+
   constructor() { }
 
   public showInformation(message: UserMessage): void {
@@ -42,5 +44,18 @@ export class UserInformationService {
   public getInformation(): Observable<UserMessage> {
     return this.informationSubject.asObservable();
   }
+
+  public startLoading(): void {
+      this.loadingSubject.next(true);
+  }
+
+  public stopLoading(): void {
+    this.loadingSubject.next(false);
+  }
+
+  public getLoadingsSubject(): Observable<boolean> {
+    return this.loadingSubject.asObservable();
+  }
+
 
 }

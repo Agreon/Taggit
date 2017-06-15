@@ -61,6 +61,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     // Create Document Callback
     onCreate.subscribe(inputs => {
       this.projectService.createDocument(inputs[0].value, this.project._id);
+      // Git-Issue: Switch to Editor on document-creation [feature]
     });
 
     // On Create Document-Button

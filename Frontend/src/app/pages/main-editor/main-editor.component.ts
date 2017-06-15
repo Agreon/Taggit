@@ -12,18 +12,18 @@ import {InputService} from "../../services/input.service";
 import {InputReceiver} from "../../models/input-receiver";
 import {ModalService} from "../../services/modal.service";
 import {ModalInput, ModalParameter} from "../../components/MenuManagement/modal/modal.component";
+import {UserInformationService} from "../../services/User-Information.service";
 
 /**
  * TODO:
  * + Tag-Toolbar
- *  + Eigene wird wohl leichter sein
  * + Styling
  * + remove Selfs
  */
 /**
  * Git-Issue[#8]: Show Scrollbar, but remove it from main-window [style]
  * Git-Issue[#17]: Auto-Focus modal-input, maybe use built in >> https//www.tinymce.com/docs/advanced/creating-custom-dialogs/ << [feature]
- * Git-Issue: Show Loading spinner in editor, while doc-content is loaded [feature]
+ * Git-Issue: When Tag-Data is changed, the parsing may won't work >> Maybe make it not changeable.. << [bug]
  */
 @Component({
   selector: 'main-editor',
@@ -46,9 +46,12 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
   constructor(private projectService: ProjectService,
               private tagService: TagService,
               private inputService: InputService,
-              private modalService: ModalService){
+              private modalService: ModalService,
+              private userInformationService: UserInformationService){
 
     inputService.addReciever("MainEditor",this);
+
+    this.userInformationService.startLoading();
 
     let self = this;
 
@@ -69,9 +72,12 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
        .subscribe(d => {
        LogService.log("Current Doc", d);
        this.document = d;
+         this.userInformationService.startLoading();
 
        this.projectService.loadDocumentContent(this.document._id).subscribe(doc => {
          LogService.log("Got Content", doc.content);
+
+         this.userInformationService.stopLoading();
 
          tinymce.EditorManager.execCommand("mceAddEditor",true, "mainEditor");
          self.editor = tinymce.EditorManager.editors[0];
@@ -83,6 +89,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
            // TODO: Maybe throws exception
            self.editor.focus();
          }
+
        });
     });
   }

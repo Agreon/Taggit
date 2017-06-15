@@ -1,6 +1,7 @@
 import {Component, HostListener, ViewChild} from '@angular/core';
 import {LogService} from "./services/log.service";
 import {InputService} from "./services/input.service";
+import {UserInformationService} from "./services/User-Information.service";
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,14 @@ import {InputService} from "./services/input.service";
 })
 export class AppComponent {
   private sidebarVisible: boolean = true;
+  private loading: boolean = false;
 
-  constructor(private inputService: InputService) {
+  constructor(private inputService: InputService, private userInformationService: UserInformationService) {
+    userInformationService.getLoadingsSubject().subscribe(show => {
+      this.loading = show;
+    });
   }
+
 
   private toggleSidebar(){
     this.sidebarVisible = !this.sidebarVisible;

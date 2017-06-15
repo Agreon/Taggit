@@ -11,6 +11,7 @@ import {Subject} from "rxjs/Subject";
 import {ReplaySubject} from "rxjs/ReplaySubject";
 import {Observable} from "rxjs/Observable";
 import {Helper} from "../models/Helper";
+import {LogService} from "./log.service";
 
 @Injectable()
 export class LearnService {
@@ -33,17 +34,18 @@ export class LearnService {
   public startLearning(learnable: HoldsTags){
     this.currentObject = learnable;
 
-    console.log("Learning with", learnable);
+    LogService.log("Learning with", learnable);
 
     this.dbService.get("learnObject", learnable._id).subscribe(res => {
 
       if(res.length == 0){
 
-        console.log("Creating new LearnObject");
+        LogService.log("Creating new LearnObject");
 
         this.learnObject = new LearnObject(learnable._id);
         this.dbService.create(this.learnObject).subscribe((learnObject) => {
-          console.log("Created new LearnObject", learnObject);
+          LogService.log("Created new LearnObject", learnObject);
+          this.learnObject = LearnObject.fromJSON(learnObject);
           this.learnObjectSubject.next(this.learnObject);
           this.router.navigate(['/LearnSettings']);
         });
@@ -53,8 +55,8 @@ export class LearnService {
 
       // Get Tags and Fill LearnObject with Tagsdata
       let tags = learnable.getTags();
-      // TODO: Only add those of types, that are already added
       this.learnObject.fillTagData(tags);
+
       this.learnObjectSubject.next(this.learnObject);
       this.router.navigate(['/LearnSettings']);
     });
@@ -93,7 +95,7 @@ export class LearnService {
     this.currentTag = null;
 
     /**
-     * Git-Issue: Filter tags: maybe with starting at level-param [feature]
+     * Git-Issue[#22]: Filter tags maybe with starting at level-param [feature]
      */
     let tags = this.learnObject.tags.filter(tag => {
         return tag.active;

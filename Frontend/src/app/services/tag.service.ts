@@ -38,13 +38,13 @@ export class TagService {
    */
   public loadTags(): void {
     this.dbService.get("tag").subscribe( tags => {
-      console.log("Got tags",tags);
+      LogService.log("Got tags",tags);
       tags = tags.data;
 
       this.tags = tags.map(tag=> {
         return Tag.fromJSON(tag);
       });
-      console.log("Save them as",this.tags);
+      LogService.log("Save them as",this.tags);
 
       //this.tags = tags;
       this.allTagsSubject.next(this.tags);

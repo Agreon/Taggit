@@ -13,6 +13,7 @@ import {UserService} from "../../../../services/user.service";
 import {TagService} from "../../../../services/tag.service";
 import {Tag} from "../../../../models/tag";
 import {MessageType, UserInformationService, UserMessage} from "../../../../services/User-Information.service";
+import {LearnService} from "../../../../services/learn.service";
 
 
 /**
@@ -27,6 +28,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
   private projectSelected = new Subject<any>();
   private createProject = new Subject<any>();
+  private learnProject = new Subject<Project>();
   private renameProject = new Subject<Project>();
   private deleteProject = new Subject<Project>();
 
@@ -40,7 +42,8 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
               private modalService: ModalService,
               private userService: UserService,
               private tagService: TagService,
-              private informationService: UserInformationService) {
+              private informationService: UserInformationService,
+              private learnService: LearnService) {
     super();
 
     this.slots = [
@@ -62,6 +65,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
 
       projects.forEach(p => {
         this.slots[0].subSlots.push(new Slot(p.name, "book", [
+        //  new Slot("Learn", "leanpub", null, false, this.learnProject, false, true, p),
           new Slot("Rename", "pencil", null,false, this.renameProject, false, true, p),
           new Slot("Delete", "trash", null, false, this.deleteProject, false, true, p)
         ], true, this.projectSelected, false, true, p));
@@ -118,6 +122,15 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
         new ModalInput("Name","")
       ], onCreate, "MenuContainer");
       this.modalService.openModal(param);
+    });
+
+    // Learn Project
+    this.learnProject.subscribe((project) => {
+      this.currentProject= project;
+      LogService.log("Learn Project", project);
+
+      // Get all documents if not cached // TODO: Start Loading
+
     });
 
     // Rename Project

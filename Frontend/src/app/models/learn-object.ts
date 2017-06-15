@@ -1,21 +1,41 @@
 import {Storeable} from "./storeable";
 import {StoreTag} from "./store-tag";
+import {Helper} from "./Helper";
+import {LogService} from "../services/log.service";
 
 /**
  * Wrapper object for tag, so that learn-attributes dont have to be stored in main collection
- * TODO: We have to save the tagdata to the db as well, so that additional tags can be added
- 		=> Maybe make it optional (if empty, load it from learnObject)
  */
 export class LearnTag {
   constructor(
     public tagID: string,
-    public tagData: StoreTag,
+    public tagType: string,
+    public question: string,
+    public answer: string,
     public level: number = 0,
     public active: boolean = true
   ) {}
 
+  public fromJSON(obj: any): LearnTag {
+    for(let attr in obj) {
+      if (this.hasOwnProperty(attr)) {
+        this[attr] = obj[attr];
+      }
+    }
+    return this;
+  }
+
   public getStoreableContent(): any {
-    return {tagID: this.tagID, level: this.level, active: this.active};
+
+    let retObj = {};
+
+    for(let attr in this) {
+      if (this.hasOwnProperty(attr)) {
+          retObj[attr] = this[attr];
+      }
+    }
+
+    return retObj;
   }
 }
 
@@ -34,29 +54,17 @@ export class LearnObject extends Storeable {
 
   public getTagsOfType(type: string): Array<LearnTag> {
       return this.tags.filter(tag => {
-        return tag.tagData.tagType == type;
+        return tag.tagType == type;
       });
   }
 
   public getTagTypes(): Array<string> {
-    let types: Array<string> = [];
-    this.tags.forEach(tag => {
-      let found = false;
-      for(let i = 0; i < types.length; i++){
-        if(types[i] == tag.tagData.tagType){
-          found = true;
-          break;
-        }
-      }
-      if(!found){
-        types.push(tag.tagData.tagType);
-      }
-    });
-    return types;
+    return Helper.distinctArray(this.tags, "tagType");
   }
 
   /**
    * Fills Tags from Learnable-Object
+   * Git-Issue: Only add those types to learnObj, that are already added [bug]
    * @param tags
    */
   public fillTagData(tags: Array<StoreTag>) {
@@ -68,13 +76,16 @@ export class LearnObject extends Storeable {
 
         let updateTag = this.tags.filter(ownTag => {
           return ownTag.tagID == tag.id;
-        });
+        })[0];
+
+
 
         // If existing
-        if(updateTag.length > 0){
-          updateTag[0].tagData = tag;
+        if(updateTag){
+          updateTag.question = tag.inputs[0].value;
+          updateTag.answer = tag.inputs[1].value;
         } else {
-          this.tags.push(new LearnTag(tag.id, tag));
+          this.tags.push(new LearnTag(tag.id, tag.tagType, tag.inputs[0].value, tag.inputs[1].value));
         }
     });
   }
@@ -91,15 +102,20 @@ export class LearnObject extends Storeable {
     if(found){
       found.level = tag.level;
       found.active = tag.active;
-      found.tagData = tag.tagData;
+      found.question = tag.question;
+      found.answer = tag.answer;
     } else {
       this.tags.push(tag);
     }
   }
 
+  /**
+   * TODO: Not used
+   * @param tagID
+   */
   public removeTag(tagID: string){
     this.tags = this.tags.filter(tag => {
-      return tag.tagData.id !== tagID;
+      return tag.tagID !== tagID;
     });
   }
 
@@ -125,11 +141,10 @@ export class LearnObject extends Storeable {
 
     for(let attr in object){
       if(object.hasOwnProperty(attr)){
-
         if(attr == "tags"){
           obj.tags = [];
           for(let tag of object.tags){
-            obj.tags.push(new LearnTag(tag.tagID, tag.tagData, tag.level, tag.active));
+            obj.tags.push(new LearnTag("","","","").fromJSON(tag));
           }
           continue;
         }
@@ -145,8 +160,6 @@ export class LearnObject extends Storeable {
     let content = super.getStoreableContent();
     content.tags = [];
 
-    // TODO: ERROR ON SECOND SAVE
-    console.log("Tags", this.tags);
     for (let tag of this.tags){
       content.tags.push(tag.getStoreableContent());
     }

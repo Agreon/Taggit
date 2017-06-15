@@ -4,9 +4,6 @@ import {LearnObject, LearnTag} from "../../../models/learn-object";
 import {Router} from "@angular/router";
 import {LogService} from "../../../services/log.service";
 
-/**
- * Git-Issue[12]: Flashcard needs less margin in responsive mode >> Strange, even tho media-query is implemented, it wont work..<<[style]
- */
 @Component({
   selector: 'app-learning',
   templateUrl: './learning.component.html',

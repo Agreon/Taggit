@@ -1,5 +1,6 @@
 import {Injectable, HostListener} from '@angular/core';
 import {InputReceiver} from "../models/input-receiver";
+import {LogService} from "./log.service";
 
 @Injectable()
 export class InputService {
@@ -19,7 +20,7 @@ export class InputService {
 
     // Activate Focus
     if(this.receivers[name].receiver.focusHandle){
-      console.log("Setting focus",name);
+      LogService.log("Setting focus",name);
       this.receivers[name].receiver.focusHandle.nativeElement.focus();
     }
 

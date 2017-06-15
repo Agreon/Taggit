@@ -3,6 +3,8 @@ import {LogService} from "../services/log.service";
 import {Storeable} from "./storeable";
 import {HoldsTags} from "./HoldsTags";
 import {StoreTag} from "./store-tag";
+import {DBService} from "../services/db.service";
+import {ProjectService} from "../services/project.service";
 
 export class Project extends Storeable implements HoldsTags {
 
@@ -52,10 +54,18 @@ export class Project extends Storeable implements HoldsTags {
     })[0];
   }
 
+  /**
+   * TODO: Check if docs Cached
+   * @returns {Array}
+   */
   public getTags(): Array<StoreTag> {
       let tags = [];
 
       for(let doc of this.documents){
+      /*  if(!doc.cached){
+            this.projectService.loadDocumentContent(doc._id);
+        }*/
+
         tags.concat(doc.getTags());
       }
 
