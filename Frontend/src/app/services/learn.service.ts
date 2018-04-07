@@ -27,7 +27,6 @@ export class LearnService {
   private learnQueue1: Array<number>;
   private learnQueue2: Array<number>;
 
-
   constructor(private router: Router,
               private dbService: DBService) { }
 
@@ -97,15 +96,12 @@ export class LearnService {
     /**
      * Git-Issue[#22]: Filter tags maybe with starting at level-param [feature]
      */
-    let tags = this.learnObject.tags.filter(tag => {
-        return tag.active;
-    });
-
-
     // Make Index for every Tag
     let indexes = [];
-    for(let i = 0; i < tags.length; i++){
-      indexes.push(i);
+    for(let i = 0; i < this.learnObject.tags.length; i++){
+      if(this.learnObject.tags[i].active){
+        indexes.push(i);
+      }
     }
 
     // Shuffle Indexes and enter in queue

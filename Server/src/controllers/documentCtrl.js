@@ -1,6 +1,8 @@
 var Document = require('../models/document');
 var Project = require('../models/project');
 var ObjectId = require('mongodb').ObjectId;
+var util = require('./util');
+
 
 exports.getAll = function(req, res, next) {
     Document.find({}, function(err, projects){
@@ -12,16 +14,26 @@ exports.getAll = function(req, res, next) {
 };
 
 exports.getOne = function(req, res, next){
+
+    var decoded = util.extractTokenUser(req.headers);
+    if (!decoded) {
+        return res.status(403).send('Authentication failed. User not found.');
+    }
+
     Document.find({_id: req.params.id}, function(err, document){
         if(err) {
             return res.status(500).send(err);
         }
         console.log("Found",document);
         if(document.length == 0){
-        	res.status(403).send("Document not found!");
-        } else {
-        	res.send(document[0]);
-        }        
+        	return res.status(403).send("Document not found!");
+        }
+        
+        /*if(!document.shared && !document.ownerID == decoded._id){
+            return res.status(403).send("You don't have access to that document");
+        }*/
+
+        res.send(document[0]);        
     });
 };
 

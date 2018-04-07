@@ -74,11 +74,14 @@ export class LearnObject extends Storeable {
           return;
         }
 
+        // TODO: does not work..
+
         let updateTag = this.tags.filter(ownTag => {
           return ownTag.tagID == tag.id;
         })[0];
 
-
+        console.log("NewTag", updateTag);
+      console.log(this.tags, tag);
 
         // If existing
         if(updateTag){

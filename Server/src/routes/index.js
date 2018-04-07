@@ -105,6 +105,8 @@ router.route('/document/:id')
     .put(documentCtrl.save)
     .delete(documentCtrl.remove);
 
+router.route('/shared/:id')
+    .get(documentCtrl.getOne);
 /**
  * Tag
  */

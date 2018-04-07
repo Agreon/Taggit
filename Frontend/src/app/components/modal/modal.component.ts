@@ -1,11 +1,11 @@
 import {Component, EventEmitter, ViewChild, ViewChildren} from "@angular/core";
-import {ModalService} from "../../../services/modal.service";
-import {InputReceiver} from "../../../models/input-receiver";
-import {InputService} from "../../../services/input.service";
-import {LogService} from "../../../services/log.service";
+import {ModalService} from "../../services/modal.service";
+import {InputReceiver} from "../../models/input-receiver";
+import {InputService} from "../../services/input.service";
+import {LogService} from "../../services/log.service";
 
 /**
- * Type: text, select, hiddden
+ * Type: text, select, hidden
  * Git-Issue[#18]: Add mandatory-parameter to ModalInput, that is checked onSubmit [feature]
  */
 export class ModalInput {

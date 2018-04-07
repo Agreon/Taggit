@@ -6,7 +6,7 @@ import {MenuTemplateComponent} from "../menu-template/menu-template.component";
 import {ProjectService} from "../../../../services/project.service";
 import {Project} from "../../../../models/project";
 import {ModalService} from "../../../../services/modal.service";
-import {ModalInput, ModalParameter} from "../../modal/modal.component";
+import {ModalInput, ModalParameter} from "../../../modal/modal.component";
 import {LogService} from "../../../../services/log.service";
 import {InputService} from "../../../../services/input.service";
 import {UserService} from "../../../../services/user.service";
@@ -138,7 +138,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     onRename.subscribe(inputs => {
 
       // Rename Project in DB
-      this.projectService.renameProject(this.currentProject, inputs[0].value).subscribe(() => {
+      this.projectService.renameProject(this.currentProject, inputs[0].value).then(() => {
 
         // Set Name of project without reloading menu
         let currentSlot = this.slots[0].subSlots.filter(s => {
@@ -168,7 +168,7 @@ export class MainMenuComponent extends MenuTemplateComponent implements OnInit{
     // Delete Project
     let onDelete = new EventEmitter<Array<ModalInput>>();
     onDelete.subscribe(inputs => {
-      this.projectService.deleteProject(this.currentProject).subscribe(() => {
+      this.projectService.deleteProject(this.currentProject).then(() => {
 
         let subSlots = this.slots[0].subSlots;
         let toDelete = -1;

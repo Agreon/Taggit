@@ -11,8 +11,9 @@ import {ProjectService} from "../../services/project.service";
 import {InputService} from "../../services/input.service";
 import {InputReceiver} from "../../models/input-receiver";
 import {ModalService} from "../../services/modal.service";
-import {ModalInput, ModalParameter} from "../../components/MenuManagement/modal/modal.component";
+import {ModalInput, ModalParameter} from "../../components/modal/modal.component";
 import {UserInformationService} from "../../services/User-Information.service";
+import {ActivatedRoute} from "@angular/router";
 
 /**
  * TODO:
@@ -22,7 +23,6 @@ import {UserInformationService} from "../../services/User-Information.service";
  */
 /**
  * Git-Issue[#8]: Show Scrollbar, but remove it from main-window [style]
- * Git-Issue[#17]: Auto-Focus modal-input, maybe use built in >> https//www.tinymce.com/docs/advanced/creating-custom-dialogs/ << [feature]
  * Git-Issue: When Tag-Data is changed, the parsing may won't work >> Maybe make it not changeable.. << [bug]
  */
 @Component({
@@ -43,7 +43,8 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
   private tags: Tag[] = [];
 
-  constructor(private projectService: ProjectService,
+  constructor(private route: ActivatedRoute,
+              private projectService: ProjectService,
               private tagService: TagService,
               private inputService: InputService,
               private modalService: ModalService,
@@ -55,6 +56,14 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
     let self = this;
 
+    // Load Document on startup
+     this.route.params.subscribe(params => {
+       this.userInformationService.startLoading();
+       this.projectService.loadDocumentContent(params["id"]).then(doc => {
+          this.projectService.setCurrentDocument(doc);
+        });
+     });
+
     this.subscription = tagService.getTags().subscribe(tags => {
       this.tags = tags;
 
@@ -62,7 +71,7 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
       //this.initEditor();
 
-      if(this.document.content){
+      if(this.document && this.document.content){
         self.editor.setContent(this.document.content);
       }
     });
@@ -72,9 +81,9 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
        .subscribe(d => {
        LogService.log("Current Doc", d);
        this.document = d;
-         this.userInformationService.startLoading();
+       this.userInformationService.startLoading();
 
-       this.projectService.loadDocumentContent(this.document._id).subscribe(doc => {
+       this.projectService.loadDocumentContent(this.document._id).then(doc => {
          LogService.log("Got Content", doc.content);
 
          this.userInformationService.stopLoading();
@@ -100,6 +109,11 @@ export class MainEditorComponent implements AfterViewInit, OnDestroy, InputRecei
 
   private tagClicked(tag: Tag){
     this.openDialog(tag);
+  }
+
+  private shareToggle(){
+    this.document.shared = !this.document.shared;
+    this.projectService.saveDocument(this.document);
   }
 
   private contentClicked(){

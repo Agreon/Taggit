@@ -40,6 +40,7 @@ export class Slot {
     }
   }
 
+
   public selectSlot() {
     // Open
     if (!this.collapsed) {

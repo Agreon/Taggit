@@ -6,7 +6,7 @@ import {Router} from "@angular/router";
 import {DBService} from "../../../services/db.service";
 import {distinct} from "rxjs/operator/distinct";
 import {ModalService} from "../../../services/modal.service";
-import {ModalInput, ModalParameter} from "../../../components/MenuManagement/modal/modal.component";
+import {ModalInput, ModalParameter} from "../../../components/modal/modal.component";
 import {Helper} from "../../../models/Helper";
 import {find} from "rxjs/operator/find";
 import {LogService} from "../../../services/log.service";
@@ -47,6 +47,34 @@ export class LearnSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  }
+
+  private async loadLearnObject(id: number){
+   /* this.dbService.get("learnObject", learnable._id).subscribe(res => {
+
+      if(res.length == 0){
+
+        LogService.log("Creating new LearnObject");
+
+        this.learnObject = new LearnObject(learnable._id);
+        this.dbService.create(this.learnObject).subscribe((learnObject) => {
+          LogService.log("Created new LearnObject", learnObject);
+          this.learnObject = LearnObject.fromJSON(learnObject);
+          this.learnObjectSubject.next(this.learnObject);
+          this.router.navigate(['/LearnSettings']);
+        });
+        return;
+      }
+      this.learnObject = LearnObject.fromJSON(res[0]);
+
+      // Get Tags and Fill LearnObject with Tagsdata
+      let tags = learnable.getTags();
+      this.learnObject.fillTagData(tags);
+
+      this.learnObjectSubject.next(this.learnObject);
+      this.router.navigate(['/LearnSettings']);
+    });*/
   }
 
   private tagChanged(tag: LearnTag) {

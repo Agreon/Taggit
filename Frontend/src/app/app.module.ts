@@ -28,7 +28,7 @@ import {Routes, RouterModule} from "@angular/router";
 import { TagButtonComponent } from './pages/main-editor/tag-button/tag-button.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import {DBService} from "./services/db.service";
-import { ModalComponent } from './components/MenuManagement/modal/modal.component';
+import { ModalComponent } from './components/modal/modal.component';
 import { AuthenticationComponent } from './components/navbar/authentication/authentication.component';
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { OverviewComponent } from './pages/overview/overview.component';
@@ -38,9 +38,10 @@ import { TagListComponent } from './pages/learning/learn-settings/tag-list/tag-l
 import { ProgressBarComponent } from './pages/learning/progress-bar/progress-bar.component';
 import { LearnSettingsComponent } from './pages/learning/learn-settings/learn-settings.component';
 import { IntroductionComponent } from './pages/introduction/introduction.component';
+import { AddTagModalComponent } from './components/modal/modal-types/add-tag-modal/add-tag-modal.component';
 
 const appRoutes: Routes = [
-  { path: 'MainEditor', component: MainEditorComponent},
+  { path: 'document/:id', component: MainEditorComponent},
   { path: 'Overview', component: OverviewComponent},
   { path: 'Learning', component: LearningComponent},
   { path: 'LearnSettings', component: LearnSettingsComponent},
@@ -68,7 +69,8 @@ const appRoutes: Routes = [
     TagListComponent,
     ProgressBarComponent,
     LearnSettingsComponent,
-    IntroductionComponent
+    IntroductionComponent,
+    AddTagModalComponent
   ],
   imports: [
     BrowserModule,

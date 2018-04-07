@@ -1,0 +1,36 @@
+<div class="modal-header">
+  {{parameter.header}}
+</div>
+<div class="modal-body container-fluid" *ngIf="parameter && parameter.inputs">
+  <div class="modal-description" *ngIf="parameter.description">
+    Please enter Question and Answer or extract Questions from Tags.
+    {{parameter.description}}
+  </div>
+  <div class="row d-flex">
+    <div class="inputs">
+      <div class="container-fluid">
+          <div class="row">
+            <div class="col">{{parameter.inputs[0].name}}</div>
+            <div class="col">
+              <input type="text" [(ngModel)]="parameter.inputs[0].value" #inputField>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col">{{parameter.inputs[1].name}}</div>
+          <div class="col">
+            <input type="text" [(ngModel)]="parameter.inputs[1].value" #inputField>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tagSelect">
+      <select (change)="selectChange($event, parameter.inputs[2].name)" #inputField>
+        <option *ngFor="let option of parameter.inputs[2].options">{{option}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="hide()">Close</button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+</div>

@@ -6,8 +6,8 @@ import {Slot} from "../../models/slot";
 import {ProjectService} from "../../../../services/project.service";
 import {Document} from "../../../../models/document";
 import {Project} from "../../../../models/project";
-import {Router, ActivatedRoute} from "@angular/router";
-import {ModalInput, ModalParameter} from "../../modal/modal.component";
+import {Router, ActivatedRoute, NavigationExtras} from "@angular/router";
+import {ModalInput, ModalParameter} from "../../../modal/modal.component";
 import {ModalService} from "../../../../services/modal.service";
 import {LogService} from "../../../../services/log.service";
 import {LearnService} from "../../../../services/learn.service";
@@ -51,8 +51,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       this.slots.forEach(slot => {
         slot.active = slot.name == d.name;
       });
-      this.projectService.setCurrentDocument(this.project.getDocument(d._id));
-      this.router.navigate(['/MainEditor']);
+      this.router.navigate(['/document', d._id]);
     });
 
 
@@ -60,8 +59,17 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
     // Create Document Callback
     onCreate.subscribe(inputs => {
-      this.projectService.createDocument(inputs[0].value, this.project._id);
-      // Git-Issue: Switch to Editor on document-creation [feature]
+      this.projectService.createDocument(inputs[0].value, this.project._id).then((doc) => {
+
+        this.router.navigate(['document', doc._id]);
+
+        this.informationService.stopLoading();
+
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Document "+inputs[0].value+" created."
+        ));
+      });
     });
 
     // On Create Document-Button
@@ -93,7 +101,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
 
       // Rename Document in DB
       this.projectService.renameDocument(this.currentDocument, inputs[0].value)
-        .subscribe(() => {
+        .then(() => {
 
           // Set Name of project without reloading menu
           let currentSlot = this.slots.filter(s => {
@@ -126,7 +134,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
       LogService.log("Learn Document", document);
 
       // Get whole document if not cached // TODO: Start Loading
-      this.projectService.loadDocumentContent(document._id).subscribe(doc => {
+      this.projectService.loadDocumentContent(document._id).then(doc => {
         this.projectService.setCurrentDocument(doc);
         this.learnService.startLearning(doc);
       });
@@ -147,7 +155,7 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
     });
 
     onDelete.subscribe(inputs => {
-      this.projectService.deleteDocument(this.currentDocument).subscribe(res => {
+      this.projectService.deleteDocument(this.currentDocument).then(res => {
         LogService.log("Deleted Document", res);
 
         let toDelete = -1;
@@ -161,7 +169,11 @@ export class ProjectViewMenuComponent extends MenuTemplateComponent implements O
         if(toDelete != -1){
             this.slots.splice(toDelete, 1);
         }
-      }, err => {
+        this.informationService.showInformation(new UserMessage(
+          MessageType.SUCCESS,
+          "Document " + this.currentDocument.name + " deleted."
+        ));
+      }).catch(err => {
         console.log("Could not delete",err);
       });
     });

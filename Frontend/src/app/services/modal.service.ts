@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, Subject} from "rxjs";
-import {ModalParameter} from "../components/MenuManagement/modal/modal.component";
+import {ModalParameter} from "../components/modal/modal.component";
 
 @Injectable()
 export class ModalService {

@@ -18,9 +18,7 @@ export class MenuEvent{
   ){}
 }
 
-/**
- * TODO: Inject params to menu
- */
+
 @Component({
   selector: 'menu-manager',
   templateUrl: './menu-manager.component.html',

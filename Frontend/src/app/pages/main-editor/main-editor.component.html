@@ -8,10 +8,19 @@
     </h1>-->
     <div class="box">
       <div class="box-body">
+
         <app-tag-button *ngFor="let tag of tags"
                         [Tag]="tag"
                         (OnClick)="tagClicked($event)">
         </app-tag-button>
+
+        <!--<button type="button"
+                class="btn btn-primary shareButton"
+                (click)="shareToggle()">
+          <span *ngIf="!document.shared">Share</span>
+          <span *ngIf="document.shared">Make Private</span>
+        </button>-->
+
       </div>
     </div>
     <div id="editorToolbar">

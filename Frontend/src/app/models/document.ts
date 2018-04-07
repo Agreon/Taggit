@@ -13,7 +13,8 @@ export class Document extends Storeable implements HoldsTags{
     public name: string,
     public content: string = "",
     public projectID: string = "",
-    public cached: boolean = false
+    public cached: boolean = false,
+    public shared: boolean = false
   ) {
     super();
     // Exclude cached

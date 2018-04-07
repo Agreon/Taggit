@@ -8,6 +8,10 @@ var DocumentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
     },
+    ownerID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }, 
     name: String, 
     tags: {
         type: [],
@@ -16,6 +20,10 @@ var DocumentSchema = new mongoose.Schema({
     content: { 
     	type: String,
     	default: "" 
+    },
+    shared: {
+        type: Boolean,
+        default: false
     },
     updated_at: {
         type: Date,

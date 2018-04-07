@@ -24,7 +24,12 @@ export class TagService {
     new Tag("Important",
       "Add a Important Tag",
       "ctrl+3",
-      [new TagInput("Text", "")])
+      [new TagInput("Text", "")]),
+    new Tag("Term",
+      "Add a Term Tag",
+      "ctrl+4",
+      [new TagInput("Term", ""),
+      new TagInput("Text","")])
   ];
 
   constructor(private dbService: DBService,
